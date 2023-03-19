@@ -8,6 +8,7 @@ import wavingHand from '../assets/gifs/waving-hand.gif';
 
 import apple from '../assets/svgs/apple.svg';
 import kakao from '../assets/svgs/kakao.svg';
+import logoWithLetter from '../assets/svgs/logo-with-letter.svg';
 import back from '../assets/svgs/back.svg';
 import close from '../assets/svgs/close.svg';
 
@@ -15,6 +16,7 @@ export const svgs = {
   apple,
   back,
   close,
+  logoWithLetter,
   kakao,
 };
 

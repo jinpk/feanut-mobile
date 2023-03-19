@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "clear" : "rm -rf node_modules && rm -rf ios/build && rm -rf ios/Pods",
     "pod-install": "cd ios && bundle install && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -12,7 +13,6 @@
     "dev": "yarn install && yarn pod-install && yarn ios && yarn start"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "react": "18.2.0",
@@ -20,7 +20,8 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
-    "react-native-svg": "^13.8.0"
+    "react-native-svg": "^13.8.0",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

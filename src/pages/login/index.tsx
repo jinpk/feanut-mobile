@@ -1,16 +1,18 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import routes from '../../libs/routes';
+import {useUserStore} from '../../store';
 import LoginTemplate from '../../templates/login';
 
 function Login(): JSX.Element {
   const navigation = useNavigation();
+  const login = useUserStore(state => state.actions.login);
 
   const handleKakaoLogin = () => {
-    navigation.reset({index: 0, routes: [{name: routes.welcome}]});
+    login();
   };
   const handleAppleLogin = () => {
-    navigation.reset({index: 0, routes: [{name: routes.welcome}]});
+    login();
   };
   const handleEmailLogin = () => {
     navigation.navigate(routes.loginEmail);
@@ -18,6 +20,7 @@ function Login(): JSX.Element {
 
   const handlePrivacyTerm = () => {};
   const handleServiceTerm = () => {};
+  console.log('ha')
 
   return (
     <LoginTemplate

@@ -3,14 +3,15 @@ import React from 'react';
 import {View} from 'react-native';
 import {Text} from '../../../components/text';
 import {BackTopBar} from '../../../components/top-bar';
-import routes from '../../../libs/routes';
+import {useUserStore} from '../../../store';
 import InputConfirmTemplate from '../../../templates/input-confirm';
 
 function LoginEmailVerification(): JSX.Element {
   const navigation = useNavigation();
+  const login = useUserStore(state => state.actions.login);
 
   const handleConfirm = () => {
-    navigation.reset({index: 0, routes: [{name: routes.welcome}]});
+    login();
   };
 
   return (
