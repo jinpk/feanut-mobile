@@ -2,7 +2,10 @@ const colors = {
   primary: '#FF9900',
 
   dark: '#1D1D1F',
- 
+  black: '#000000',
+
+  kakao: '#FEE500',
+
   white: '#FFFFFF',
 
   blue: '#3478F6',

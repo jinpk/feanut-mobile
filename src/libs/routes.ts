@@ -1,6 +1,7 @@
 const routes = {
   login: '/login',
   loginEmail: '/login/email',
+  loginEmailVerification: '/login/email/verification',
   welcome: '/welcome',
 
   main: '/main',
