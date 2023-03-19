@@ -1,6 +1,7 @@
 import {PropsWithChildren, useMemo} from 'react';
 import {Text as RNText} from 'react-native';
 import colors from '../../libs/colors';
+import fonts from '../../libs/fonts';
 
 type TextProps = PropsWithChildren<{
   color?: string | undefined;
@@ -12,22 +13,22 @@ type TextProps = PropsWithChildren<{
 }>;
 
 export const Text = (props: TextProps): JSX.Element => {
-  const fontWeight = useMemo(() => {
+  const fontFamily = useMemo(() => {
     if (props.weight === 'bold') {
-      return '700';
+      return fonts.pretendard.bold;
     } else if (props.weight === 'medium') {
-      return '600';
+      return fonts.pretendard.medium;
     }
-    return 'normal';
+    return fonts.pretendard.regular;
   }, [props.weight]);
 
   return (
     <RNText
       style={[
         {
+          fontFamily: fontFamily,
           fontSize: props.size || 14,
           color: props.color || colors.dark,
-          fontWeight,
           marginTop: props.mt,
           marginBottom: props.mb,
           marginVertical: props.my,
