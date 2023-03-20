@@ -114,7 +114,7 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
       </View>
       <View style={styles.body}>
         <View style={styles.titleArea}>
-          <Gif source={props.icon} />
+          <Gif source={props.icon}  />
           <Text
             color={colors.white}
             mt={15}
