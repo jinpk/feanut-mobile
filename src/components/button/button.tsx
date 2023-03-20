@@ -15,8 +15,13 @@ type ButtonProps = PropsWithChildren<{
   mt?: number;
   my?: number;
   mx?: number;
+  px?: number;
+
+  alignSelf?: 'stretch' | 'center';
+  radius?: 's' | 'm';
 
   onPress?: (e: GestureResponderEvent) => void;
+  disabled?: boolean;
 
   leftIcon?: ReactNode;
 }>;
@@ -24,14 +29,31 @@ type ButtonProps = PropsWithChildren<{
 export const Button = (props: ButtonProps): JSX.Element => {
   const buttonStyle = useMemo((): ViewStyle => {
     return {
-      backgroundColor: props.color || colors.primary,
+      backgroundColor: props.disabled
+        ? colors.mediumGrey
+        : props.color || colors.primary,
       marginVertical: props.my,
       marginHorizontal: props.mx,
+      paddingHorizontal: props.px,
       marginTop: props.mt,
+      borderRadius: props.radius === 'm' ? 21 : 7,
+      alignSelf: props.alignSelf || 'stretch',
     };
-  }, [props.color, props.mx, props.my, props.mt]);
+  }, [
+    props.disabled,
+    props.color,
+    props.radius,
+    props.mx,
+    props.px,
+    props.my,
+    props.mt,
+    props.alignSelf,
+  ]);
 
   const textColor = useMemo(() => {
+    if (props.disabled) {
+      return colors.darkGrey;
+    }
     if (
       [colors.dark, colors.primary, colors.black].includes(
         buttonStyle.backgroundColor as string,
@@ -41,10 +63,11 @@ export const Button = (props: ButtonProps): JSX.Element => {
     } else {
       colors.dark;
     }
-  }, [buttonStyle.backgroundColor]);
+  }, [buttonStyle.backgroundColor, props.disabled]);
 
   return (
     <TouchableOpacity
+      disabled={props.disabled}
       onPress={props.onPress}
       style={[styles.root, buttonStyle]}>
       {props.leftIcon && <View style={styles.leftIcon}>{props.leftIcon}</View>}
@@ -55,9 +78,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
 
 const styles = StyleSheet.create({
   root: {
-    alignSelf: 'stretch',
     height: 42,
-    borderRadius: 7,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

@@ -11,12 +11,20 @@ import {
 type GifProps = PropsWithChildren<{
   source: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
+  size?: number;
 }>;
 
 export const Gif = (props: GifProps): JSX.Element => {
   return (
     <View style={props.style}>
-      <Image source={props.source} style={styles.gif} resizeMode="contain" />
+      <Image
+        source={props.source}
+        style={[
+          styles.gif,
+          {width: props.size || 45, height: props.size || 45},
+        ]}
+        resizeMode="contain"
+      />
     </View>
   );
 };

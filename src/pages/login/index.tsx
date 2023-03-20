@@ -1,18 +1,24 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {CasualTopBar} from '../../components/top-bar';
+import colors from '../../libs/colors';
 import routes from '../../libs/routes';
-import {useUserStore} from '../../store';
+import {useModalStore, useUserStore} from '../../store';
 import LoginTemplate from '../../templates/login';
 
 function Login(): JSX.Element {
   const navigation = useNavigation();
   const login = useUserStore(state => state.actions.login);
+  const openWelcome = useModalStore(s => s.actions.openWelcome);
 
   const handleKakaoLogin = () => {
     login();
+    openWelcome();
   };
   const handleAppleLogin = () => {
     login();
+    openWelcome();
   };
   const handleEmailLogin = () => {
     navigation.navigate(routes.loginEmail);
@@ -20,17 +26,23 @@ function Login(): JSX.Element {
 
   const handlePrivacyTerm = () => {};
   const handleServiceTerm = () => {};
-  console.log('ha')
 
   return (
-    <LoginTemplate
-      onKakaoLogin={handleKakaoLogin}
-      onAppleLogin={handleAppleLogin}
-      onEmailLogin={handleEmailLogin}
-      onPrivacyTerm={handlePrivacyTerm}
-      onServiceTerm={handleServiceTerm}
-    />
+    <View style={styles.root}>
+      <CasualTopBar />
+      <LoginTemplate
+        onKakaoLogin={handleKakaoLogin}
+        onAppleLogin={handleAppleLogin}
+        onEmailLogin={handleEmailLogin}
+        onPrivacyTerm={handlePrivacyTerm}
+        onServiceTerm={handleServiceTerm}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {flex: 1, backgroundColor: colors.white},
+});
 
 export default Login;

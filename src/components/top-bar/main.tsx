@@ -14,7 +14,7 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
   return (
     <View style={[styles.root, {marginTop: insets.top}]}>
       <TouchableOpacity onPress={props.onInboxPress} style={styles.optionItem}>
-        <Text>수신함</Text>
+        <Text weight="medium">수신함</Text>
       </TouchableOpacity>
       <View>
         <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
@@ -22,7 +22,7 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
       <TouchableOpacity
         onPress={props.onProfilePress}
         style={styles.optionItem}>
-        <Text>프로필</Text>
+        <Text weight="medium">프로필</Text>
       </TouchableOpacity>
     </View>
   );

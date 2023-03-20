@@ -4,7 +4,6 @@ import {Button} from '../components/button';
 import {TextButton} from '../components/button/text-button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
-import {CasualTopBar} from '../components/top-bar';
 import colors from '../libs/colors';
 import {gifs, svgs} from '../libs/images';
 
@@ -19,7 +18,6 @@ type LoginTemplateProps = {
 function LoginTemplate(props: LoginTemplateProps): JSX.Element {
   return (
     <View style={styles.root}>
-      <CasualTopBar />
       <Gif source={gifs.wavingHand} />
 
       <Button

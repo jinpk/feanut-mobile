@@ -1,8 +1,10 @@
 import {create} from 'zustand';
 
 export interface UserStore {
-  logged: boolean;
+  // 세션정보 조회중 상태
   loading: boolean;
+  // 로그인 여부
+  logged: boolean;
   actions: {
     login: () => void;
     check: () => void;

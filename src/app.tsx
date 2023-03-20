@@ -6,9 +6,13 @@ import Login from './pages/login';
 import Home from './pages/home';
 import LoginEmail from './pages/login/email';
 import LoginEmailVerification from './pages/login/email/verification';
-import Welcome from './pages/welcome';
 import {useUserStore} from './store';
 import {Text} from './components/text';
+import WelcomeModal from './modals/welcome';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Inbox from './pages/inbox';
+import {View} from 'react-native';
+import Profile from './pages/profile';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -29,7 +33,7 @@ function NavigationApp() {
   }, []);
 
   if (loginLoading) {
-    return <Text mt={100}>hi feanut</Text>;
+    return <Text mt={100}>auth checking...</Text>;
   }
 
   return (
@@ -39,7 +43,8 @@ function NavigationApp() {
           initialRouteName={routes.home}
           screenOptions={{headerShown: false}}>
           <Stack.Screen name={routes.home} component={Home} />
-          <Stack.Screen name={routes.welcome} component={Welcome} />
+          <Stack.Screen name={routes.inbox} component={Inbox} />
+          <Stack.Screen name={routes.profile} component={Profile} />
         </Stack.Navigator>
       )}
       {!logged && (
@@ -59,7 +64,13 @@ function NavigationApp() {
 }
 
 function FeanutApp(props: AppProps): JSX.Element {
-  return <NavigationApp />;
+  return (
+    <SafeAreaProvider>
+      <NavigationApp />
+      {/** Modals */}
+      <WelcomeModal />
+    </SafeAreaProvider>
+  );
 }
 
 export default FeanutApp;

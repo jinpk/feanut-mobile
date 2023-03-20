@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "clear" : "rm -rf node_modules && rm -rf ios/build && rm -rf ios/Pods",
+    "clear": "rm -rf node_modules && rm -rf ios/build && rm -rf ios/Pods",
     "pod-install": "cd ios && bundle install && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "dayjs": "^1.11.7",
     "react": "18.2.0",
     "react-native": "0.71.4",
     "react-native-fast-image": "^8.6.3",

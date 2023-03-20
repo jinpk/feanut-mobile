@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components/text';
 import {BackTopBar} from '../../../components/top-bar';
+import colors from '../../../libs/colors';
 import {useUserStore} from '../../../store';
 import InputConfirmTemplate from '../../../templates/input-confirm';
 
@@ -15,7 +16,7 @@ function LoginEmailVerification(): JSX.Element {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.root}>
       <BackTopBar onBack={navigation.goBack} />
       <InputConfirmTemplate
         title="인증번호가 발송되었습니다."
@@ -31,5 +32,9 @@ function LoginEmailVerification(): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {flex: 1, backgroundColor: colors.white},
+});
 
 export default LoginEmailVerification;
