@@ -1,9 +1,9 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import LogoSvg from '../../assets/svgs/logo.svg';
-import LogoLetterSvg from '../../assets/svgs/logo-letter.svg';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {svgs} from '../../libs/images';
+import colors from '../../libs/colors';
 
 type CasualTopBarProps = {
   onClose?: () => void;
@@ -24,7 +24,8 @@ export const CasualTopBar = (props: CasualTopBarProps): JSX.Element => {
       <WithLocalSvg
         width={60}
         height={15}
-        asset={LogoLetterSvg}
+        fill={colors.dark}
+        asset={svgs.logoLetterBlack}
         style={styles.letter}
       />
     </View>

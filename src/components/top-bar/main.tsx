@@ -1,28 +1,43 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
+import colors from '../../libs/colors';
 import {svgs} from '../../libs/images';
 import {Text} from '../text';
 
 type MainTopBar = {
   onInboxPress: () => void;
   onProfilePress: () => void;
+  polling?: boolean;
 };
 
 export const MainTopBar = (props: MainTopBar): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.root, {marginTop: insets.top}]}>
+    <View style={[styles.root, {top: insets.top}]}>
       <TouchableOpacity onPress={props.onInboxPress} style={styles.optionItem}>
-        <Text weight="medium">수신함</Text>
+        <Text
+          weight="medium"
+          color={props.polling ? colors.white : colors.dark}>
+          수신함
+        </Text>
       </TouchableOpacity>
       <View>
-        <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
+        {props.polling && (
+          <WithLocalSvg width={40} height={10} asset={svgs.logoLetter} />
+        )}
+        {!props.polling && (
+          <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
+        )}
       </View>
       <TouchableOpacity
         onPress={props.onProfilePress}
         style={styles.optionItem}>
-        <Text weight="medium">프로필</Text>
+        <Text
+          weight="medium"
+          color={props.polling ? colors.white : colors.dark}>
+          프로필
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -30,6 +45,10 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
 
 const styles = StyleSheet.create({
   root: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 2,
     height: 50,
     alignItems: 'center',
     flexDirection: 'row',

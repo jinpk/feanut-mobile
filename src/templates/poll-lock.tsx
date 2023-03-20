@@ -4,7 +4,6 @@ import {Timer} from '../components';
 import {Button} from '../components/button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
-import {useInsets} from '../hooks';
 import {gifs} from '../libs/images';
 
 type PollLockTemplateProps = {
@@ -12,9 +11,8 @@ type PollLockTemplateProps = {
 };
 
 function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
-  const insets = useInsets();
   return (
-    <View style={[styles.root, {paddingBottom: insets.top}]}>
+    <View style={styles.root}>
       <Gif source={gifs.timerClock} />
       <Text weight="bold" mt={15} size={18} mb={30}>
         투표를 다 하셨군요!
