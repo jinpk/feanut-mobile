@@ -25,7 +25,8 @@ export const LineIndicator = (props: PollIndicatorProps): JSX.Element => {
     const barWidth =
       Math.ceil((SCREEN_WIDTH - 32) / props.length) * (props.index + 1);
 
-    const toValue = barWidth || 0;
+    const toValue = !isFinite(barWidth) ? 0 : barWidth || 0;
+
     Animated.timing(indicatorWidth, {
       duration: 300,
       toValue,

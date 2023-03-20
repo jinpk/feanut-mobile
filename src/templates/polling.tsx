@@ -1,5 +1,13 @@
 import React, {useCallback, useMemo} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  GestureResponderEvent,
+  ImageSourcePropType,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import colors from '../libs/colors';
@@ -20,17 +28,22 @@ interface PollingFriend {
 
 type PollingTemplateProps = {
   emotion: emotions;
-  focused: boolean;
+  icon: ImageSourcePropType;
+  title: string;
+
   selectedFriend: PollingFriendValue;
-  onFriendSelected: (value: PollingFriendValue) => void;
   friends: PollingFriend[];
+
+  onFriendSelected: (value: PollingFriendValue) => void;
+  onSkip: () => void;
+  onShuffle: () => void;
 };
 
 function PollingTemplate(props: PollingTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
 
   const handleFriendSelect = useCallback(
-    (friend: PollingFriend) => () => {
+    (friend: PollingFriend) => (e: GestureResponderEvent) => {
       props.onFriendSelected(friend.value);
     },
     [props.onFriendSelected],
@@ -91,7 +104,7 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
   return (
     <View style={[styles.root, {backgroundColor}]}>
       {renderFigure()}
-      <View style={[styles.header, {paddingTop: insets.top + 7}]}>
+      <View style={[styles.header, {paddingTop: insets.top + 9}]}>
         <WithLocalSvg
           width={67}
           height={35}
@@ -101,15 +114,14 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
       </View>
       <View style={styles.body}>
         <View style={styles.titleArea}>
-          <Gif source={gifs.fire} />
+          <Gif source={props.icon} />
           <Text
             color={colors.white}
             mt={15}
             weight="bold"
             size={27}
             align="center">
-            심적으로 나를{'\n'}
-            편안하게 만들어 주는 친구는?
+            {props.title}
           </Text>
         </View>
         <View>
@@ -129,7 +141,7 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
       </View>
 
       <View style={[styles.footer, {paddingBottom: insets.bottom + 20}]}>
-        <TouchableOpacity style={styles.footerButton}>
+        <TouchableOpacity onPress={props.onSkip} style={styles.footerButton}>
           <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
           <Text ml={7} color={colors.white} size={12}>
             질문 건너뛰기
@@ -138,7 +150,7 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
 
         <View style={styles.footerDivider} />
 
-        <TouchableOpacity style={styles.footerButton}>
+        <TouchableOpacity onPress={props.onShuffle} style={styles.footerButton}>
           <WithLocalSvg width={14} height={14} asset={svgs.refresh} />
           <Text ml={7} color={colors.white} size={12}>
             친구 다시찾기

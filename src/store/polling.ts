@@ -12,6 +12,7 @@ interface Polling {
 type Poll = {
   id: string;
   emotion: emotions;
+  skip: boolean;
   selectedFriend: string;
   polling: Polling | null;
 };
@@ -21,6 +22,7 @@ interface PollingStoreActions {
   setPolls: (polls: Poll[]) => void;
   setPollIndex: (index: number) => void;
   setPollSelected: (pollId: string, freindId: string) => void;
+  skipPoll: (pollId: string) => void;
 }
 
 interface PollingState {
@@ -48,18 +50,28 @@ export const usePollingStore = create<PollingStore>(set => ({
     setLoading: loading => set({loading}),
     setPolls: polls => set({polls}),
     setPollIndex: pollIndex => set({pollIndex}),
-    setPollSelected: (pi, fi) =>
+    setPollSelected: (pollId, selectedFriend) =>
       set(state => ({
         polls: [
           ...state.polls.map(x => {
-            if (x.id === pi) {
-              x.selectedFriend = fi;
-            } else {
-              x.selectedFriend = '';
+            if (x.id === pollId) {
+              x.selectedFriend = selectedFriend;
             }
             return x;
           }),
         ],
       })),
+    skipPoll: pollId => {
+      set(state => ({
+        polls: [
+          ...state.polls.map(x => {
+            if (x.id === pollId) {
+              x.skip = true;
+            }
+            return x;
+          }),
+        ],
+      }));
+    },
   },
 }));

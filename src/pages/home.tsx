@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   Dimensions,
   ScrollView,
@@ -30,10 +30,13 @@ function Home(): JSX.Element {
   const pollingActions = usePollingStore(s => s.actions);
 
   /** 현재 투표중인지 여부 */
+  const focused = useIsFocused();
   const polling = useMemo(() => tabIndex === 1, [tabIndex]);
   useEffect(() => {
-    StatusBar.setBarStyle(polling ? 'light-content' : 'dark-content');
-  }, [polling]);
+    StatusBar.setBarStyle(
+      !focused || !polling ? 'dark-content' : 'light-content',
+    );
+  }, [polling, focused]);
 
   useEffect(() => {
     pollingActions.setLoading(true);
@@ -124,7 +127,6 @@ function Home(): JSX.Element {
   }, []);
   const handleProfilePress = useCallback(() => {
     navigation.navigate(routes.profile);
-    navigation.navigate(routes.inbox);
   }, []);
 
   return (

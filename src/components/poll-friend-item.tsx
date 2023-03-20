@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {
   Animated,
+  GestureResponderEvent,
   ImageSourcePropType,
   StyleSheet,
   TouchableNativeFeedback,
@@ -13,7 +14,7 @@ import {Text} from './text';
 
 type PollFriendItemProps = {
   mb?: number;
-  onPress?: () => void;
+  onPress?: (e: GestureResponderEvent) => void;
   selected?: boolean;
   percent?: number;
   color?: string;
@@ -50,7 +51,11 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   }, [props.percent]);
 
   return (
-    <TouchableNativeFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback
+      onPressIn={e => {
+        console.log('hi');
+      }}
+      onPress={props.onPress}>
       <View
         style={[
           styles.root,
