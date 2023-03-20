@@ -51,6 +51,9 @@ export const Button = (props: ButtonProps): JSX.Element => {
   ]);
 
   const textColor = useMemo(() => {
+    if (buttonStyle.backgroundColor === colors.lightGrey) {
+      return colors.red;
+    }
     if (props.disabled) {
       return colors.darkGrey;
     }

@@ -17,6 +17,8 @@ const colors = {
   transparent: '#ffffff00',
 
   yellow: '#FBE338',
+
+  red: '#d91d1d',
 };
 
 export default colors;

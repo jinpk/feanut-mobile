@@ -16,6 +16,8 @@ type BadgeButtonProps = PropsWithChildren<{
   mx?: number;
   px?: number;
 
+  alignSelf?: 'center';
+
   onPress?: (e: GestureResponderEvent) => void;
   disabled?: boolean;
 }>;
@@ -28,8 +30,17 @@ export const BadgeButton = (props: BadgeButtonProps): JSX.Element => {
       marginHorizontal: props.mx,
       paddingHorizontal: props.px,
       marginTop: props.mt,
+      alignSelf: props.alignSelf || 'flex-start',
     };
-  }, [props.disabled, props.color, props.mx, props.px, props.my, props.mt]);
+  }, [
+    props.disabled,
+    props.color,
+    props.mx,
+    props.px,
+    props.my,
+    props.mt,
+    props.alignSelf,
+  ]);
 
   const textColor = useMemo(() => {
     if (buttonStyle.backgroundColor === colors.lightGrey) {
@@ -55,7 +66,6 @@ const styles = StyleSheet.create({
   root: {
     height: 24,
     borderRadius: 12,
-    alignSelf: 'flex-start',
     minWidth: 60,
     alignItems: 'center',
     justifyContent: 'center',
