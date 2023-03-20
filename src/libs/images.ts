@@ -32,6 +32,17 @@ import pollCardInspiration from '../assets/svgs/poll-card-inspiration.svg';
 import pollCardAwe from '../assets/svgs/poll-card-awe.svg';
 import pollCardLove from '../assets/svgs/poll-card-love.svg';
 
+import figureHappiness from '../assets/svgs/figure-happiness.svg';
+import figureGratitude from '../assets/svgs/figure-gratitude.svg';
+import figureSerenity from '../assets/svgs/figure-serenity.svg';
+import figureInterest from '../assets/svgs/figure-interest.svg';
+import figureHope from '../assets/svgs/figure-hope.svg';
+import figurePride from '../assets/svgs/figure-pride.svg';
+import figureAmusement from '../assets/svgs/figure-amusement.svg';
+import figureInspiration from '../assets/svgs/figure-inspiration.svg';
+import figureAwe from '../assets/svgs/figure-awe.svg';
+import figureLove from '../assets/svgs/figure-love.svg';
+
 export const svgs = {
   shuffle,
   refresh,
@@ -59,6 +70,17 @@ export const svgs = {
   pollCardInspiration,
   pollCardAwe,
   pollCardLove,
+
+  figureHappiness,
+  figureGratitude,
+  figureSerenity,
+  figureInterest,
+  figureHope,
+  figurePride,
+  figureAmusement,
+  figureInspiration,
+  figureAwe,
+  figureLove,
 };
 
 export const gifs = {

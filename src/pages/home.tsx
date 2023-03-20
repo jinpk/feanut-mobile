@@ -14,6 +14,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MainTopBar} from '../components/top-bar/main';
 import colors from '../libs/colors';
+import emotions from '../libs/emotions';
 import routes from '../libs/routes';
 import {usePollingStore} from '../store';
 import LoadingTemplate from '../templates/loading';
@@ -42,7 +43,18 @@ function Home(): JSX.Element {
   useEffect(() => {
     pollingActions.setLoading(true);
     let tm = setTimeout(() => {
-      pollingActions.setPolls([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+      pollingActions.setPolls([
+        {emotion: emotions.amusement},
+        {emotion: emotions.awe},
+        {emotion: emotions.gratitude},
+        {emotion: emotions.happiness},
+        {emotion: emotions.hope},
+        {emotion: emotions.inspiration},
+        {emotion: emotions.interest},
+        {emotion: emotions.love},
+        {emotion: emotions.pride},
+        {emotion: emotions.serenity},
+      ]);
       pollingActions.setLoading(false);
       pollingActions.setLoading(false);
       pollingActions.setPollIndex(0);
@@ -124,11 +136,14 @@ function Home(): JSX.Element {
     return polls.map((x, i) => {
       return (
         <View style={styles.pollContainer} key={i.toString()}>
-          <PollingTemplate backgroundColor="#FFD62B" pointColor="#6B99FF" />
+          <PollingTemplate
+            emotion={x.emotion}
+            focused={currentPollIndex === i}
+          />
         </View>
       );
     });
-  }, [polls]);
+  }, [polls, currentPollIndex]);
 
   const renderPollIndicator = useCallback(() => {
     return (
@@ -137,8 +152,6 @@ function Home(): JSX.Element {
       </View>
     );
   }, [insets]);
-
-  console.log('hi2');
 
   return (
     <View style={styles.root}>

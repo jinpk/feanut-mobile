@@ -1,6 +1,10 @@
 import {create} from 'zustand';
+import emotions from '../libs/emotions';
 
-type Poll = {};
+type Poll = {
+  emotion: emotions;
+};
+
 interface PollingStoreActions {
   setLoading: (loading: boolean) => void;
   setPolls: (polls: Poll[]) => void;
