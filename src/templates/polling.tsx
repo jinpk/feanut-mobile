@@ -1,12 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  Animated,
-  Easing,
-  StyleSheet,
-  TouchableOpacity,
-  useAnimatedValue,
-  View,
-} from 'react-native';
+import React, {useCallback, useMemo} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import colors from '../libs/colors';
@@ -19,49 +12,29 @@ import emotions, {
   emotionPointColor,
 } from '../libs/emotions';
 
+export type PollingFriendValue = string;
+
+interface PollingFriend {
+  value: PollingFriendValue;
+}
+
 type PollingTemplateProps = {
   emotion: emotions;
   focused: boolean;
+  selectedFriend: PollingFriendValue;
+  onFriendSelected: (value: PollingFriendValue) => void;
+  friends: PollingFriend[];
 };
 
 function PollingTemplate(props: PollingTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
-  const [selected, setSelected] = useState(null);
 
-  const opacity = useAnimatedValue(0.1);
-
-  useEffect(() => {
-    const animate = () => {
-      Animated.timing(opacity, {
-        duration: 1500,
-        toValue: 1,
-        useNativeDriver: false,
-        easing: Easing.ease,
-      }).start();
-    };
-    if (selected === null || !props.focused) {
-      opacity.setValue(0.1);
-    } else {
-      let i = setInterval(() => {
-        opacity.setValue(0.1);
-        animate();
-      }, 1500);
-
-      return () => {
-        clearTimeout(i);
-      };
-    }
-  }, [selected, props.focused]);
-
-  const translateX = opacity.interpolate({
-    inputRange: [0.1, 1],
-    outputRange: [0, -50],
-  });
-
-  const width = opacity.interpolate({
-    inputRange: [0.1, 0.3, 0.6, 1],
-    outputRange: [20, 60, 40, 20],
-  });
+  const handleFriendSelect = useCallback(
+    (friend: PollingFriend) => () => {
+      props.onFriendSelected(friend.value);
+    },
+    [props.onFriendSelected],
+  );
 
   const backgroundColor = useMemo((): string => {
     return emotionBackgorundColor[props.emotion];
@@ -118,15 +91,6 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
   return (
     <View style={[styles.root, {backgroundColor}]}>
       {renderFigure()}
-      {selected !== null && (
-        <Animated.View
-          style={[
-            styles.scrollGuide,
-            {opacity, width, transform: [{translateX}]},
-          ]}
-        />
-      )}
-
       <View style={[styles.header, {paddingTop: insets.top + 7}]}>
         <WithLocalSvg
           width={67}
@@ -149,41 +113,18 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
           </Text>
         </View>
         <View>
-          <PollFriendItem
-            percent={selected === null ? undefined : 30}
-            selected={selected === 0}
-            color={pointColor}
-            onPress={() => {
-              setSelected(0);
-            }}
-            mb={15}
-          />
-          <PollFriendItem
-            percent={selected === null ? undefined : 10}
-            selected={selected === 1}
-            color={pointColor}
-            onPress={() => {
-              setSelected(1);
-            }}
-            mb={15}
-          />
-          <PollFriendItem
-            percent={selected === null ? undefined : 60}
-            selected={selected === 2}
-            color={pointColor}
-            onPress={() => {
-              setSelected(2);
-            }}
-            mb={15}
-          />
-          <PollFriendItem
-            percent={selected === null ? undefined : 95}
-            selected={selected === 3}
-            color={pointColor}
-            onPress={() => {
-              setSelected(3);
-            }}
-          />
+          {props.friends.map((x, i) => {
+            return (
+              <PollFriendItem
+                key={i.toString()}
+                percent={props.selectedFriend ? 30 : undefined}
+                selected={props.selectedFriend === x.value}
+                color={pointColor}
+                onPress={handleFriendSelect(x)}
+                mb={i === 3 ? 0 : 15}
+              />
+            );
+          })}
         </View>
       </View>
 
@@ -248,16 +189,6 @@ const styles = StyleSheet.create({
   footerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  scrollGuide: {
-    width: 20,
-    height: 20,
-    backgroundColor: colors.lightGrey,
-    borderRadius: 100,
-    position: 'absolute',
-    top: '50%',
-    right: 16,
-    marginTop: -10,
   },
 });
 

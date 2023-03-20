@@ -55,7 +55,8 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
         style={[
           styles.root,
           {marginBottom: props.mb},
-          props.selected && {borderWidth: 1, borderColor: props.color},
+          props.selected && styles.shadow,
+          props.selected && {borderWidth: 1.5, borderColor: colors.dark},
         ]}>
         {props.percent && (
           <Animated.View
@@ -70,11 +71,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
             ]}
           />
         )}
-        <Avatar
-          source={source}
-          size={54}
-          defaultLogo={Math.floor(Math.random() * 100) > 50 ? 'm' : 'w'}
-        />
+        <Avatar source={source} size={54} defaultLogo={'m'} />
         <View style={styles.content}>
           <Text>피넛유저</Text>
         </View>
@@ -92,6 +89,16 @@ const styles = StyleSheet.create({
     height: 70,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   content: {
     marginLeft: 20,

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "clear": "rm -rf node_modules && rm -rf ios/build && rm -rf ios/Pods",
-    "pod-install": "cd ios && bundle install && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
+    "pod-install": "cd ios && bundle install && RCT_NEW_ARCH_ENABLED=0 bundle exec pod install",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",

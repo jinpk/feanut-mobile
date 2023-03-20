@@ -4,6 +4,7 @@ import partyPopper from '../assets/gifs/party-popper.gif';
 import partyingFace from '../assets/gifs/partying-face.gif';
 import teddyBear from '../assets/gifs/teddy-bear.gif';
 import timerClock from '../assets/gifs/timer-clock.gif';
+import pointingRight from '../assets/gifs/pointing-right.gif';
 import wavingHand from '../assets/gifs/waving-hand.gif';
 
 import apple from '../assets/svgs/apple.svg';
@@ -87,6 +88,7 @@ export const gifs = {
   dolphin,
   fire,
   partyPopper,
+  pointingRight,
   partyingFace,
   teddyBear,
   timerClock,

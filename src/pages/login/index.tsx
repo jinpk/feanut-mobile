@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import {CasualTopBar} from '../../components/top-bar';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
@@ -29,6 +29,7 @@ function Login(): JSX.Element {
 
   return (
     <View style={styles.root}>
+      <StatusBar barStyle="dark-content" />
       <CasualTopBar />
       <LoginTemplate
         onKakaoLogin={handleKakaoLogin}

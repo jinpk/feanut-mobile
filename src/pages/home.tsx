@@ -1,31 +1,26 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {
-  Animated,
   Dimensions,
-  Easing,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   ScrollView,
+  StatusBar,
   StyleSheet,
-  useAnimatedValue,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MainTopBar} from '../components/top-bar/main';
+import {PollingIndicatorFeautre} from '../features/polling';
+import {PollingsFeature} from '../features/polling/pollings';
 import colors from '../libs/colors';
 import emotions from '../libs/emotions';
 import routes from '../libs/routes';
 import {usePollingStore} from '../store';
 import LoadingTemplate from '../templates/loading';
 import PollLockTemplate from '../templates/poll-lock';
-import PollingTemplate from '../templates/polling';
 import RewardTemplate from '../templates/reward';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 function Home(): JSX.Element {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
   const scrollRef = useRef<ScrollView>(null);
@@ -33,29 +28,78 @@ function Home(): JSX.Element {
 
   // polling
   const pollingActions = usePollingStore(s => s.actions);
-  const polls = usePollingStore(s => s.polls);
-  const currentPollIndex = usePollingStore(s => s.pollIndex);
-  const loading = usePollingStore(s => s.loading);
 
   /** 현재 투표중인지 여부 */
   const polling = useMemo(() => tabIndex === 1, [tabIndex]);
+  useEffect(() => {
+    StatusBar.setBarStyle(polling ? 'light-content' : 'dark-content');
+  }, [polling]);
 
   useEffect(() => {
     pollingActions.setLoading(true);
     let tm = setTimeout(() => {
       pollingActions.setPolls([
-        {emotion: emotions.amusement},
-        {emotion: emotions.awe},
-        {emotion: emotions.gratitude},
-        {emotion: emotions.happiness},
-        {emotion: emotions.hope},
-        {emotion: emotions.inspiration},
-        {emotion: emotions.interest},
-        {emotion: emotions.love},
-        {emotion: emotions.pride},
-        {emotion: emotions.serenity},
+        {
+          id: emotions.amusement,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.amusement,
+        },
+        {
+          id: emotions.awe,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.awe,
+        },
+        {
+          id: emotions.gratitude,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.gratitude,
+        },
+        {
+          id: emotions.happiness,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.happiness,
+        },
+        {
+          id: emotions.hope,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.hope,
+        },
+        {
+          id: emotions.inspiration,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.inspiration,
+        },
+        {
+          id: emotions.interest,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.interest,
+        },
+        {
+          id: emotions.love,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.love,
+        },
+        {
+          id: emotions.pride,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.pride,
+        },
+        {
+          id: emotions.serenity,
+          polling: {},
+          selectedFriend: null,
+          emotion: emotions.serenity,
+        },
       ]);
-      pollingActions.setLoading(false);
       pollingActions.setLoading(false);
       pollingActions.setPollIndex(0);
       setTabIndex(1);
@@ -72,57 +116,8 @@ function Home(): JSX.Element {
     });
   }, [tabIndex]);
 
-  /** Polls Indicator hooks */
-  const indicatorWidth = useAnimatedValue(0);
-  useEffect(() => {
-    if (!polling) {
-      indicatorWidth.setValue(0);
-      return;
-    }
-    const barWidth =
-      Math.ceil((SCREEN_WIDTH - 32) / polls.length) * (currentPollIndex + 1);
-    console.log(barWidth, (SCREEN_WIDTH - 32) / polls.length, currentPollIndex);
-    const toValue = barWidth || 0;
-    Animated.timing(indicatorWidth, {
-      duration: 300,
-      toValue,
-      easing: Easing.bounce,
-      useNativeDriver: false,
-    }).start(r => {
-      if (!r.finished) {
-        indicatorWidth.setValue(toValue);
-      }
-    });
-  }, [currentPollIndex, polling, polls.length]);
-
   const handleFindFriendByEmail = () => {};
   const handleKakaoSync = () => {};
-
-  const handleFinishPolling = useCallback(() => {
-    console.log('finish polling!');
-    setTabIndex(2);
-    let tm = setTimeout(() => {
-      setTabIndex(3);
-      clearTimeout(tm);
-    }, 3000);
-  }, []);
-
-  const handleScrollEnd = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      if (
-        e.nativeEvent.contentOffset.x -
-          (e.nativeEvent.contentSize.width -
-            e.nativeEvent.layoutMeasurement.width) >=
-        10
-      ) {
-        handleFinishPolling();
-      }
-      pollingActions.setPollIndex(
-        Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH),
-      );
-    },
-    [handleFinishPolling],
-  );
 
   const handleInboxPress = useCallback(() => {
     navigation.navigate(routes.inbox);
@@ -131,27 +126,6 @@ function Home(): JSX.Element {
     navigation.navigate(routes.profile);
     navigation.navigate(routes.inbox);
   }, []);
-
-  const renderPolls = useCallback(() => {
-    return polls.map((x, i) => {
-      return (
-        <View style={styles.pollContainer} key={i.toString()}>
-          <PollingTemplate
-            emotion={x.emotion}
-            focused={currentPollIndex === i}
-          />
-        </View>
-      );
-    });
-  }, [polls, currentPollIndex]);
-
-  const renderPollIndicator = useCallback(() => {
-    return (
-      <View style={[styles.indicator, {top: insets.top + 50 + 9}]}>
-        <Animated.View style={[styles.indicatorBar, {width: indicatorWidth}]} />
-      </View>
-    );
-  }, [insets]);
 
   return (
     <View style={styles.root}>
@@ -173,15 +147,8 @@ function Home(): JSX.Element {
         </View>
 
         <View style={styles.polls}>
-          <ScrollView
-            onMomentumScrollEnd={handleScrollEnd}
-            onScrollEndDrag={handleScrollEnd}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}>
-            {renderPolls()}
-          </ScrollView>
-          {renderPollIndicator()}
+          <PollingsFeature />
+          <PollingIndicatorFeautre />
         </View>
 
         {/** Reward */}
@@ -202,20 +169,6 @@ const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: colors.white},
   pollContainer: {
     width: SCREEN_WIDTH,
-  },
-
-  indicator: {
-    zIndex: 2,
-    left: 16,
-    right: 16,
-    backgroundColor: colors.lightGrey + '59',
-    borderRadius: 15,
-    height: 3,
-    position: 'absolute',
-  },
-  indicatorBar: {
-    height: '100%',
-    backgroundColor: colors.lightGrey + 'BF',
   },
   polls: {
     backgroundColor: colors.primary,
