@@ -63,6 +63,7 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
+    paddingTop: 70,
     flex: 1,
     alignItems: 'center',
   },

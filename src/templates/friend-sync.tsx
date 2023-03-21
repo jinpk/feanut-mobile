@@ -6,7 +6,7 @@ import {TextButton} from '../components/button/text-button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
 import colors from '../libs/colors';
-import {gifs, svgs} from '../libs/images';
+import {svgs} from '../libs/images';
 
 type FriendSyncTemplateProps = PropsWithChildren<{
   title: string;
@@ -27,31 +27,33 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
 
       {props.children}
 
-      <Button
-        onPress={props.onKakaoSync}
-        leftIcon={
-          <WithLocalSvg
-            asset={svgs.kakao}
-            style={{marginLeft: -17}}
-            width={85}
-            height={42}
-          />
-        }
-        color={colors.kakao}
-        title="카카오톡 친구 동기화"
-        mx={16}
-      />
-
-      <Text size={12} color={colors.darkGrey} my={27}>
-        또는
-      </Text>
-
-      <View style={styles.emailWrap}>
-        <TextButton
-          onPress={props.onFindByEamil}
-          title="이메일로 친구 찾기"
-          color={colors.darkGrey}
+      <View style={styles.footer}>
+        <Button
+          onPress={props.onKakaoSync}
+          leftIcon={
+            <WithLocalSvg
+              asset={svgs.kakao}
+              style={{marginLeft: -17}}
+              width={85}
+              height={42}
+            />
+          }
+          color={colors.kakao}
+          title="카카오톡 친구 동기화"
+          mx={16}
         />
+
+        <Text size={12} color={colors.darkGrey} my={27}>
+          또는
+        </Text>
+
+        <View style={styles.emailWrap}>
+          <TextButton
+            onPress={props.onFindByEamil}
+            title="이메일로 친구 찾기"
+            color={colors.darkGrey}
+          />
+        </View>
       </View>
     </View>
   );
@@ -59,17 +61,22 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
+    paddingTop: 50,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   },
   body: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   emailWrap: {
-    marginBottom: 76,
+    marginBottom: 20,
+  },
+  footer: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
 });
 

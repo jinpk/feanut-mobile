@@ -13,7 +13,7 @@ import {PollingsFeature} from '../features/polling/pollings';
 import colors from '../libs/colors';
 import emotions from '../libs/emotions';
 import routes from '../libs/routes';
-import {usePollingStore} from '../store';
+import {useModalStore, usePollingStore} from '../store';
 import LoadingTemplate from '../templates/loading';
 import PollLockTemplate from '../templates/poll-lock';
 import RewardTemplate from '../templates/reward';
@@ -32,11 +32,17 @@ function Home(): JSX.Element {
   /** 현재 투표중인지 여부 */
   const focused = useIsFocused();
   const polling = useMemo(() => tabIndex === 1, [tabIndex]);
+
+  const welcomModalOpened = useModalStore(s => s.welcome);
   useEffect(() => {
     StatusBar.setBarStyle(
-      !focused || !polling ? 'dark-content' : 'light-content',
+      welcomModalOpened
+        ? 'dark-content'
+        : !focused || !polling
+        ? 'dark-content'
+        : 'light-content',
     );
-  }, [polling, focused]);
+  }, [polling, focused, welcomModalOpened]);
 
   useEffect(() => {
     pollingActions.setLoading(true);
@@ -122,6 +128,14 @@ function Home(): JSX.Element {
   const handleFindFriendByEmail = () => {};
   const handleKakaoSync = () => {};
 
+  const handleFinishPolling = useCallback(() => {
+    setTabIndex(2);
+    let tm = setTimeout(() => {
+      clearTimeout(tm);
+      setTabIndex(3);
+    }, 2000);
+  }, []);
+
   const handleInboxPress = useCallback(() => {
     navigation.navigate(routes.inbox);
   }, []);
@@ -149,7 +163,7 @@ function Home(): JSX.Element {
         </View>
 
         <View style={styles.polls}>
-          <PollingsFeature />
+          <PollingsFeature onFinish={handleFinishPolling} />
           <PollingIndicatorFeautre />
         </View>
 

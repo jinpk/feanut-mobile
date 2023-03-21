@@ -30,6 +30,7 @@ function Login(): JSX.Element {
   return (
     <View style={styles.root}>
       <StatusBar barStyle="dark-content" />
+      <View style={styles.topPadding} />
       <CasualTopBar />
       <LoginTemplate
         onKakaoLogin={handleKakaoLogin}
@@ -44,6 +45,9 @@ function Login(): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: colors.white},
+  topPadding: {
+    paddingTop: 70,
+  },
 });
 
 export default Login;

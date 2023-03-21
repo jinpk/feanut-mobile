@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import LogoSvg from '../../assets/svgs/logo.svg';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -12,7 +12,8 @@ type CasualTopBarProps = {
 export const CasualTopBar = (props: CasualTopBarProps): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.root, {paddingTop: insets.top + 70}]}>
+    <View style={[styles.root, {paddingTop: insets.top + 16}]}>
+      <StatusBar barStyle="dark-content" />
       {props.onClose && (
         <TouchableOpacity
           onPress={props.onClose}
@@ -37,7 +38,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
-    paddingVertical: 70,
     flexDirection: 'row',
   },
   letter: {

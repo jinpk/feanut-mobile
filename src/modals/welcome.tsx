@@ -1,8 +1,9 @@
 import React from 'react';
 import {Modal, StyleSheet, View} from 'react-native';
-import {PollCards} from '../components/poll-cards';
+import {PollCard} from '../components';
 import {TextMarker, Text} from '../components/text';
 import {CasualTopBar} from '../components/top-bar';
+import emotions from '../libs/emotions';
 import {gifs} from '../libs/images';
 import {useModalStore} from '../store';
 import FriendSyncTemplate from '../templates/friend-sync';
@@ -21,7 +22,9 @@ function WelcomeModal(): JSX.Element {
       <FriendSyncTemplate
         icon={gifs.partyingFace}
         title="피넛터가 되신 걸 축하합니다!">
-        <PollCards mt={30} />
+        <View style={styles.cards}>
+          <PollCard emotion={emotions.pride} />
+        </View>
 
         <Text align="center">
           피넛은 친구들과 다양한 주제로{'\n'}서로 투표하고 칭찬하는
@@ -47,6 +50,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  cards: {
+    marginVertical: 24,
   },
 });
 

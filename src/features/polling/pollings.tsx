@@ -1,19 +1,15 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  PanResponder,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Alert, PanResponder, ScrollView, StyleSheet, View} from 'react-native';
 import constants from '../../libs/constants';
 import {gifs} from '../../libs/images';
 import {usePollingStore} from '../../store';
 import PollingTemplate from '../../templates/polling';
 
-export const PollingsFeature = React.memo(() => {
+type PollingsFeatureProps = {
+  onFinish: () => void;
+};
+
+export const PollingsFeature = React.memo((props: PollingsFeatureProps) => {
   const scollRef = useRef<ScrollView>(null);
   const polls = usePollingStore(s => s.polls);
   const currentPollIndex = usePollingStore(s => s.pollIndex);
@@ -40,16 +36,19 @@ export const PollingsFeature = React.memo(() => {
     },
   ]);
 
+  // stored poll information
   const storedPoll = useRef({
     currentPollIndex,
     poll,
+    length: polls.length,
   });
   useEffect(() => {
     storedPoll.current = {
       currentPollIndex,
       poll,
+      length: polls.length,
     };
-  }, [currentPollIndex, poll]);
+  }, [currentPollIndex, poll, polls.length]);
 
   const gestureX = useRef(0);
   const slidePanResponder = useRef(
@@ -67,24 +66,27 @@ export const PollingsFeature = React.memo(() => {
         gestureX.current = gestureState.dx;
       },
       onPanResponderRelease: (evt, gestureState) => {
-        if (Math.abs(gestureState.dx) < 5) {
-          console.log('is touced');
-          evt.preventDefault();
-          evt.stopPropagation();
-          evt.persist();
-        }
         if (gestureX.current < -30) {
-          console.log('next poll');
           if (
-            storedPoll.current.poll.skip ||
-            storedPoll.current.poll.selectedFriend
+            storedPoll.current.poll?.skip ||
+            storedPoll.current.poll?.selectedFriend
           ) {
-            scollRef.current?.scrollTo({
-              animated: true,
-              x:
-                constants.screenWidth *
-                (storedPoll.current.currentPollIndex + 1),
-            });
+            if (
+              storedPoll.current.length ===
+              storedPoll.current.currentPollIndex + 1
+            ) {
+              // finish poll
+              handleFinishPolling();
+            } else {
+              // next poll
+              scollRef.current?.scrollTo({
+                animated: true,
+                x:
+                  constants.screenWidth *
+                  (storedPoll.current.currentPollIndex + 1),
+              });
+              setPollIndex(storedPoll.current.currentPollIndex + 1);
+            }
           } else {
             Alert.alert('알림', '질문을 건너뛰거나 친구를 투표하세요!');
           }
@@ -97,8 +99,13 @@ export const PollingsFeature = React.memo(() => {
   ).current;
 
   const handleFinishPolling = useCallback(() => {
-    console.log('finish polling');
-  }, [polls, currentPollIndex]);
+    if (
+      storedPoll.current.poll?.skip ||
+      storedPoll.current.poll?.selectedFriend
+    ) {
+      props.onFinish();
+    }
+  }, []);
 
   // 첫번째 투표에서만 친구 선택하면 다음 투표 스크롤 가이드
   useEffect(() => {
@@ -149,34 +156,15 @@ export const PollingsFeature = React.memo(() => {
           animated: true,
           x: constants.screenWidth * (i + 1),
         });
+        setPollIndex(i + 1);
       }
     },
     [polls.length],
   );
 
-  const handleScrollEnd = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      currentScrollOffsetX.current = e.nativeEvent.contentOffset.x;
-      if (
-        e.nativeEvent.contentOffset.x -
-          (e.nativeEvent.contentSize.width -
-            e.nativeEvent.layoutMeasurement.width) >=
-        10
-      ) {
-        handleFinishPolling();
-      }
-      setPollIndex(
-        Math.round(e.nativeEvent.contentOffset.x / constants.screenWidth),
-      );
-    },
-    [handleFinishPolling],
-  );
-
   return (
     <View {...slidePanResponder.panHandlers} style={styles.root}>
       <ScrollView
-        onMomentumScrollEnd={handleScrollEnd}
-        onScrollEndDrag={handleScrollEnd}
         horizontal
         ref={scollRef}
         pagingEnabled

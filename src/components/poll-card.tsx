@@ -44,10 +44,10 @@ export const PollCard = (props: PollCardProps): JSX.Element => {
         marginHorizontal: props.mx,
         marginLeft: props.ml,
       }}>
-      <WithLocalSvg width={255} height={200} asset={asset} />
+      <WithLocalSvg width={190} height={149} asset={asset} />
       <View style={styles.poll}>
-        <Gif source={gifs.fire} />
-        <Text color={colors.white} mt={25} size={27} weight="bold">
+        <Gif size={35} source={gifs.fire} />
+        <Text color={colors.white} mt={18} size={18} weight="bold">
           첫인상이 가장{'\n'}좋았던 친구는?
         </Text>
       </View>
