@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import colors from '../../libs/colors';
+import {colors} from '../../libs/common';
 import {Text, TextColorProps, TextSizeProps} from '../text';
 
 type TextButtonProps = PropsWithChildren<{

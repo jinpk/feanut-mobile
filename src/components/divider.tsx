@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 
 type DividerProps = {
   my?: number;

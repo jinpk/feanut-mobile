@@ -4,7 +4,7 @@ import {Timer} from '../components';
 import {Button} from '../components/button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
-import {gifs} from '../libs/images';
+import {gifs} from '../libs/common';
 
 type PollLockTemplateProps = {
   second: number;

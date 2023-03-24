@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import emotions from '../libs/emotions';
+import {emotions} from '../libs/common';
 import {PollCard} from './poll-card';
 
 export const PollCards = (): JSX.Element => {

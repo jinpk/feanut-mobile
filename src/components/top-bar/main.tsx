@@ -1,8 +1,7 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
-import colors from '../../libs/colors';
-import {svgs} from '../../libs/images';
+import {colors, svgs} from '../../libs/common';
 import {Text} from '../text';
 
 type MainTopBar = {

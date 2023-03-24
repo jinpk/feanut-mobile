@@ -1,4 +1,4 @@
-const routes = {
+export const routes = {
   login: '/login',
   loginEmail: '/login/email',
   loginEmailVerification: '/login/email/verification',
@@ -13,5 +13,3 @@ const routes = {
 
   friendRegistration: '/friend/registration',
 };
-
-export default routes;

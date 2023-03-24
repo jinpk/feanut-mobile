@@ -1,18 +1,12 @@
 import React, {PropsWithChildren} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {WithLocalSvg} from 'react-native-svg';
 import {Button} from '../components/button';
-import {TextButton} from '../components/button/text-button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
-import colors from '../libs/colors';
-import {svgs} from '../libs/images';
 
 type FriendSyncTemplateProps = PropsWithChildren<{
   title: string;
   icon: number;
-  onFindByEamil: () => void;
-  onKakaoSync: () => void;
 }>;
 
 function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
@@ -27,34 +21,7 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
 
       {props.children}
 
-      <View style={styles.footer}>
-        <Button
-          onPress={props.onKakaoSync}
-          leftIcon={
-            <WithLocalSvg
-              asset={svgs.kakao}
-              style={{marginLeft: -17}}
-              width={85}
-              height={42}
-            />
-          }
-          color={colors.kakao}
-          title="카카오톡 친구 동기화"
-          mx={16}
-        />
-
-        <Text size={12} color={colors.darkGrey} my={27}>
-          또는
-        </Text>
-
-        <View style={styles.emailWrap}>
-          <TextButton
-            onPress={props.onFindByEamil}
-            title="이메일로 친구 찾기"
-            color={colors.darkGrey}
-          />
-        </View>
-      </View>
+      <Button title="연락처 동기화" />
     </View>
   );
 }
@@ -69,14 +36,6 @@ const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  emailWrap: {
-    marginBottom: 20,
-  },
-  footer: {
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
   },
 });
 

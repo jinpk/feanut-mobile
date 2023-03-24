@@ -10,10 +10,8 @@ import {
 import {MainTopBar} from '../components/top-bar/main';
 import {PollingIndicatorFeautre} from '../features/polling';
 import {PollingsFeature} from '../features/polling/pollings';
-import colors from '../libs/colors';
-import emotions from '../libs/emotions';
-import routes from '../libs/routes';
-import {useModalStore, usePollingStore} from '../store';
+import {colors, emotions, routes} from '../libs/common';
+import {useModalStore, usePollingStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import PollLockTemplate from '../templates/poll-lock';
 import RewardTemplate from '../templates/reward';

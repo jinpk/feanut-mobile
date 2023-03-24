@@ -1,4 +1,4 @@
-const emotions = {
+export const emotions = {
   happiness: 'happiness',
   gratitude: 'gratitude',
   serenity: 'serenity',
@@ -10,7 +10,9 @@ const emotions = {
   awe: 'awe',
   love: 'love',
 };
-type emotions = (typeof emotions)[keyof typeof emotions];
+
+export type emotions = (typeof emotions)[keyof typeof emotions];
+
 export const emotionBackgorundColor = {
   happiness: '#FFD62B',
   gratitude: '#7DBCD7',
@@ -35,4 +37,3 @@ export const emotionPointColor = {
   awe: '#FF7569',
   love: '#9BEA77',
 };
-export default emotions;

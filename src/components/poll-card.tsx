@@ -1,9 +1,7 @@
 import React, {useMemo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import colors from '../libs/colors';
-import emotions from '../libs/emotions';
-import {gifs, svgs} from '../libs/images';
+import {colors, emotions, gifs, svgs} from '../libs/common';
 import {Gif} from './image';
 import {Text} from './text';
 

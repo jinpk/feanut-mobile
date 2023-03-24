@@ -7,10 +7,9 @@ import {TextButton} from '../components/button/text-button';
 import {Divider} from '../components';
 import {InputSwitch} from '../components/input';
 import {Text} from '../components/text';
-import colors from '../libs/colors';
-import {svgs} from '../libs/images';
 import Switch from '../components/switch';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {colors, svgs} from '../libs/common';
 
 type ProfileTemplateProps = {};
 

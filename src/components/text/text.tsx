@@ -1,7 +1,6 @@
 import {PropsWithChildren, useMemo} from 'react';
 import {Text as RNText} from 'react-native';
-import colors from '../../libs/colors';
-import fonts from '../../libs/fonts';
+import {colors, fonts} from '../../libs/common';
 
 export type TextColorProps = string | undefined;
 export type TextSizeProps = 27 | 18 | 14 | 13 | 12 | 10 | undefined;

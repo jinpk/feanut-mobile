@@ -2,8 +2,7 @@ import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import LogoSvg from '../../assets/svgs/logo.svg';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {svgs} from '../../libs/images';
-import colors from '../../libs/colors';
+import {svgs, colors} from '../../libs/common';
 
 type CasualTopBarProps = {
   onClose?: () => void;
@@ -21,10 +20,10 @@ export const CasualTopBar = (props: CasualTopBarProps): JSX.Element => {
           <WithLocalSvg width={14} height={14} asset={svgs.close} />
         </TouchableOpacity>
       )}
-      <WithLocalSvg width={30} height={15} asset={LogoSvg} />
+      <WithLocalSvg width={58} height={30} asset={LogoSvg} />
       <WithLocalSvg
-        width={60}
-        height={15}
+        width={76}
+        height={20}
         fill={colors.dark}
         asset={svgs.logoLetterBlack}
         style={styles.letter}
@@ -38,10 +37,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
-    flexDirection: 'row',
   },
   letter: {
-    marginLeft: 8,
+    marginTop: 9,
   },
   close: {
     position: 'absolute',

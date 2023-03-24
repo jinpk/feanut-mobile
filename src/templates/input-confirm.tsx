@@ -4,7 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '../components/button';
 import {TextInput} from '../components/input';
 import {Text} from '../components/text';
-import colors from '../libs/colors';
+import colors from '../libs/common/colors';
 
 type InputConfirmTemplateProps = {
   title: string;

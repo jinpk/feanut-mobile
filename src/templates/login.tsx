@@ -1,61 +1,137 @@
-import {GestureResponderEvent, StyleSheet, View} from 'react-native';
+import {useEffect, useRef} from 'react';
+import {Controller, UseFormReturn} from 'react-hook-form';
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  TextInput as RNTextInput,
+  View,
+} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {Button} from '../components/button';
 import {TextButton} from '../components/button/text-button';
+import {Errors} from '../components/errors';
 import {Gif} from '../components/image';
-import {Text} from '../components/text';
-import colors from '../libs/colors';
-import {gifs, svgs} from '../libs/images';
+import {TextInput} from '../components/input';
+import {colors, gifs, svgs} from '../libs/common';
+import {LoginForm} from '../libs/interfaces';
 
 type LoginTemplateProps = {
-  onKakaoLogin: (e: GestureResponderEvent) => void;
-  onAppleLogin: (e: GestureResponderEvent) => void;
-  onEmailLogin: (e: GestureResponderEvent) => void;
-  onPrivacyTerm: (e: GestureResponderEvent) => void;
-  onServiceTerm: (e: GestureResponderEvent) => void;
+  form: UseFormReturn<LoginForm>;
+
+  onFindPassword: (e: GestureResponderEvent) => void;
+  onFirst: (e: GestureResponderEvent) => void;
+  onSubmit: (e: GestureResponderEvent) => void;
 };
 
 function LoginTemplate(props: LoginTemplateProps): JSX.Element {
+  const usernameRef = useRef<RNTextInput>(null);
+  const passwordRef = useRef<RNTextInput>(null);
+
+  const hasUsername = props.form.watch().hasUsername;
+
+  const handleUsernamePressOut = () => {
+    if (hasUsername) {
+      props.form.setValue('password', '');
+      props.form.clearErrors('password');
+      props.form.setValue('hasUsername', false);
+      usernameRef.current?.focus();
+    }
+  };
+
+  useEffect(() => {
+    if (hasUsername) {
+      passwordRef.current?.focus();
+    }
+  }, [hasUsername]);
+
   return (
     <View style={styles.root}>
-      <Gif source={gifs.wavingHand} />
+      <WithLocalSvg width={58} height={30} asset={svgs.logo} />
+      <WithLocalSvg
+        width={76}
+        height={20}
+        fill={colors.dark}
+        asset={svgs.logoLetterBlack}
+      />
 
-      <Button
-        onPress={props.onKakaoLogin}
-        leftIcon={
-          <WithLocalSvg
-            asset={svgs.kakao}
-            style={{marginLeft: -17}}
-            width={85}
-            height={42}
+      <Gif source={gifs.wavingHand} style={styles.waving} />
+
+      <View style={styles.body}>
+        <View style={styles.inputWrap}>
+          <Controller
+            control={props.form.control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <TextInput
+                inputRef={usernameRef}
+                disabled={hasUsername}
+                onPressOut={handleUsernamePressOut}
+                disabledAutoCapitalize
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                disabledBorderBottomRadius={hasUsername}
+                disabledBorderBottom={hasUsername}
+                placeholder="feanut ID를 입력해 주세요"
+              />
+            )}
+            name="username"
           />
-        }
-        color={colors.kakao}
-        title="카카오 시작하기"
-        mx={16}
-        mt={120}
-      />
-      <Button
-        onPress={props.onAppleLogin}
-        leftIcon={<WithLocalSvg asset={svgs.apple} width={14} height={16.6} />}
-        color={colors.black}
-        title="Apple 로그인"
-        mx={16}
-        mt={15}
-      />
-      <Button
-        onPress={props.onEmailLogin}
-        color={colors.mediumGrey}
-        title="이메일 로그인"
-        mx={16}
-        mt={15}
-      />
+          {hasUsername && (
+            <Controller
+              control={props.form.control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  disabledBorderTopRadius
+                  inputRef={passwordRef}
+                  secureTextEntry
+                  disabledAutoCapitalize
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  placeholder="비밀번호"
+                />
+              )}
+              name="password"
+            />
+          )}
+          <Errors
+            errors={[
+              props.form.formState.errors.username?.message as string,
+              props.form.formState.errors.password?.message as string,
+            ]}
+          />
+        </View>
 
-      <View style={styles.terms}>
-        <TextButton onPress={props.onPrivacyTerm} title="개인정보 처리방침" />
-        <Text size={12}>과 </Text>
-        <TextButton onPress={props.onServiceTerm} title="서비스 이용약관" />
-        <Text size={12}>에 동의합니다.</Text>
+        {!hasUsername && (
+          <View style={styles.tools}>
+            <TextButton
+              hiddenBorder
+              onPress={props.onFirst}
+              title="feanut이 처음이신가요?"
+            />
+          </View>
+        )}
+
+        {hasUsername && (
+          <View style={styles.tools}>
+            <TextButton
+              color={colors.darkGrey}
+              hiddenBorder
+              onPress={props.onFindPassword}
+              title="비밀번호를 잊으셨나요?"
+            />
+          </View>
+        )}
+
+        <Button
+          disabled={
+            Boolean(props.form.formState.errors.username) ||
+            Boolean(props.form.formState.errors.password)
+          }
+          onPress={props.onSubmit}
+          title={hasUsername ? '로그인' : '시작하기'}
+          mt={15}
+        />
       </View>
     </View>
   );
@@ -63,14 +139,26 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 70,
+    paddingTop: 50,
     flex: 1,
     alignItems: 'center',
   },
-  terms: {
-    marginTop: 30,
+  waving: {
+    marginTop: 50,
+  },
+  body: {
+    paddingTop: 100,
+    flex: 1,
+    alignSelf: 'stretch',
+    paddingHorizontal: 16,
+  },
+  inputWrap: {
+    marginBottom: 15,
+    alignSelf: 'stretch',
+  },
+  tools: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
 });
 

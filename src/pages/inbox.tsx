@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {BackTopBar} from '../components/top-bar';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 import InboxTemplate from '../templates/inbox';
 
 function Inbox(): JSX.Element {

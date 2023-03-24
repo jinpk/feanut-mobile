@@ -7,3 +7,4 @@ export * from './poll-card';
 export * from './switch';
 export * from './poll-friend-item';
 export * from './line-indicator';
+export * from './terms';

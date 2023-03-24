@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 
 type PollIndicatorProps = {
   length: number;

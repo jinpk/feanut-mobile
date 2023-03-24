@@ -3,9 +3,9 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components/text';
 import {BackTopBar} from '../../../components/top-bar';
-import colors from '../../../libs/colors';
-import {useUserStore} from '../../../store';
+import {useUserStore} from '../../../libs/stores';
 import InputConfirmTemplate from '../../../templates/input-confirm';
+import {colors, routes} from '../../../libs/common';
 
 function LoginEmailVerification(): JSX.Element {
   const navigation = useNavigation();

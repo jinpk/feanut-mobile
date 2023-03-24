@@ -8,9 +8,9 @@ import {
   useAnimatedValue,
   View,
 } from 'react-native';
-import colors from '../libs/colors';
 import {Avatar} from './avatar';
 import {Text} from './text';
+import {colors} from '../libs/common';
 
 type PollFriendItemProps = {
   mb?: number;

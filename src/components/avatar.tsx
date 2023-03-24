@@ -1,8 +1,7 @@
 import React from 'react';
 import {Image, ImageSourcePropType, StyleSheet, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import colors from '../libs/colors';
-import {svgs} from '../libs/images';
+import {colors, svgs} from '../libs/common';
 
 type AvatarProps = {
   source: ImageSourcePropType;

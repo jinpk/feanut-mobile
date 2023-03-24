@@ -3,21 +3,26 @@ import {Modal, StyleSheet, View} from 'react-native';
 import {PollCard} from '../components';
 import {TextMarker, Text} from '../components/text';
 import {CasualTopBar} from '../components/top-bar';
-import emotions from '../libs/emotions';
-import {gifs} from '../libs/images';
-import {useModalStore} from '../store';
-import FriendSyncTemplate from '../templates/friend-sync';
+import {emotions, gifs} from '../libs/common';
+import FriendSyncTemplate from './friend-sync';
 
-function WelcomeModal(): JSX.Element {
-  const visible = useModalStore(s => s.welcome);
-  const close = useModalStore(s => s.actions.closeWelcome);
+type WelcomeModalTemplateProps = {
+  visible: boolean;
+  onClose: () => void;
+};
 
+export const WelcomeModalTemplate = (
+  props: WelcomeModalTemplateProps,
+): JSX.Element => {
   const handleClose = () => {
-    close();
+    props.onClose();
   };
 
   return (
-    <Modal animationType="slide" visible={visible} onRequestClose={handleClose}>
+    <Modal
+      animationType="slide"
+      visible={props.visible}
+      onRequestClose={handleClose}>
       <CasualTopBar onClose={handleClose} />
       <FriendSyncTemplate
         icon={gifs.partyingFace}
@@ -43,7 +48,7 @@ function WelcomeModal(): JSX.Element {
       </FriendSyncTemplate>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   markerWrap: {
@@ -55,5 +60,3 @@ const styles = StyleSheet.create({
     marginVertical: 24,
   },
 });
-
-export default WelcomeModal;

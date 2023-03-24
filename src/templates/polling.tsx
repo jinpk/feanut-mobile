@@ -10,15 +10,17 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
-import colors from '../libs/colors';
-import {svgs, gifs} from '../libs/images';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
 import {PollFriendItem} from '../components';
-import emotions, {
+import {
   emotionBackgorundColor,
   emotionPointColor,
-} from '../libs/emotions';
+  emotions,
+  colors,
+  svgs,
+  gifs,
+} from '../libs/common';
 
 export type PollingFriendValue = string;
 
@@ -114,7 +116,7 @@ function PollingTemplate(props: PollingTemplateProps): JSX.Element {
       </View>
       <View style={styles.body}>
         <View style={styles.titleArea}>
-          <Gif source={props.icon}  />
+          <Gif source={props.icon} />
           <Text
             color={colors.white}
             mt={15}

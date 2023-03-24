@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
-import {gifs} from '../libs/images';
+import {gifs} from '../libs/common';
 
 type LoadingTemplateProps = {
   label?: string;

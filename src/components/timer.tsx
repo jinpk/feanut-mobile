@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 import {Text} from './text';
 
 dayjs.extend(duration);

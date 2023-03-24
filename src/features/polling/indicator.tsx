@@ -1,6 +1,6 @@
 import React from 'react';
 import {LineIndicator} from '../../components';
-import {usePollingStore} from '../../store';
+import {usePollingStore} from '../../libs/stores';
 
 export const PollingIndicatorFeautre = React.memo(() => {
   const pollsLength = usePollingStore(s => s.polls.length);

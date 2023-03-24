@@ -1,17 +1,16 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import routes from './libs/routes';
+import {routes} from './libs/common';
 import Login from './pages/login';
 import Home from './pages/home';
 import LoginEmail from './pages/login/email';
 import LoginEmailVerification from './pages/login/email/verification';
-import {useUserStore} from './store';
+import {useUserStore} from './libs/stores';
 import {Text} from './components/text';
-import WelcomeModal from './modals/welcome';
+import {WelcomeModalFeature} from './features/modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
-import {View} from 'react-native';
 import Profile from './pages/profile';
 
 type AppProps = React.PropsWithChildren<{}>;
@@ -24,16 +23,11 @@ function NavigationApp() {
   const checkLogin = useUserStore(state => state.actions.check);
 
   useEffect(() => {
-    let tm = setTimeout(() => {
-      checkLogin();
-    }, 1000);
-    return () => {
-      clearTimeout(tm);
-    };
+    checkLogin();
   }, []);
 
   if (loginLoading) {
-    return <Text mt={100}>auth checking...</Text>;
+    return <Text mt={100}>Checking credidental...</Text>;
   }
 
   return (
@@ -68,7 +62,7 @@ function FeanutApp(props: AppProps): JSX.Element {
     <SafeAreaProvider>
       <NavigationApp />
       {/** Modals */}
-      <WelcomeModal />
+      <WelcomeModalFeature />
     </SafeAreaProvider>
   );
 }

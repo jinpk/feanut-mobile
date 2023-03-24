@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
 import {useInsets} from '../hooks';
-import {gifs} from '../libs/images';
+import {gifs} from '../libs/common';
 
 type RewardTemplateProps = {
   amount: number;

@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {BackTopBar} from '../components/top-bar';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 import ProfileTemplate from '../templates/profile';
 
 function Profile(): JSX.Element {

@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import colors from '../libs/colors';
+import {colors} from '../libs/common';
 import {Avatar} from './avatar';
 import {BadgeButton} from './button';
 import {Text} from './text';

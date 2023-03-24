@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, PanResponder, ScrollView, StyleSheet, View} from 'react-native';
-import constants from '../../libs/constants';
-import {gifs} from '../../libs/images';
-import {usePollingStore} from '../../store';
+import {gifs, constants} from '../../libs/common';
+import {usePollingStore} from '../../libs/stores';
 import PollingTemplate from '../../templates/polling';
 
 type PollingsFeatureProps = {

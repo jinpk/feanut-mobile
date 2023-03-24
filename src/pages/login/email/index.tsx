@@ -3,8 +3,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text} from '../../../components/text';
 import {BackTopBar} from '../../../components/top-bar';
-import colors from '../../../libs/colors';
-import routes from '../../../libs/routes';
+import {colors, routes} from '../../../libs/common';
 import InputConfirmTemplate from '../../../templates/input-confirm';
 
 function LoginEmail(): JSX.Element {

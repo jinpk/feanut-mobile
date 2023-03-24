@@ -1,36 +1,76 @@
-import React from 'react';
+import React, {LegacyRef, useCallback} from 'react';
 import {
+  NativeSyntheticEvent,
   StyleSheet,
   TextInput as RNTextInput,
+  TextInputFocusEventData,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import colors from '../../libs/colors';
-import {svgs} from '../../libs/images';
+import {svgs, colors} from '../../libs/common';
 
 type TextInputProps = {
+  disabled?: boolean;
+
+  value: string;
+  onChange: (text: string) => void;
+  onBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+
   placeholder?: string;
-  value?: string;
+
+  disabledAutoCapitalize?: boolean;
+  secureTextEntry?: boolean;
+
+  onPressOut?: () => void;
+
+  inputRef?: LegacyRef<RNTextInput>;
+
+  disabledBorderBottom?: boolean;
+  disabledBorderBottomRadius?: boolean;
+  disabledBorderTopRadius?: boolean;
 };
 
 export const TextInput = (props: TextInputProps): JSX.Element => {
+  const handleClear = useCallback(() => {
+    props.onChange('');
+  }, []);
   return (
     <View style={styles.root}>
-      <RNTextInput
-        placeholderTextColor={colors.darkGrey}
-        style={styles.input}
-        placeholder={props.placeholder}
-      />
-      <TouchableOpacity style={styles.clear}>
-        <WithLocalSvg width={6} height={6} asset={svgs.close} />
-      </TouchableOpacity>
+      <View
+        style={[
+          styles.inputWrap,
+          props.disabledBorderBottomRadius && styles.disabledBorderBottomRadius,
+          props.disabledBorderTopRadius && styles.disabledBorderTopRadius,
+          props.disabledBorderBottom && styles.disabledBorderBottom,
+        ]}>
+        <RNTextInput
+          ref={props.inputRef}
+          editable={props.disabled ? false : true}
+          onPressOut={props.onPressOut}
+          secureTextEntry={props.secureTextEntry}
+          autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
+          placeholderTextColor={colors.darkGrey}
+          style={styles.input}
+          placeholder={props.placeholder}
+          value={props.value}
+          onChangeText={props.onChange}
+          onBlur={props.onBlur}
+          returnKeyType="done"
+        />
+        {!props.disabled && (
+          <TouchableOpacity style={styles.clear} onPress={handleClear}>
+            <WithLocalSvg width={6} height={6} asset={svgs.close} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {
+  root: {},
+  inputWrap: {
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.mediumGrey,
@@ -56,4 +96,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.mediumGrey,
   },
+
+  disabledBorderBottomRadius: {
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  disabledBorderTopRadius: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
+  disabledBorderBottom: {borderBottomWidth: 0},
 });

@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import colors from '../../libs/colors';
+import {colors} from '../../libs/common';
 import {Text} from '../text';
 
 type ButtonProps = PropsWithChildren<{
