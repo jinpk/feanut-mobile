@@ -1,5 +1,6 @@
 export const routes = {
   login: '/login',
+  signup: '/signup',
   loginEmail: '/login/email',
   loginEmailVerification: '/login/email/verification',
 

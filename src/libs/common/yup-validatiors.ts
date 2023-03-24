@@ -27,4 +27,25 @@ export const yupValidators = {
       constants.passwordMaxLength,
       `${constants.passwordMaxLength}자리 이하로 입력해 주세요`,
     ),
+
+  birth: yup
+    .string()
+    .required('생년월일을 입력해 주세요')
+    .length(8, '8자리로 입력해 주세요'),
+
+  name: yup
+    .string()
+    .required('이름을 입력해 주세요')
+    .max(
+      constants.nameMaxLength,
+      `${constants.nameMaxLength}자리 이하로 입력해 주세요`,
+    ),
+
+  phoneNumber: yup
+    .string()
+    .required('휴대폰번호를 입력해 주세요')
+    .length(
+      constants.phoneNumberMaxLength,
+      `${constants.phoneNumberMaxLength}자리로 입력해 주세요`,
+    ),
 };

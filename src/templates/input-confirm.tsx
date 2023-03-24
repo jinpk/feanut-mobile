@@ -4,7 +4,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '../components/button';
 import {TextInput} from '../components/input';
 import {Text} from '../components/text';
-import colors from '../libs/common/colors';
+import {BackTopBar} from '../components/top-bar';
+import {colors, constants} from '../libs/common';
 
 type InputConfirmTemplateProps = {
   title: string;
@@ -19,10 +20,11 @@ function InputConfirmTemplate(props: InputConfirmTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
   return (
     <View style={styles.root}>
-      <Text weight="bold" size={18}>
+      <BackTopBar />
+      <Text weight="bold" size={18} mt={15} mx={16}>
         {props.title}
       </Text>
-      <Text mt={30} mb={15}>
+      <Text mt={30} mb={15} mx={16}>
         {props.label}
       </Text>
 
@@ -43,9 +45,9 @@ function InputConfirmTemplate(props: InputConfirmTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    paddingHorizontal: 16,
-    paddingTop: 17,
+    backgroundColor: colors.white,
     flex: 1,
+    width: constants.screenWidth,
   },
   absoluteButton: {
     position: 'absolute',

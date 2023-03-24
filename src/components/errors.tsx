@@ -5,14 +5,23 @@ import {svgs, colors} from '../libs/common';
 
 type ErrorsProps = {
   errors: string[];
+  mx?: number;
+  mt?: number;
 };
 
 export const Errors = (props: ErrorsProps): JSX.Element | null => {
-  if (!props.errors.length) {
+  if (!props.errors.filter(x => x).length) {
     return null;
   }
   return (
-    <View style={styles.root}>
+    <View
+      style={[
+        styles.root,
+        {
+          marginTop: props.mt || 7,
+          marginHorizontal: props.mx,
+        },
+      ]}>
       {props.errors.map((x, i) => {
         if (!x) return null;
         return (
@@ -25,7 +34,7 @@ export const Errors = (props: ErrorsProps): JSX.Element | null => {
             {
               // <WithLocalSvg asset={svgs.warning} width={16} height={16} />
             }
-            <Text ml={7} color={colors.red} size={12}>
+            <Text color={colors.red} size={12}>
               {x}
             </Text>
           </View>

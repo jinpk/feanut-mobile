@@ -16,6 +16,7 @@ type ButtonProps = PropsWithChildren<{
   my?: number;
   mx?: number;
   px?: number;
+  mb? :number;
 
   alignSelf?: 'stretch' | 'center';
   radius?: 's' | 'm';
@@ -36,6 +37,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
       marginHorizontal: props.mx,
       paddingHorizontal: props.px,
       marginTop: props.mt,
+      marginBottom: props.mb,
       borderRadius: props.radius === 'm' ? 21 : 7,
       alignSelf: props.alignSelf || 'stretch',
     };
@@ -45,6 +47,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
     props.radius,
     props.mx,
     props.px,
+    props.mb,
     props.my,
     props.mt,
     props.alignSelf,

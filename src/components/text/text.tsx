@@ -14,6 +14,7 @@ type TextProps = PropsWithChildren<{
   mb?: number;
   my?: number;
   ml?: number;
+  mx?: number;
 }>;
 
 export const Text = (props: TextProps): JSX.Element => {
@@ -38,6 +39,7 @@ export const Text = (props: TextProps): JSX.Element => {
           textAlign: props.align,
           marginVertical: props.my,
           marginLeft: props.ml,
+          marginHorizontal: props.mx,
         },
       ]}>
       {props.children}

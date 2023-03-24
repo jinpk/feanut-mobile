@@ -2,6 +2,7 @@ import {useEffect, useRef} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {
   GestureResponderEvent,
+  StatusBar,
   StyleSheet,
   TextInput as RNTextInput,
   View,
@@ -46,10 +47,12 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
   return (
     <View style={styles.root}>
+      <StatusBar barStyle="dark-content" />
       <WithLocalSvg width={58} height={30} asset={svgs.logo} />
       <WithLocalSvg
         width={76}
         height={20}
+        style={styles.logo}
         fill={colors.dark}
         asset={svgs.logoLetterBlack}
       />
@@ -139,10 +142,12 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 50,
+    paddingTop: 100,
     flex: 1,
     alignItems: 'center',
+    backgroundColor: colors.white,
   },
+  logo: {marginTop: 9},
   waving: {
     marginTop: 50,
   },

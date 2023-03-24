@@ -44,6 +44,7 @@ import figureLove from '../../assets/svgs/figure-love.svg';
 
 import logo from '../../assets/svgs/logo.svg';
 import warning from '../../assets/svgs/warning.svg';
+import privacy from '../../assets/svgs/privacy.svg';
 
 export const svgs = {
   logo,
@@ -51,6 +52,7 @@ export const svgs = {
   warning,
   refresh,
   logoLetterBlack,
+  privacy,
   back,
   close,
   logoLetter,

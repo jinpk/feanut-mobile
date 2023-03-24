@@ -1,15 +1,17 @@
+import * as yup from 'yup';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, StatusBar, StyleSheet, View} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {LoginForm} from '../../libs/interfaces';
-import {colors, setCredentials, yupValidators} from '../../libs/common';
+import {routes, setCredentials, yupValidators} from '../../libs/common';
 import LoginTemplate from '../../templates/login';
-import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {getExistenceUserByUsername, getMe} from '../../libs/api/users';
 import {postLogin} from '../../libs/api/auth';
 import {setAPIAuthorization} from '../../libs/api';
 import {useUserStore} from '../../libs/stores';
+import {SignUpModal} from '../../components/signup-modal';
+import {useNavigation} from '@react-navigation/native';
 
 const initialFormValues: LoginForm = {
   username: '',
@@ -25,6 +27,7 @@ const schema = yup
   .required();
 
 function Login(): JSX.Element {
+  const navigation = useNavigation();
   const [signUpModal, setSignUpModal] = useState(false);
   const login = useUserStore(s => s.actions.login);
 
@@ -32,6 +35,8 @@ function Login(): JSX.Element {
     resolver: yupResolver(schema),
     defaultValues: initialFormValues,
   });
+
+  const username = loginForm.watch().username;
 
   const handleLogin = async (data: LoginForm) => {
     try {
@@ -76,7 +81,6 @@ function Login(): JSX.Element {
   };
 
   const handleFirst = async () => {
-    const username = loginForm.watch().username;
     if (!username) {
       Alert.alert(
         'feanut이 처음이신가요?',
@@ -94,25 +98,37 @@ function Login(): JSX.Element {
 
   const handleFindPassword = () => {};
 
+  const handleSignUp = () => {
+    setSignUpModal(false);
+    navigation.navigate(routes.signup, {
+      username,
+    });
+  };
+
   return (
-    <View style={styles.root}>
-      <StatusBar barStyle="dark-content" />
-      <View style={styles.topPadding} />
+    <>
       <LoginTemplate
         form={loginForm}
         onSubmit={loginForm.handleSubmit(onSubmit)}
         onFirst={handleFirst}
         onFindPassword={handleFindPassword}
       />
-    </View>
+      <SignUpModal
+        username={loginForm.watch().username}
+        visible={signUpModal}
+        onPrivacyTerm={() => {
+          Linking.openURL('https://feanut.com/privacy');
+        }}
+        onServiceTerm={() => {
+          Linking.openURL('https://feanut.com/terms');
+        }}
+        onSignUp={handleSignUp}
+        onClose={() => {
+          setSignUpModal(false);
+        }}
+      />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.white},
-  topPadding: {
-    paddingTop: 70,
-  },
-});
 
 export default Login;

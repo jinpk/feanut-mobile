@@ -2,7 +2,7 @@ import * as axios from 'axios';
 import {configs} from '../common/configs';
 
 export const feanutAPI = axios.default.create({
-  baseURL: 'http://172.30.4.4:3000',
+  baseURL: configs.apiBaseURL,
 });
 
 feanutAPI.interceptors.request.use(

@@ -12,6 +12,7 @@ import {WelcomeModalFeature} from './features/modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
+import SignUp from './pages/signup';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -46,6 +47,7 @@ function NavigationApp() {
           initialRouteName={routes.login}
           screenOptions={{headerShown: false}}>
           <Stack.Screen name={routes.login} component={Login} />
+          <Stack.Screen name={routes.signup} component={SignUp} />
           <Stack.Screen name={routes.loginEmail} component={LoginEmail} />
           <Stack.Screen
             name={routes.loginEmailVerification}

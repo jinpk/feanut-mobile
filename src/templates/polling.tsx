@@ -2,9 +2,7 @@ import React, {useCallback, useMemo} from 'react';
 import {
   GestureResponderEvent,
   ImageSourcePropType,
-  NativeSyntheticEvent,
   StyleSheet,
-  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,7 +17,6 @@ import {
   emotions,
   colors,
   svgs,
-  gifs,
 } from '../libs/common';
 
 export type PollingFriendValue = string;
