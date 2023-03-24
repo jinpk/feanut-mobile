@@ -11,7 +11,9 @@ import Switch from '../components/switch';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, svgs} from '../libs/common';
 
-type ProfileTemplateProps = {};
+type ProfileTemplateProps = {
+  onLogout: () => void;
+};
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
@@ -154,7 +156,12 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       </View>
       <Divider ml={13} />
 
-      <Button title="로그아웃" mt={27} color={colors.lightGrey} />
+      <Button
+        onPress={props.onLogout}
+        title="로그아웃"
+        mt={27}
+        color={colors.lightGrey}
+      />
 
       <View style={styles.withdrawal}>
         <Text color={colors.darkGrey} size={10}>

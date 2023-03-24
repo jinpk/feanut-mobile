@@ -23,7 +23,9 @@ export const Errors = (props: ErrorsProps): JSX.Element | null => {
         },
       ]}>
       {props.errors.map((x, i) => {
-        if (!x) return null;
+        if (!x) {
+          return null;
+        }
         return (
           <View
             style={[

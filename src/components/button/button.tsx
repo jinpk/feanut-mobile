@@ -16,7 +16,7 @@ type ButtonProps = PropsWithChildren<{
   my?: number;
   mx?: number;
   px?: number;
-  mb? :number;
+  mb?: number;
 
   alignSelf?: 'stretch' | 'center';
   radius?: 's' | 'm';

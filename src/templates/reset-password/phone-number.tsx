@@ -1,7 +1,7 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import {StyleSheet, View} from 'react-native';
-import {SignUpTemplateProps} from '.';
+import {ResetPasswordTemplateProps} from '.';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
@@ -10,7 +10,9 @@ import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
 import {colors, constants} from '../../libs/common';
 
-export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
+export const FindPasswordPhoneNumberTemplate = (
+  props: ResetPasswordTemplateProps,
+) => {
   const errorsphoneNumber = props.form.formState.errors.phoneNumber
     ?.message as string;
 
@@ -19,10 +21,10 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
       <Text weight="bold" size={18} mt={15} mx={16}>
-        휴대폰번호를 입력해 주세요
+        비밀번호 재설정
       </Text>
       <Text mt={30} mx={16}>
-        친구가 이미 회원님의 번호로 투표했을 수 있어요 {':)'}
+        가입 시 등록하신 번호를 입력해 주세요
       </Text>
 
       <Controller

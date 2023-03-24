@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import colors from '../../libs/common/colors';
+import {colors} from '../../libs/common';
 import {Text} from '../text';
 
 type BadgeButtonProps = PropsWithChildren<{

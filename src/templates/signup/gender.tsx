@@ -1,3 +1,4 @@
+import React from 'react';
 import {Controller} from 'react-hook-form';
 import {StyleSheet, View} from 'react-native';
 import {SignUpTemplateProps} from '.';

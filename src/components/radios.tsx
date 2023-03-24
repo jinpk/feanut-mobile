@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -35,7 +36,7 @@ export const Radios = (props: RadiosProps) => {
             key={i.toString()}
             style={styles.radioWrap}>
             <View style={styles.radio}>
-              {selected && <View style={styles.radioSelected}></View>}
+              {selected && <View style={styles.radioSelected} />}
             </View>
             <Text ml={7} color={selected ? colors.black : colors.darkGrey}>
               {x.label}

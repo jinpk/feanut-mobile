@@ -1,6 +1,7 @@
+import React from 'react';
 import {PropsWithChildren} from 'react';
 import {View} from 'react-native';
-import colors from '../../libs/common/colors';
+import {colors} from '../../libs/common';
 
 type TextMarketProps = PropsWithChildren<{}>;
 

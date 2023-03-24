@@ -11,6 +11,6 @@ export const getExistenceUserByUsername = async (
 };
 
 export const getMe = async (): Promise<User> => {
-  const res = await feanutAPI.get<User>(`/users/me`);
+  const res = await feanutAPI.get<User>('/users/me');
   return res.data;
 };

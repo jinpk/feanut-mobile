@@ -1,3 +1,4 @@
+import React from 'react';
 import {GestureResponderEvent, StyleSheet, View} from 'react-native';
 import {TextButton} from '../components/button/text-button';
 import {Text} from '../components/text';

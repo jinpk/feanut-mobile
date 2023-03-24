@@ -2,15 +2,15 @@ import * as yup from 'yup';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert, Linking} from 'react-native';
-import {LoginForm} from '../../libs/interfaces';
-import {routes, setCredentials, yupValidators} from '../../libs/common';
-import LoginTemplate from '../../templates/login';
+import {LoginForm} from '../libs/interfaces';
+import {routes, setCredentials, yupValidators} from '../libs/common';
+import LoginTemplate from '../templates/login';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {getExistenceUserByUsername, getMe} from '../../libs/api/users';
-import {postLogin} from '../../libs/api/auth';
-import {setAPIAuthorization} from '../../libs/api';
-import {useUserStore} from '../../libs/stores';
-import {SignUpModal} from '../../components/signup-modal';
+import {getExistenceUserByUsername, getMe} from '../libs/api/users';
+import {postLogin} from '../libs/api/auth';
+import {setAPIAuthorization} from '../libs/api';
+import {useUserStore} from '../libs/stores';
+import {SignUpModal} from '../components/signup-modal';
 import {useNavigation} from '@react-navigation/native';
 
 const initialFormValues: LoginForm = {
@@ -86,6 +86,7 @@ function Login(): JSX.Element {
         'feanut이 처음이신가요?',
         '사용할 feanut ID를 입력후 다시 버튼을 눌러주세요!',
       );
+      return;
     }
 
     try {
@@ -96,7 +97,11 @@ function Login(): JSX.Element {
     }
   };
 
-  const handleFindPassword = () => {};
+  const handleFindPassword = () => {
+    navigation.navigate(routes.resetPassword, {
+      username,
+    });
+  };
 
   const handleSignUp = () => {
     setSignUpModal(false);

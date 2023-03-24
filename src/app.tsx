@@ -4,8 +4,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {routes} from './libs/common';
 import Login from './pages/login';
 import Home from './pages/home';
-import LoginEmail from './pages/login/email';
-import LoginEmailVerification from './pages/login/email/verification';
 import {useUserStore} from './libs/stores';
 import {Text} from './components/text';
 import {WelcomeModalFeature} from './features/modals';
@@ -13,6 +11,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
 import SignUp from './pages/signup';
+import ResetPassword from './pages/reset-password';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -48,11 +47,7 @@ function NavigationApp() {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name={routes.login} component={Login} />
           <Stack.Screen name={routes.signup} component={SignUp} />
-          <Stack.Screen name={routes.loginEmail} component={LoginEmail} />
-          <Stack.Screen
-            name={routes.loginEmailVerification}
-            component={LoginEmailVerification}
-          />
+          <Stack.Screen name={routes.resetPassword} component={ResetPassword} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

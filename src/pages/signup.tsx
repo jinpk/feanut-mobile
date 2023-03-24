@@ -2,18 +2,18 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert, Keyboard, ScrollView} from 'react-native';
-import {SignUpForm} from '../../libs/interfaces';
+import {SignUpForm} from '../libs/interfaces';
 import {
   SignUpGenderTemplate,
   SignUpPhoneNumberTemplate,
   SignUpNameTemplate,
   SignUpCodeTemplate,
-} from '../../templates/signup';
-import {constants, setCredentials, yupValidators} from '../../libs/common';
-import {postSignUp, postSignUpVerification} from '../../libs/api/auth';
-import {setAPIAuthorization} from '../../libs/api';
-import {useUserStore} from '../../libs/stores';
-import {getMe} from '../../libs/api/users';
+} from '../templates/signup';
+import {constants, setCredentials, yupValidators} from '../libs/common';
+import {postSignUp, postSignUpVerification} from '../libs/api/auth';
+import {setAPIAuthorization} from '../libs/api';
+import {useUserStore} from '../libs/stores';
+import {getMe} from '../libs/api/users';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -96,12 +96,12 @@ function SignUp(): JSX.Element {
       await yupValidators.phoneNumber.validate(data.phoneNumber);
     } catch (error: any) {
       form.setError('phoneNumber', error);
+      return;
     }
 
     form.setValue('sendingCode', true);
 
     try {
-      console.log('singup', data);
       const authId = await postSignUpVerification(data);
       form.setValue('authId', authId);
       setPageIndex(3);

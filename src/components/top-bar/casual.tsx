@@ -1,3 +1,4 @@
+import React from 'react';
 import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import LogoSvg from '../../assets/svgs/logo.svg';

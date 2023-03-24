@@ -64,6 +64,11 @@ export const useUserStore = create<UserStore>((set, get) => ({
       }
     },
     login: (user: User) => set({logged: true, user, loading: false}),
-    logout: () => set({logged: false, loading: false, user: null}),
+    logout: () => {
+      // clear refresh token
+      clearCredentials();
+      setAPIAuthorization('');
+      set({logged: false, loading: false, user: null});
+    },
   },
 }));

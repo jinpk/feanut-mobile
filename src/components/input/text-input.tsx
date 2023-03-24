@@ -1,5 +1,6 @@
 import React, {LegacyRef, useCallback} from 'react';
 import {
+  KeyboardTypeOptions,
   NativeSyntheticEvent,
   StyleSheet,
   TextInput as RNTextInput,
@@ -29,6 +30,18 @@ type TextInputProps = {
   disabledBorderBottom?: boolean;
   disabledBorderBottomRadius?: boolean;
   disabledBorderTopRadius?: boolean;
+
+  mt?: number;
+  mb?: number;
+  my?: number;
+  mx?: number;
+  ml?: number;
+  mr?: number;
+
+  keyboardType?: KeyboardTypeOptions;
+  maxLength?: number;
+
+  autoFocus?: boolean;
 };
 
 export const TextInput = (props: TextInputProps): JSX.Element => {
@@ -36,7 +49,18 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
     props.onChange('');
   }, []);
   return (
-    <View style={styles.root}>
+    <View
+      style={[
+        styles.root,
+        {
+          marginTop: props.mt,
+          marginBottom: props.mb,
+          marginHorizontal: props.mx,
+          marginVertical: props.my,
+          marginLeft: props.ml,
+          marginRight: props.mr,
+        },
+      ]}>
       <View
         style={[
           styles.inputWrap,
@@ -48,10 +72,11 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
           ref={props.inputRef}
           editable={props.disabled ? false : true}
           onPressOut={props.onPressOut}
+          maxLength={props.maxLength}
           secureTextEntry={props.secureTextEntry}
           autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
           placeholderTextColor={colors.darkGrey}
-          style={styles.input}
+          style={[styles.input]}
           placeholder={props.placeholder}
           value={props.value}
           onChangeText={props.onChange}
