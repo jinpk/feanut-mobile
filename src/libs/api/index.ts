@@ -1,5 +1,9 @@
 import * as axios from 'axios';
+import {getCredentials, isTokenExpired, setCredentials} from '../common';
 import {configs} from '../common/configs';
+import {TokenResponse} from '../interfaces';
+import {useUserStore} from '../stores';
+import {postToken} from './auth';
 
 export const feanutAPI = axios.default.create({
   baseURL: configs.apiBaseURL,
@@ -18,12 +22,33 @@ feanutAPI.interceptors.response.use(
   function (response) {
     return response;
   },
-  function (error) {
-    if (error.response.status === 401) {
-      console.log('try once reissue accesstoken then');
-      console.log('need to clear crenditials and store');
+  async function (error) {
+    if (error.response.status !== 401) {
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+
+    const credentials = await getCredentials();
+
+    try {
+      const token = credentials as TokenResponse;
+      if (isTokenExpired(token.refreshToken)) {
+        throw new Error('refresh token exipred.');
+      }
+
+      const newToken = await postToken({
+        refreshToken: token.refreshToken,
+      });
+
+      await setCredentials(newToken);
+      setAPIAuthorization(newToken.accessToken);
+      // Set recalled api auth
+      error.config.headers.Authorization = `Bearer ${newToken.accessToken}`;
+
+      return feanutAPI(error.config);
+    } catch (tokenError: any) {
+      await useUserStore.getState().actions.logout();
+      return Promise.reject(error);
+    }
   },
 );
 

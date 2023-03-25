@@ -18,7 +18,7 @@ export interface UserStore {
   user: User | null;
   actions: {
     login: (user: User) => void;
-    logout: () => void;
+    logout: () => Promise<void>;
     check: () => Promise<void>;
   };
 }
@@ -64,9 +64,9 @@ export const useUserStore = create<UserStore>((set, get) => ({
       }
     },
     login: (user: User) => set({logged: true, user, loading: false}),
-    logout: () => {
-      // clear refresh token
-      clearCredentials();
+    logout: async () => {
+      console.log('logout');
+      await clearCredentials();
       setAPIAuthorization('');
       set({logged: false, loading: false, user: null});
     },
