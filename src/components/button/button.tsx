@@ -12,6 +12,7 @@ import {Text} from '../text';
 type ButtonProps = PropsWithChildren<{
   title: string;
   color?: string;
+  fontColor?: string;
   mt?: number;
   my?: number;
   mx?: number;
@@ -54,6 +55,9 @@ export const Button = (props: ButtonProps): JSX.Element => {
   ]);
 
   const textColor = useMemo(() => {
+    if (props.fontColor) {
+      return props.fontColor;
+    }
     if (buttonStyle.backgroundColor === colors.lightGrey) {
       return colors.red;
     }
@@ -69,7 +73,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
     } else {
       colors.dark;
     }
-  }, [buttonStyle.backgroundColor, props.disabled]);
+  }, [buttonStyle.backgroundColor, props.disabled, props.fontColor]);
 
   return (
     <TouchableOpacity

@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
+  Alert,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -10,16 +11,20 @@ import {
 import {MainTopBar} from '../components/top-bar/main';
 import {PollingIndicatorFeautre} from '../features/polling';
 import {PollingsFeature} from '../features/polling/pollings';
-import {colors, emotions, routes} from '../libs/common';
-import {useModalStore, usePollingStore} from '../libs/stores';
+import {colors, gifs, routes} from '../libs/common';
+import {useModalStore, usePollingStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import PollLockTemplate from '../templates/poll-lock';
 import RewardTemplate from '../templates/reward';
+import FriendSyncTemplate from '../templates/friend-sync';
+import {getHasFriends} from '../libs/api/friendship';
+import {useSyncContacts} from '../hooks';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 function Home(): JSX.Element {
   const navigation = useNavigation();
+  const userId = useUserStore(s => s.user?.id);
 
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -30,6 +35,10 @@ function Home(): JSX.Element {
   /** 현재 투표중인지 여부 */
   const focused = useIsFocused();
   const polling = useMemo(() => tabIndex === 1, [tabIndex]);
+
+  const [needMoreFriends, setNeedMoreFriends] = useState(true);
+
+  const syncContacts = useSyncContacts();
 
   const welcomModalOpened = useModalStore(s => s.welcome);
   useEffect(() => {
@@ -42,79 +51,29 @@ function Home(): JSX.Element {
     );
   }, [polling, focused, welcomModalOpened]);
 
-  useEffect(() => {
+  const init = useCallback(async () => {
+    if (!userId) return;
+
     pollingActions.setLoading(true);
-    let tm = setTimeout(() => {
-      pollingActions.setPolls([
-        {
-          id: emotions.amusement,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.amusement,
-        },
-        {
-          id: emotions.awe,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.awe,
-        },
-        {
-          id: emotions.gratitude,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.gratitude,
-        },
-        {
-          id: emotions.happiness,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.happiness,
-        },
-        {
-          id: emotions.hope,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.hope,
-        },
-        {
-          id: emotions.inspiration,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.inspiration,
-        },
-        {
-          id: emotions.interest,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.interest,
-        },
-        {
-          id: emotions.love,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.love,
-        },
-        {
-          id: emotions.pride,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.pride,
-        },
-        {
-          id: emotions.serenity,
-          polling: {},
-          selectedFriend: null,
-          emotion: emotions.serenity,
-        },
-      ]);
-      pollingActions.setLoading(false);
-      pollingActions.setPollIndex(0);
-      setTabIndex(1);
-    }, 3000);
-    return () => {
-      clearTimeout(tm);
-    };
-  }, []);
+    try {
+      const hasFriends = await getHasFriends(userId);
+      setNeedMoreFriends(!hasFriends);
+
+      if (hasFriends) {
+        Alert.alert('투표 불러오기!! 개발중');
+      }
+    } catch (error: any) {
+      Alert.alert(error.message || error);
+    }
+    pollingActions.setLoading(false);
+  }, [userId]);
+
+  useEffect(() => {
+    init();
+  }, [userId]);
+
+  //pollingActions.setPollIndex(0);
+  //setTabIndex(1);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -122,9 +81,6 @@ function Home(): JSX.Element {
       x: tabIndex * SCREEN_WIDTH,
     });
   }, [tabIndex]);
-
-  const handleFindFriendByEmail = () => {};
-  const handleKakaoSync = () => {};
 
   const handleFinishPolling = useCallback(() => {
     setTabIndex(2);
@@ -135,11 +91,20 @@ function Home(): JSX.Element {
   }, []);
 
   const handleInboxPress = useCallback(() => {
+    Alert.alert('수신함!! 개발중');
+    return;
     navigation.navigate(routes.inbox);
   }, []);
+
   const handleProfilePress = useCallback(() => {
     navigation.navigate(routes.profile);
   }, []);
+
+  const handleSyncContacts = () => {
+    syncContacts.syncContacts(() => {
+      init();
+    });
+  };
 
   return (
     <View style={styles.root}>
@@ -157,7 +122,14 @@ function Home(): JSX.Element {
         scrollEnabled={false}>
         {/** Loading */}
         <View style={styles.pollContainer}>
-          <LoadingTemplate label="투표 불러오는 중" />
+          {!needMoreFriends && <LoadingTemplate label="투표 불러오는 중" />}
+          {needMoreFriends && (
+            <FriendSyncTemplate
+              onSyncContacts={handleSyncContacts}
+              icon={gifs.teddyBear}
+              title={'친구를 추가하고\n다양한 투표를 경험해 보세요!'}
+            />
+          )}
         </View>
 
         <View style={styles.polls}>
@@ -192,13 +164,3 @@ const styles = StyleSheet.create({
 });
 
 export default Home;
-
-/** {test === 1 && (
-        <FriendSyncTemplate
-          icon={gifs.teddyBear}
-          title={'친구를 추가하고\n다양한 투표를 경험해 보세요!'}
-          onFindByEamil={handleFindFriendByEmail}
-          onKakaoSync={handleKakaoSync}
-        />
-      )}
-      {test === 4 && <PollLockTemplate second={60 * 17} />}*/

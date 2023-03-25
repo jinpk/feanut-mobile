@@ -5,13 +5,14 @@ import {Avatar} from '../components/avatar';
 import {BadgeButton, Button} from '../components/button';
 import {TextButton} from '../components/button/text-button';
 import {Divider} from '../components';
-import {InputSwitch} from '../components/input';
 import {Text} from '../components/text';
 import Switch from '../components/switch';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, svgs} from '../libs/common';
+import {Profile} from '../libs/interfaces';
 
 type ProfileTemplateProps = {
+  profile: Profile;
   onLogout: () => void;
 };
 
@@ -27,7 +28,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <Text color={colors.darkGrey} size={12}>
               이름
             </Text>
-            <Text my={7}>피넛</Text>
+            <Text my={7}>{props.profile.name}</Text>
             <TextButton hiddenBorder title="내 피넛카드 >" />
           </View>
 
@@ -35,31 +36,18 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <Text color={colors.darkGrey} size={12}>
               친구
             </Text>
-            <Text my={7}>768</Text>
+            <Text my={7}>23</Text>
             <TextButton hiddenBorder title="친구 관리 >" />
           </View>
         </View>
       </View>
 
       <Button
-        leftIcon={
-          <WithLocalSvg
-            asset={svgs.kakao}
-            style={{marginLeft: -17}}
-            width={85}
-            height={42}
-          />
-        }
-        color={colors.kakao}
-        title="카카오톡 프로필 동기화"
-        mt={30}
+        color={colors.lightGrey}
+        title="프로필 편집"
+        mt={15}
+        fontColor={colors.dark}
       />
-      <Text size={10} mb={20} color={colors.darkGrey} mt={7} ml={13}>
-        피넛은 카카오톡 친구들과 함께하는 소셜 투표 서비스입니다.{'\n'}
-        프로필은 카카오톡과 동기화해서 수정할 수 있습니다.
-      </Text>
-
-      <InputSwitch label="상태 메시지" value="피넛 투표 기다리는중 ㅎㅎ" />
 
       <View style={styles.feanut}>
         <View style={styles.feanutContent}>
@@ -72,7 +60,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <BadgeButton
             alignSelf="center"
             color={colors.primary}
-            title="구매하기"
+            title="충전하기"
           />
         </View>
 

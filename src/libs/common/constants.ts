@@ -1,8 +1,8 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 export const constants = {
   screenWidth: Dimensions.get('window').width,
-
+  platform: Platform.OS,
   nameMaxLength: 10,
 
   usernameMinLength: 2,

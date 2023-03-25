@@ -7,6 +7,7 @@ import {Text} from '../components/text';
 type FriendSyncTemplateProps = PropsWithChildren<{
   title: string;
   icon: number;
+  onSyncContacts: () => void;
 }>;
 
 function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
@@ -21,7 +22,7 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
 
       {props.children}
 
-      <Button title="연락처 동기화" />
+      <Button onPress={props.onSyncContacts} title="연락처 동기화" mx={16} />
     </View>
   );
 }

@@ -3,9 +3,11 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {svgs} from '../../libs/common';
+import {Text} from '../text';
 
 type BackTopBar = {
   onBack?: () => void;
+  title?: string;
   logo?: boolean;
 };
 
@@ -19,6 +21,11 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
       <View>
         {props.logo && (
           <WithLocalSvg width={67.5} height={35} asset={svgs.logoWithLetter} />
+        )}
+        {Boolean(props.title) && (
+          <Text size={16} weight="medium">
+            {props.title}
+          </Text>
         )}
       </View>
       <View />

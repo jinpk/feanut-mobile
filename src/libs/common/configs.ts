@@ -1,5 +1,5 @@
 import Config from 'react-native-config';
 
 export const configs = {
-  apiBaseURL: 'http://192.168.45.191:3000' || Config.API_BASE_URL,
+  apiBaseURL: 'https://feanut-backend-development-cr-pbnfpxn5eq-du.a.run.app' || Config.API_BASE_URL,
 };

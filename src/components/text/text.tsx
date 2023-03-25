@@ -4,7 +4,7 @@ import {Text as RNText} from 'react-native';
 import {colors, fonts} from '../../libs/common';
 
 export type TextColorProps = string | undefined;
-export type TextSizeProps = 27 | 18 | 14 | 13 | 12 | 10 | undefined;
+export type TextSizeProps = 27 | 18 | 16 | 14 | 13 | 12 | 10 | undefined;
 
 type TextProps = PropsWithChildren<{
   color?: TextColorProps;
