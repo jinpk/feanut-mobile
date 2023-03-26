@@ -90,6 +90,10 @@ export function useCoin(topComponent?: boolean) {
                         userId,
                       }).then(async () => {
                         await finishTransaction({purchase, isConsumable: true});
+
+                        getMyCoin().then(result => {
+                          updateAmount(result.total);
+                        });
                       });
                     } else {
                       Alert.alert(
