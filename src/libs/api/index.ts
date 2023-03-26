@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import {getCredentials, isTokenExpired, setCredentials} from '../common';
 import {configs} from '../common/configs';
-import {TokenResponse} from '../interfaces';
+import {APIError, TokenResponse} from '../interfaces';
 import {useUserStore} from '../stores';
 import {postToken} from './auth';
 
@@ -23,11 +23,21 @@ feanutAPI.interceptors.response.use(
     return response;
   },
   async function (error) {
-    if (error.response.status !== 401) {
+    if (!error.response) {
       return Promise.reject(error);
+    } else if (error.response.status !== 401) {
+      const wrappedError: APIError = {
+        ...error.response.data,
+        status: error.response.status,
+      };
+      return Promise.reject(wrappedError);
     }
 
     const credentials = await getCredentials();
+
+    if (!credentials) {
+      return Promise.reject(error);
+    }
 
     try {
       const token = credentials as TokenResponse;
@@ -41,11 +51,13 @@ feanutAPI.interceptors.response.use(
 
       await setCredentials(newToken);
       setAPIAuthorization(newToken.accessToken);
+
       // Set recalled api auth
       error.config.headers.Authorization = `Bearer ${newToken.accessToken}`;
 
       return feanutAPI(error.config);
     } catch (tokenError: any) {
+      console.log(tokenError);
       await useUserStore.getState().actions.logout();
       return Promise.reject(error);
     }

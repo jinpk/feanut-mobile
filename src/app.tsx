@@ -6,18 +6,21 @@ import Login from './pages/login';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {Text} from './components/text';
-import {WelcomeModalFeature} from './features/modals';
+import {CoinModal, WelcomeModal} from './modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
 import SignUp from './pages/signup';
 import ResetPassword from './pages/reset-password';
+import ProfileEdit from './pages/profile/edit';
+import {useCoin} from './hooks';
 
 type AppProps = React.PropsWithChildren<{}>;
 
 const Stack = createNativeStackNavigator();
 
 function NavigationApp() {
+  useCoin(true);
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
@@ -39,6 +42,7 @@ function NavigationApp() {
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
           <Stack.Screen name={routes.profile} component={Profile} />
+          <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
         </Stack.Navigator>
       )}
       {!logged && (
@@ -59,7 +63,8 @@ function FeanutApp(props: AppProps): JSX.Element {
     <SafeAreaProvider>
       <NavigationApp />
       {/** Modals */}
-      <WelcomeModalFeature />
+      <WelcomeModal />
+      <CoinModal />
     </SafeAreaProvider>
   );
 }

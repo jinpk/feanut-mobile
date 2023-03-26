@@ -5,4 +5,18 @@ export interface Profile {
   birth: string;
   statusMessage: string;
   profileImageKey: string;
+  instagram?: string;
+}
+
+export interface ProfileForm {
+  name: string;
+  statusMessage: string;
+  profileImage: any;
+}
+
+export interface PatchProfileRequest {
+  name?: string;
+  statusMessage?: string;
+  imageFileId?: string | null;
+  instagram?: string ;
 }

@@ -9,6 +9,7 @@ type BackTopBar = {
   onBack?: () => void;
   title?: string;
   logo?: boolean;
+  rightComponent?: JSX.Element;
 };
 
 export const BackTopBar = (props: BackTopBar): JSX.Element => {
@@ -28,7 +29,9 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
           </Text>
         )}
       </View>
-      <View />
+      <View style={styles.rightItem}>
+        {props.rightComponent && props.rightComponent}
+      </View>
     </View>
   );
 };
@@ -44,5 +47,9 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
     paddingHorizontal: 15,
+  },
+  rightItem: {
+    right: 0,
+    position: 'absolute',
   },
 });

@@ -1,14 +1,38 @@
-import React from 'react';
-import {Animated, StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Animated,
+  Easing,
+  StyleSheet,
+  TouchableOpacity,
+  useAnimatedValue,
+} from 'react-native';
 import {colors} from '../libs/common';
 
-type SwitchProps = {};
+type SwitchProps = {
+  value: boolean;
+  onChange: (value: boolean) => void;
+};
 
 function Switch(props: SwitchProps): JSX.Element {
+  const translateX = useAnimatedValue(0);
+
+  useEffect(() => {
+    Animated.timing(translateX, {
+      easing: Easing.linear,
+      useNativeDriver: false,
+      toValue: props.value ? 13 : 0,
+      duration: 300,
+    }).start();
+  }, [props.value]);
+
   return (
-    <View style={styles.root}>
-      <Animated.View style={styles.ball} />
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        props.onChange(props.value ? false : true);
+      }}
+      style={[styles.root, props.value && styles.rootOn]}>
+      <Animated.View style={[styles.ball, {transform: [{translateX}]}]} />
+    </TouchableOpacity>
   );
 }
 
@@ -25,6 +49,9 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 16,
+  },
+  rootOn: {
+    backgroundColor: colors.primary,
   },
 });
 

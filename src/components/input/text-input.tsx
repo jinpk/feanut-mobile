@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 13,
     paddingBottom: 14,
-    fontSize: 13,
+    fontSize: 14,
     color: colors.dark,
   },
   clear: {

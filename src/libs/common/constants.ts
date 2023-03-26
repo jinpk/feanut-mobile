@@ -1,15 +1,18 @@
 import {Dimensions, Platform} from 'react-native';
 
 export const constants = {
+  screenHeight: Dimensions.get('window').height,
   screenWidth: Dimensions.get('window').width,
   platform: Platform.OS,
-  nameMaxLength: 10,
+  nameMaxLength: 6,
 
   usernameMinLength: 2,
   usernameMaxLength: 15,
 
   passwordMinLength: 6,
   passwordMaxLength: 20,
+
+  statusMessageMaxLength: 50,
 
   phoneNumberMaxLength: 11,
 

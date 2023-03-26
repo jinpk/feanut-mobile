@@ -46,6 +46,12 @@ import logo from '../../assets/svgs/logo.svg';
 import warning from '../../assets/svgs/warning.svg';
 import privacy from '../../assets/svgs/privacy.svg';
 
+import coin5 from '../../assets/pngs/coin5.png';
+import coin10 from '../../assets/pngs/coin10.png';
+import coin30 from '../../assets/pngs/coin30.png';
+import coin50 from '../../assets/pngs/coin50.png';
+import coin100 from '../../assets/pngs/coin100.png';
+
 export const svgs = {
   logo,
   shuffle,
@@ -96,4 +102,12 @@ export const gifs = {
   teddyBear,
   timerClock,
   wavingHand,
+};
+
+export const pngs = {
+  coin10,
+  coin5,
+  coin30,
+  coin50,
+  coin100,
 };

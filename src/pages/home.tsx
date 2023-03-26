@@ -60,7 +60,7 @@ function Home(): JSX.Element {
       setNeedMoreFriends(!hasFriends);
 
       if (hasFriends) {
-        Alert.alert('투표 불러오기!! 개발중');
+        //Alert.alert('투표 불러오기!! 개발중');
       }
     } catch (error: any) {
       Alert.alert(error.message || error);

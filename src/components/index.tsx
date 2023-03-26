@@ -11,3 +11,5 @@ export * from './terms';
 export * from './signup-modal';
 export * from './radios';
 export * from './privacy';
+export * from './close';
+export * from './coin-item';

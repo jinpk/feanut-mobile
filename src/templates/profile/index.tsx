@@ -1,19 +1,32 @@
 import React from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import {Avatar} from '../components/avatar';
-import {BadgeButton, Button} from '../components/button';
-import {TextButton} from '../components/button/text-button';
-import {Divider} from '../components';
-import {Text} from '../components/text';
-import Switch from '../components/switch';
+import {Avatar} from '../../components/avatar';
+import {BadgeButton, Button} from '../../components/button';
+import {TextButton} from '../../components/button/text-button';
+import {Divider} from '../../components';
+import {Text} from '../../components/text';
+import Switch from '../../components/switch';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {colors, svgs} from '../libs/common';
-import {Profile} from '../libs/interfaces';
+import {colors, svgs} from '../../libs/common';
+import {Profile} from '../../libs/interfaces';
+import DeviceInfo from 'react-native-device-info';
+import {configs} from '../../libs/common/configs';
 
 type ProfileTemplateProps = {
   profile: Profile;
+  username: string;
+  friendsCount: number;
+  feanutAmount: number;
   onLogout: () => void;
+  onPurchaseFeanut: () => void;
+  onEditProfile: () => void;
+  onWithdrawal: () => void;
+  onInstagram: (value: boolean) => void;
+
+  onService: () => void;
+  onTerms: () => void;
+  onPrivacy: () => void;
 };
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
@@ -21,7 +34,15 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
   return (
     <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
       <View style={styles.profile}>
-        <Avatar size={100} defaultLogo="m" />
+        <Avatar
+          size={100}
+          defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
+          source={
+            props.profile.profileImageKey
+              ? {uri: configs.cdnBaseUrl + '/' + props.profile.profileImageKey}
+              : undefined
+          }
+        />
 
         <View style={styles.profileContent}>
           <View style={styles.profileContentButton}>
@@ -36,13 +57,14 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <Text color={colors.darkGrey} size={12}>
               친구
             </Text>
-            <Text my={7}>23</Text>
+            <Text my={7}>{props.friendsCount}</Text>
             <TextButton hiddenBorder title="친구 관리 >" />
           </View>
         </View>
       </View>
 
       <Button
+        onPress={props.onEditProfile}
         color={colors.lightGrey}
         title="프로필 편집"
         mt={15}
@@ -55,9 +77,10 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <Text color={colors.darkGrey} size={12}>
               보유 피넛
             </Text>
-            <Text mt={7}>23</Text>
+            <Text mt={7}>{props.feanutAmount}</Text>
           </View>
           <BadgeButton
+            onPress={props.onPurchaseFeanut}
             alignSelf="center"
             color={colors.primary}
             title="충전하기"
@@ -77,7 +100,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text color={colors.darkGrey} size={12}>
             feanut ID
           </Text>
-          <Text mt={7}>hi@feanut.com</Text>
+          <Text mt={7}>{props.username}</Text>
         </View>
       </View>
 
@@ -86,14 +109,19 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text color={colors.darkGrey} size={12}>
             인스타그램
           </Text>
-          <Text mt={7}>@feanut_official</Text>
+          {Boolean(props.profile.instagram) && (
+            <Text mt={7}>{props.profile.instagram}</Text>
+          )}
         </View>
-        <Switch />
+        <Switch
+          value={Boolean(props.profile.instagram)}
+          onChange={props.onInstagram}
+        />
       </View>
 
       <Divider ml={13} />
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onService}>
         <View style={styles.listItem}>
           <Text>feanut 서비스 소개</Text>
           <WithLocalSvg width={12} height={12} asset={svgs.right} />
@@ -108,7 +136,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
 
       <Divider mt={8} ml={13} />
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onPrivacy}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>개인정보 처리방침</Text>
           <WithLocalSvg width={12} height={12} asset={svgs.right} />
@@ -117,7 +145,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
 
       <Divider ml={13} />
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onTerms}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>이용약관</Text>
           <WithLocalSvg width={12} height={12} asset={svgs.right} />
@@ -151,14 +179,18 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         color={colors.lightGrey}
       />
 
-      <View style={styles.withdrawal}>
-        <Text color={colors.darkGrey} size={10}>
-          앱버전 v1.01.2
-        </Text>
+      <View style={[styles.withdrawal]}>
+        <TextButton
+          onPress={props.onWithdrawal}
+          title="회원탈퇴"
+          color={colors.darkGrey}
+        />
       </View>
 
-      <View style={[styles.withdrawal, {marginBottom: insets.bottom}]}>
-        <TextButton title="회원탈퇴" color={colors.darkGrey} />
+      <View style={styles.withdrawal}>
+        <Text color={colors.darkGrey} size={10} mb={insets.bottom + 30}>
+          앱버전 v{DeviceInfo.getVersion()}
+        </Text>
       </View>
     </ScrollView>
   );

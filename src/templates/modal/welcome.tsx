@@ -1,10 +1,10 @@
 import React from 'react';
 import {Modal, StyleSheet, View} from 'react-native';
-import {PollCard} from '../components';
-import {TextMarker, Text} from '../components/text';
-import {CasualTopBar} from '../components/top-bar';
-import {emotions, gifs} from '../libs/common';
-import FriendSyncTemplate from './friend-sync';
+import {PollCard} from '../../components';
+import {TextMarker, Text} from '../../components/text';
+import {CasualTopBar} from '../../components/top-bar';
+import {emotions, gifs} from '../../libs/common';
+import FriendSyncTemplate from '../friend-sync';
 
 type WelcomeModalTemplateProps = {
   visible: boolean;

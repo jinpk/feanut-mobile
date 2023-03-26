@@ -1,4 +1,5 @@
 import React from 'react';
+import {useForm} from 'react-hook-form';
 import {StyleSheet, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, svgs} from '../libs/common';

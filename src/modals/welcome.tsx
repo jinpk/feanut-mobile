@@ -1,8 +1,8 @@
 import React from 'react';
-import {useModalStore} from '../../libs/stores';
-import {WelcomeModalTemplate} from '../../templates/welcome-modal';
+import {useModalStore} from '../libs/stores';
+import {WelcomeModalTemplate} from '../templates/modal';
 
-export const WelcomeModalFeature = (): JSX.Element => {
+export const WelcomeModal = (): JSX.Element => {
   const visible = useModalStore(s => s.welcome);
   const close = useModalStore(s => s.actions.closeWelcome);
 
