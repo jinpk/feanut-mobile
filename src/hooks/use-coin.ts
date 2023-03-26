@@ -11,11 +11,14 @@ import {
   purchaseErrorListener,
   purchaseUpdatedListener,
   requestPurchase,
+  setup,
 } from 'react-native-iap';
 import {getMyCoin, postPurchaseCoin} from '../libs/api/coin';
 import {constants, pngs} from '../libs/common';
 import {CoinItem} from '../libs/interfaces';
 import {useCoinStore, useModalStore, useUserStore} from '../libs/stores';
+
+setup({storekitMode: 'STOREKIT2_MODE'});
 
 const data: CoinItem[] = [
   {

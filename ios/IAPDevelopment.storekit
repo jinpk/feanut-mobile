@@ -1,0 +1,95 @@
+{
+  "identifier" : "5D49DDF2",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "6446655579",
+      "localizations" : [
+        {
+          "description" : "피넛코인 100개 구매",
+          "displayName" : "피넛코인 100개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "feanut.iap.coin.100",
+      "referenceName" : "Feanut Coin 100개",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6446655607",
+      "localizations" : [
+        {
+          "description" : "피넛코인 10개 구매",
+          "displayName" : "피넛코인 10개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "feanut.iap.coin.10",
+      "referenceName" : "Feanut Coin 10개",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : false,
+      "internalID" : "6446655379",
+      "localizations" : [
+        {
+          "description" : "피넛코인 30개 구매",
+          "displayName" : "피넛코인 30개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "feanut.iap.coin.30",
+      "referenceName" : "Feanut Coin 30개",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "5.99",
+      "familyShareable" : false,
+      "internalID" : "6446655577",
+      "localizations" : [
+        {
+          "description" : "피넛코인 50개 구매",
+          "displayName" : "피넛코인 50개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "feanut.iap.coin.50",
+      "referenceName" : "Feanut Coin 50개",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6446655272",
+      "localizations" : [
+        {
+          "description" : "피넛코인 5개 구매",
+          "displayName" : "피넛코인 5개",
+          "locale" : "ko"
+        }
+      ],
+      "productID" : "feanut.iap.coin.5",
+      "referenceName" : "Feanut Coin 5개",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6446508324",
+    "_developerTeamID" : "Z6C9B4Q4KN",
+    "_lastSynchronizedDate" : 701497404.93353999
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
