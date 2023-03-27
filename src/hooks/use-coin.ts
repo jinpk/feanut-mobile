@@ -67,15 +67,15 @@ export function useCoin(topComponent?: boolean) {
       const handleIAPListen = () => {
         purchaseUpdateSubscription = purchaseUpdatedListener(
           async (purchase: ProductPurchase) => {
-            const receipt =
-              constants.platform === 'ios'
+            Alert.alert(
+              'IAP Event',
+              typeof purchase.transactionReceipt === 'string' ||
+                !purchase.transactionReceipt
                 ? purchase.transactionReceipt
-                : purchase.purchaseToken;
+                : JSON.stringify(purchase.transactionReceipt),
+            );
 
-            Alert.alert('IAP Event', JSON.stringify(receipt));
-
-            if (!receipt) {
-              Alert.alert('입앤 결제 오류', '영수증이 확인되지 않습니다.');
+            if (!purchase.transactionReceipt) {
               return;
             }
 
@@ -88,7 +88,9 @@ export function useCoin(topComponent?: boolean) {
             await postPurchaseCoin({
               productId: purchase.productId,
               os: constants.platform === 'ios' ? 'ios' : 'android',
-              purchaseReceipt: receipt,
+              purchaseReceipt: (constants.platform === 'ios'
+                ? purchase.transactionReceipt
+                : purchase.purchaseToken)!,
               userId,
             })
               .then(() => {

@@ -35,6 +35,8 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string/>
 	<key>NSContactsUsageDescription</key>
 	<string>회원님의 연락처에있는 친구들과 재미있는 투표를 진행할 수 있도록 연락처 접근 권한을 허용해 주세요</string>
 	<key>NSPhotoLibraryUsageDescription</key>
