@@ -64,58 +64,74 @@ export function useCoin(topComponent?: boolean) {
       let purchaseUpdateSubscription: any = null;
       let purchaseErrorSubscription: any = null;
 
-      initConnection()
-        .then(() => {
-          getProducts({skus: data.map(x => x.productId)})
-            .then(products => {
-              console.log('get iap products length: ', products.length);
-              flushFailedPurchasesCachedAsPendingAndroid().then(() => {
-                purchaseUpdateSubscription = purchaseUpdatedListener(
-                  async (purchase: ProductPurchase) => {
-                    console.log('purchaseUpdatedListener', purchase);
+      const handleIAPListen = () => {
+        purchaseUpdateSubscription = purchaseUpdatedListener(
+          async (purchase: ProductPurchase) => {
+            const receipt =
+              constants.platform === 'ios'
+                ? purchase.transactionReceipt
+                : purchase.purchaseToken;
 
-                    const userId = useUserStore().user?.id;
-                    if (!userId) {
-                      Alert.alert('입앤 결제 오류', '로그인 후 진행해 주세요');
-                      return;
-                    }
+            Alert.alert('IAP Event', JSON.stringify(receipt));
 
-                    const receipt =
-                      constants.platform === 'ios'
-                        ? purchase.transactionReceipt
-                        : purchase.purchaseToken;
+            if (!receipt) {
+              Alert.alert('입앤 결제 오류', '영수증이 확인되지 않습니다.');
+              return;
+            }
 
-                    if (receipt) {
-                      await postPurchaseCoin({
-                        productId: purchase.productId,
-                        os: constants.platform === 'ios' ? 'ios' : 'android',
-                        purchaseReceipt: receipt,
-                        userId,
-                      }).then(async () => {
-                        await finishTransaction({purchase, isConsumable: true});
+            const userId = useUserStore().user?.id;
+            if (!userId) {
+              Alert.alert('입앤 결제 오류', '로그인 후 진행해 주세요');
+              return;
+            }
 
-                        getMyCoin().then(result => {
-                          updateAmount(result.total);
-                        });
-                      });
-                    } else {
-                      Alert.alert(
-                        '입앤 결제 오류',
-                        '영수증이 확인되지 않습니다.',
-                      );
-                    }
-                  },
-                );
-
-                purchaseErrorSubscription = purchaseErrorListener(
-                  (error: PurchaseError) => {
-                    if (error.code === ErrorCode.E_USER_CANCELLED) {
-                      return;
-                    }
-                    Alert.alert('인앱 결제 오류', error.message);
-                  },
-                );
+            await postPurchaseCoin({
+              productId: purchase.productId,
+              os: constants.platform === 'ios' ? 'ios' : 'android',
+              purchaseReceipt: receipt,
+              userId,
+            })
+              .then(() => {
+                finishTransaction({purchase, isConsumable: true}).then(() => {
+                  getMyCoin().then(result => {
+                    updateAmount(result.total);
+                  });
+                });
+              })
+              .catch(error => {
+                Alert.alert('결제 검증 오류', error.message || error);
               });
+          },
+        );
+
+        purchaseErrorSubscription = purchaseErrorListener(
+          (error: PurchaseError) => {
+            if (error.code === ErrorCode.E_USER_CANCELLED) {
+              return;
+            }
+            Alert.alert('인앱 결제 오류', error.message);
+          },
+        );
+      };
+
+      initConnection()
+        .then(inited => {
+          console.log('iap inited state: ', inited);
+          getProducts({skus: data.map(x => x.productId)})
+            .then(async products => {
+              console.log('get iap products length: ', products.length);
+
+              if (constants.platform === 'android') {
+                flushFailedPurchasesCachedAsPendingAndroid()
+                  .then(() => {
+                    handleIAPListen();
+                  })
+                  .catch((error: any) => {
+                    Alert.alert(error.message || error);
+                  });
+              } else {
+                handleIAPListen();
+              }
             })
             .catch(error => {
               console.error(error);

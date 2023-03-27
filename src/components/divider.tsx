@@ -31,7 +31,7 @@ export function Divider(props: DividerProps): JSX.Element {
 const styles = StyleSheet.create({
   root: {
     alignSelf: 'stretch',
-    height: 1,
+    height: 0.5,
     borderRadius: 5,
     backgroundColor: colors.mediumGrey,
   },

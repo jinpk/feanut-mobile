@@ -14,6 +14,7 @@ import logoSimple from '../../assets/svgs/logo-simple.svg';
 import back from '../../assets/svgs/back.svg';
 import close from '../../assets/svgs/close.svg';
 import feanutYellow from '../../assets/svgs/feanut-yellow.svg';
+import feanutDefault from '../../assets/svgs/feanut-default.svg';
 import pencil from '../../assets/svgs/pencil.svg';
 import feanutBlue from '../../assets/svgs/feanut-blue.svg';
 import right from '../../assets/svgs/right.svg';
@@ -52,11 +53,14 @@ import coin30 from '../../assets/pngs/coin30.png';
 import coin50 from '../../assets/pngs/coin50.png';
 import coin100 from '../../assets/pngs/coin100.png';
 
+import sync from '../../assets/svgs/sync.svg';
+
 export const svgs = {
   logo,
   shuffle,
+  feanutDefault,
   warning,
-  refresh,
+  refresh,sync,
   logoLetterBlack,
   privacy,
   back,

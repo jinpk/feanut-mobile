@@ -33,7 +33,7 @@ export const Text = (props: TextProps): JSX.Element => {
       style={[
         {
           fontFamily: fontFamily,
-          fontSize: props.size || 14,
+          fontSize: props.size ? props.size + 1 : 14 + 1,
           color: props.color || colors.dark,
           marginTop: props.mt,
           marginBottom: props.mb,

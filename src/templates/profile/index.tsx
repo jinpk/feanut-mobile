@@ -27,6 +27,16 @@ type ProfileTemplateProps = {
   onService: () => void;
   onTerms: () => void;
   onPrivacy: () => void;
+
+  // notifications
+  receivePoll: boolean;
+  receivePull: boolean;
+
+  onReceivePull: (value: boolean) => void;
+  onReceivePoll: (value: boolean) => void;
+
+  onFriend: () => void;
+  onCard: () => void;
 };
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
@@ -37,10 +47,9 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         <Avatar
           size={100}
           defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
-          source={
-            props.profile.profileImageKey
-              ? {uri: configs.cdnBaseUrl + '/' + props.profile.profileImageKey}
-              : undefined
+          uri={
+            props.profile.profileImageKey &&
+            configs.cdnBaseUrl + '/' + props.profile.profileImageKey
           }
         />
 
@@ -50,7 +59,11 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               이름
             </Text>
             <Text my={7}>{props.profile.name}</Text>
-            <TextButton hiddenBorder title="내 피넛카드 >" />
+            <TextButton
+              onPress={props.onCard}
+              hiddenBorder
+              title="내 피넛카드 >"
+            />
           </View>
 
           <View style={styles.profileContentButton}>
@@ -58,7 +71,11 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               친구
             </Text>
             <Text my={7}>{props.friendsCount}</Text>
-            <TextButton hiddenBorder title="친구 관리 >" />
+            <TextButton
+              onPress={props.onFriend}
+              hiddenBorder
+              title="친구 관리 >"
+            />
           </View>
         </View>
       </View>
@@ -93,7 +110,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </Text>
       </View>
 
-      <Divider mt={16} ml={13} />
+      <Divider mt={16} mx={13} />
 
       <View style={styles.listItem}>
         <View>
@@ -104,13 +121,13 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </View>
       </View>
 
-      <View style={styles.listItem}>
+      <View style={styles.listAccountItem}>
         <View>
           <Text color={colors.darkGrey} size={12}>
             인스타그램
           </Text>
           {Boolean(props.profile.instagram) && (
-            <Text mt={7}>{props.profile.instagram}</Text>
+            <Text mt={7}>@{props.profile.instagram}</Text>
           )}
         </View>
         <Switch
@@ -119,7 +136,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         />
       </View>
 
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <TouchableOpacity onPress={props.onService}>
         <View style={styles.listItem}>
@@ -128,13 +145,13 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </View>
       </TouchableOpacity>
 
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <Text color={colors.darkGrey} size={12} ml={13} mt={27}>
         약관
       </Text>
 
-      <Divider mt={8} ml={13} />
+      <Divider mt={8} mx={13} />
 
       <TouchableOpacity onPress={props.onPrivacy}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
@@ -143,7 +160,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </View>
       </TouchableOpacity>
 
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <TouchableOpacity onPress={props.onTerms}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
@@ -151,31 +168,31 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <WithLocalSvg width={12} height={12} asset={svgs.right} />
         </View>
       </TouchableOpacity>
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <Text color={colors.darkGrey} size={12} ml={13} mt={27}>
         푸시알림 설정
       </Text>
 
-      <Divider mt={8} ml={13} />
+      <Divider mt={8} mx={13} />
 
       <View style={styles.listItem}>
         <Text>투표 수신알림</Text>
-        <Switch />
+        <Switch value={props.receivePull} onChange={props.onReceivePull} />
       </View>
 
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <View style={styles.listItem}>
         <Text>투표 시작알림</Text>
-        <Switch />
+        <Switch value={props.receivePoll} onChange={props.onReceivePoll} />
       </View>
-      <Divider ml={13} />
+      <Divider mx={13} />
 
       <Button
         onPress={props.onLogout}
         title="로그아웃"
-        mt={27}
+        mt={30}
         color={colors.lightGrey}
       />
 
@@ -188,7 +205,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       </View>
 
       <View style={styles.withdrawal}>
-        <Text color={colors.darkGrey} size={10} mb={insets.bottom + 30}>
+        <Text color={colors.darkGrey} mt={20} size={10} mb={insets.bottom + 60}>
           앱버전 v{DeviceInfo.getVersion()}
         </Text>
       </View>
@@ -222,9 +239,15 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 13,
+    paddingHorizontal: 13,
     justifyContent: 'space-between',
     paddingVertical: 15,
+  },
+  listAccountItem: {
+    flexDirection: 'row',
+    paddingHorizontal: 13,
+    justifyContent: 'space-between',
+    paddingBottom: 15,
   },
   withdrawal: {alignSelf: 'center', marginTop: 40},
 });

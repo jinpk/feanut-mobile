@@ -30,6 +30,10 @@ feanutAPI.interceptors.response.use(
         ...error.response.data,
         status: error.response.status,
       };
+
+      if (!wrappedError.message) {
+        wrappedError.message = '오류입니다.';
+      }
       return Promise.reject(wrappedError);
     }
 

@@ -6,3 +6,4 @@ export * from './auth';
 export * from './friend';
 export * from './profile';
 export * from './coin'
+export * from './notification'

@@ -13,3 +13,4 @@ export * from './radios';
 export * from './privacy';
 export * from './close';
 export * from './coin-item';
+export * from './friend-item'

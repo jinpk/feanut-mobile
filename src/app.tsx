@@ -13,14 +13,21 @@ import Profile from './pages/profile';
 import SignUp from './pages/signup';
 import ResetPassword from './pages/reset-password';
 import ProfileEdit from './pages/profile/edit';
-import {useCoin} from './hooks';
+import {
+  useCoin,
+  useFirebaseMessaging,
+  useNotificationUserConfig,
+} from './hooks';
+import Friend from './pages/friend';
 
 type AppProps = React.PropsWithChildren<{}>;
 
 const Stack = createNativeStackNavigator();
 
 function NavigationApp() {
+  useFirebaseMessaging();
   useCoin(true);
+  useNotificationUserConfig(true);
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
@@ -43,6 +50,16 @@ function NavigationApp() {
           <Stack.Screen name={routes.inbox} component={Inbox} />
           <Stack.Screen name={routes.profile} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+          <Stack.Screen
+            name={routes.friend}
+            initialParams={{hidden: false}}
+            component={Friend}
+          />
+          <Stack.Screen
+            name={routes.friendHidden}
+            initialParams={{hidden: true}}
+            component={Friend}
+          />
         </Stack.Navigator>
       )}
       {!logged && (

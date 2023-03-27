@@ -14,6 +14,7 @@ import {postSignUp, postSignUpVerification} from '../libs/api/auth';
 import {setAPIAuthorization} from '../libs/api';
 import {useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
+import {HttpStatusCode} from 'axios';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -106,7 +107,13 @@ function SignUp(): JSX.Element {
       form.setValue('authId', authId);
       setPageIndex(3);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (error.status === HttpStatusCode.Conflict) {
+        form.setError('phoneNumber', {
+          message: '이미 가입된 휴대폰번호 입니다.',
+        });
+      } else {
+        Alert.alert(error.message || error);
+      }
     }
 
     form.setValue('sendingCode', false);
@@ -127,7 +134,13 @@ function SignUp(): JSX.Element {
       setAPIAuthorization(token.accessToken);
       login(await getMe());
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (error.status === HttpStatusCode.BadRequest) {
+        form.setError('code', {
+          message: '인증번호를 다시 확인해 주세요',
+        });
+      } else {
+        Alert.alert(error.message || error);
+      }
     }
   }, []);
 

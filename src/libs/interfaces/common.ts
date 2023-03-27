@@ -1,3 +1,15 @@
+export type QueryBoolean = '0' | '1';
+
+export interface PagenatedRequest {
+  page: number;
+  limit: number;
+}
+
+export interface PagenatedResponse<T> {
+  data: T[];
+  total: number;
+}
+
 export interface APIErrorData {
   module: string;
   code: number;

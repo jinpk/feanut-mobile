@@ -39,7 +39,7 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
             keyboardType="decimal-pad"
             onBlur={onBlur}
             maxLength={constants.phoneNumberMaxLength}
-            placeholder={'010 1234 5678'}
+            placeholder={'01012345678'}
             mx={16}
             mt={14}
           />

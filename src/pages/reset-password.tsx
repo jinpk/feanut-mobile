@@ -14,6 +14,7 @@ import {
   FindPasswordPhoneNumberTemplate,
   FindPasswordResetTemplate,
 } from '../templates/reset-password';
+import {HttpStatusCode} from 'axios';
 
 const initialFormValues: ResetPasswordForm = {
   phoneNumber: '',
@@ -79,7 +80,13 @@ function ResetPassword(): JSX.Element {
       form.setValue('authId', authId);
       setPageIndex(1);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (error.status === HttpStatusCode.Conflict) {
+        form.setError('phoneNumber', {
+          message: '이미 가입된 휴대폰번호 입니다.',
+        });
+      } else {
+        Alert.alert(error.message || error);
+      }
     }
 
     form.setValue('sendingCode', false);
@@ -96,7 +103,13 @@ function ResetPassword(): JSX.Element {
       await postResetPasswordVerificationCode(data);
       setPageIndex(2);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (error.status === HttpStatusCode.BadRequest) {
+        form.setError('code', {
+          message: '인증번호를 다시 확인해 주세요',
+        });
+      } else {
+        Alert.alert(error.message || error);
+      }
     }
   }, []);
 

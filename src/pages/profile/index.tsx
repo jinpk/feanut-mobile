@@ -2,7 +2,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Alert, Linking, StyleSheet, View} from 'react-native';
 import {BackTopBar} from '../../components/top-bar';
-import {useCoin} from '../../hooks';
+import {useCoin, useNotificationUserConfig} from '../../hooks';
 import {getFriendshipStatus} from '../../libs/api/friendship';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
 import {colors, routes} from '../../libs/common';
@@ -25,6 +25,8 @@ function Profile(): JSX.Element {
   const [instagramModal, setInstagramModal] = useState(false);
 
   const coin = useCoin();
+
+  const notificationUserConfig = useNotificationUserConfig();
 
   const fetchMyProfile = async () => {
     const profile = await getMyProfile();
@@ -104,6 +106,12 @@ function Profile(): JSX.Element {
     logout();
   }, []);
 
+  const handleCard = useCallback(() => {}, []);
+
+  const handleFriend = useCallback(() => {
+    navigation.navigate(routes.friend);
+  }, []);
+
   return (
     <View style={styles.root}>
       <BackTopBar title={username} onBack={navigation.goBack} />
@@ -121,6 +129,12 @@ function Profile(): JSX.Element {
           onTerms={handleTerms}
           onService={handleService}
           onWithdrawal={handleWithdrawal}
+          receivePull={notificationUserConfig.config.receivePull}
+          receivePoll={notificationUserConfig.config.receivePoll}
+          onReceivePoll={notificationUserConfig.changePoll}
+          onReceivePull={notificationUserConfig.changePull}
+          onCard={handleCard}
+          onFriend={handleFriend}
         />
       )}
 

@@ -12,6 +12,7 @@ import {setAPIAuthorization} from '../libs/api';
 import {useUserStore} from '../libs/stores';
 import {SignUpModal} from '../components/signup-modal';
 import {useNavigation} from '@react-navigation/native';
+import {configs} from '../libs/common/configs';
 
 const initialFormValues: LoginForm = {
   username: '',
@@ -122,10 +123,10 @@ function Login(): JSX.Element {
         username={loginForm.watch().username}
         visible={signUpModal}
         onPrivacyTerm={() => {
-          Linking.openURL('https://feanut.com/privacy');
+          Linking.openURL(configs.privacyUrl);
         }}
         onServiceTerm={() => {
-          Linking.openURL('https://feanut.com/terms');
+          Linking.openURL(configs.termsUrl);
         }}
         onSignUp={handleSignUp}
         onClose={() => {

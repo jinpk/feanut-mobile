@@ -26,7 +26,8 @@ export function PollingItem(props: PollingItemProps): JSX.Element {
     <TouchableWithoutFeedback>
       <View style={styles.root}>
         <Avatar
-          source={source}
+          uri=""
+          //source={source}
           defaultLogo={Math.floor(Math.random() * 100) > 50 ? 'm' : 'w'}
         />
         <View style={styles.content}>

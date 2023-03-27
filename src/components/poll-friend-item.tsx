@@ -76,7 +76,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
             ]}
           />
         )}
-        <Avatar source={source} size={54} defaultLogo={'m'} />
+        <Avatar
+        // source={source}
+         size={54} defaultLogo={'m'} />
         <View style={styles.content}>
           <Text>피넛유저</Text>
         </View>

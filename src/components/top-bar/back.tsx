@@ -38,7 +38,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
 
 const styles = StyleSheet.create({
   root: {
-    height: 50,
+    height: 53,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -46,7 +46,9 @@ const styles = StyleSheet.create({
   leftItem: {
     left: 0,
     position: 'absolute',
-    paddingHorizontal: 15,
+    paddingLeft: 15,
+    paddingRight: 20,
+    paddingVertical: 10,
   },
   rightItem: {
     right: 0,
