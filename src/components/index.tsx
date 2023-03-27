@@ -12,5 +12,6 @@ export * from './signup-modal';
 export * from './radios';
 export * from './privacy';
 export * from './close';
+export * from './keyboard-layout';
 export * from './coin-item';
-export * from './friend-item'
+export * from './friend-item';

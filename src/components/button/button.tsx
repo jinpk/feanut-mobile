@@ -32,7 +32,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
   const buttonStyle = useMemo((): ViewStyle => {
     return {
       backgroundColor: props.disabled
-        ? colors.mediumGrey
+        ? colors.lightGrey
         : props.color || colors.primary,
       marginVertical: props.my,
       marginHorizontal: props.mx,
@@ -55,14 +55,19 @@ export const Button = (props: ButtonProps): JSX.Element => {
   ]);
 
   const textColor = useMemo(() => {
+    if (props.disabled) {
+      return colors.darkGrey;
+    }
+
     if (props.fontColor) {
       return props.fontColor;
     }
     if (buttonStyle.backgroundColor === colors.lightGrey) {
       return colors.red;
     }
-    if (props.disabled) {
-      return colors.darkGrey;
+
+    if ((buttonStyle.backgroundColor as string) === colors.red) {
+      return colors.white;
     }
     if (
       [colors.dark, colors.primary, colors.black].includes(

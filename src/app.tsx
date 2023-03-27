@@ -19,6 +19,7 @@ import {
   useNotificationUserConfig,
 } from './hooks';
 import Friend from './pages/friend';
+import DeleteMe from './pages/delete-me';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -60,6 +61,7 @@ function NavigationApp() {
             initialParams={{hidden: true}}
             component={Friend}
           />
+          <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
         </Stack.Navigator>
       )}
       {!logged && (

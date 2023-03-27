@@ -16,7 +16,7 @@ type TextInputProps = {
 
   value: string;
   onChange: (text: string) => void;
-  onBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 
   placeholder?: string;
 

@@ -84,7 +84,17 @@ function Profile(): JSX.Element {
       if (on) {
         setInstagramModal(true);
       } else {
-        clearInstagram();
+        Alert.alert('인스타그램 계정연동 해지 하시겠습니까?', '', [
+          {
+            style: 'destructive',
+            text: '취소',
+          },
+          {
+            style: 'cancel',
+            text: '확인',
+            onPress: clearInstagram,
+          },
+        ]);
       }
     },
     [profile.instagram],
@@ -103,7 +113,7 @@ function Profile(): JSX.Element {
   }, []);
 
   const handleWithdrawal = useCallback(() => {
-    logout();
+    navigation.navigate(routes.deleteMe);
   }, []);
 
   const handleCard = useCallback(() => {}, []);

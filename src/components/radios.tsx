@@ -7,7 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {colors} from '../libs/common';
-import {Text} from './text';
+import {Text, TextSizeProps} from './text';
 
 type DataValue = any;
 
@@ -20,6 +20,7 @@ type RadiosProps = {
   style?: StyleProp<ViewStyle>;
   value: DataValue;
   data: Data[];
+  fontSize?: TextSizeProps;
   onChagne: (value: DataValue) => void;
 };
 
@@ -38,7 +39,10 @@ export const Radios = (props: RadiosProps) => {
             <View style={styles.radio}>
               {selected && <View style={styles.radioSelected} />}
             </View>
-            <Text ml={7} color={selected ? colors.black : colors.darkGrey}>
+            <Text
+              ml={7}
+              size={props.fontSize || 14}
+              color={selected ? colors.black : colors.darkGrey}>
               {x.label}
             </Text>
           </TouchableOpacity>

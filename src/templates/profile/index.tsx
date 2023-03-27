@@ -126,9 +126,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text color={colors.darkGrey} size={12}>
             인스타그램
           </Text>
-          {Boolean(props.profile.instagram) && (
-            <Text mt={7}>@{props.profile.instagram}</Text>
-          )}
+          <Text mt={7}>@{props.profile.instagram}</Text>
         </View>
         <Switch
           value={Boolean(props.profile.instagram)}

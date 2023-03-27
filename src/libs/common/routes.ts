@@ -12,4 +12,6 @@ export const routes = {
 
   friend: '/friend',
   friendHidden: '/friend/hidden',
+
+  deleteMe: '/delete-me',
 };
