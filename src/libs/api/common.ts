@@ -1,6 +1,21 @@
 import axios from 'axios';
 import {feanutAPI} from '.';
-import {PostFileRequest, PostFileResponse} from '../interfaces';
+import {
+  Emoji,
+  PagenatedRequest,
+  PagenatedResponse,
+  PostFileRequest,
+  PostFileResponse,
+} from '../interfaces';
+
+export const getEmojis = async (
+  params: PagenatedRequest,
+): Promise<PagenatedResponse<Emoji>> => {
+  const res = await feanutAPI.get<PagenatedResponse<Emoji>>('/public/emojis', {
+    params,
+  });
+  return res.data;
+};
 
 export const postFile = async (
   data: PostFileRequest,

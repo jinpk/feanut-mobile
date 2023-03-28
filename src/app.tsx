@@ -14,8 +14,9 @@ import SignUp from './pages/signup';
 import ResetPassword from './pages/reset-password';
 import ProfileEdit from './pages/profile/edit';
 import {
-  useCoin,
   useFirebaseMessaging,
+  useIAP,
+  useInitEmoji,
   useNotificationUserConfig,
 } from './hooks';
 import Friend from './pages/friend';
@@ -27,7 +28,8 @@ const Stack = createNativeStackNavigator();
 
 function NavigationApp() {
   useFirebaseMessaging();
-  useCoin(true);
+  useIAP();
+  useInitEmoji();
   useNotificationUserConfig(true);
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
