@@ -67,15 +67,9 @@ export function useCoin(topComponent?: boolean) {
       const handleIAPListen = () => {
         purchaseUpdateSubscription = purchaseUpdatedListener(
           async (purchase: ProductPurchase) => {
-            Alert.alert(
-              'IAP Event',
-              typeof purchase.transactionReceipt === 'string' ||
-                !purchase.transactionReceipt
-                ? purchase.transactionReceipt
-                : JSON.stringify(purchase.transactionReceipt),
-            );
-
+            console.log(purchase);
             if (!purchase.transactionReceipt) {
+              finishTransaction({purchase, isConsumable: true});
               return;
             }
 

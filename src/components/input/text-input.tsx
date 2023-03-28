@@ -2,6 +2,7 @@ import React, {LegacyRef, useCallback} from 'react';
 import {
   KeyboardTypeOptions,
   NativeSyntheticEvent,
+  ReturnKeyTypeOptions,
   StyleSheet,
   TextInput as RNTextInput,
   TextInputFocusEventData,
@@ -19,6 +20,7 @@ type TextInputProps = {
   onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 
   placeholder?: string;
+  returnKeyType?: ReturnKeyTypeOptions;
 
   disabledAutoCapitalize?: boolean;
   secureTextEntry?: boolean;
@@ -42,6 +44,8 @@ type TextInputProps = {
   maxLength?: number;
 
   autoFocus?: boolean;
+
+  hiddenClose?: boolean;
 };
 
 export const TextInput = (props: TextInputProps): JSX.Element => {
@@ -81,9 +85,9 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
           value={props.value}
           onChangeText={props.onChange}
           onBlur={props.onBlur}
-          returnKeyType="done"
+          returnKeyType={props.returnKeyType || 'done'}
         />
-        {!props.disabled && (
+        {!props.disabled && !props.hiddenClose && (
           <TouchableOpacity style={styles.clear} onPress={handleClear}>
             <WithLocalSvg width={6} height={6} asset={svgs.close} />
           </TouchableOpacity>

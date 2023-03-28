@@ -1,7 +1,6 @@
 import {StyleSheet, View} from 'react-native';
-import {WithLocalSvg} from 'react-native-svg';
 import {Text} from './text';
-import {svgs, colors} from '../libs/common';
+import {colors} from '../libs/common';
 
 type ErrorsProps = {
   errors: string[];
@@ -33,9 +32,11 @@ export const Errors = (props: ErrorsProps): JSX.Element | null => {
               props.errors.length === i - 1 && styles.errorWrapLast,
             ]}
             key={i.toString()}>
-            {
-              // <WithLocalSvg asset={svgs.warning} width={16} height={16} />
-            }
+            <View style={styles.warning}>
+              <Text size={12} color={colors.red} ml={1}>
+                {'!'}
+              </Text>
+            </View>
             <Text color={colors.red} size={12}>
               {x}
             </Text>
@@ -57,5 +58,15 @@ const styles = StyleSheet.create({
   },
   errorWrapLast: {
     marginBottom: 0,
+  },
+  warning: {
+    borderRadius: 100,
+    width: 16,
+    marginRight: 7,
+    height: 16,
+    borderWidth: 1,
+    borderColor: colors.red,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

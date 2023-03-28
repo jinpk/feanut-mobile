@@ -15,8 +15,6 @@ export const colors = {
   lightGrey: '#F5F5F5',
 
   transparent: '#ffffff00',
-
   yellow: '#FBE338',
-
   red: '#FA4135',
 };

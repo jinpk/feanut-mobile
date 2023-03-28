@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Avatar, KeyboardLayout, Radios, Terms} from '../components';
+import {Avatar, KeyboardLayout, Radios} from '../components';
 import {Button} from '../components/button';
 import {TextInput} from '../components/input';
 import {Text} from '../components/text';
@@ -60,16 +60,17 @@ function DeleteMeTemplate(props: DeleteMeTemplateProps) {
             </Text>
           </View>
 
-          <Text size={12} mt={30} mb={5} color={colors.darkGrey}>
-            탈퇴하시는 이유를 입력해 주세요.
+          <Text size={12} mt={45} mb={5} color={colors.darkGrey}>
+            탈퇴하시는 이유를 알려주세요.
           </Text>
 
           <TextInput
             value={props.reason}
             onChange={props.onReasonChange}
-            placeholder="이유를 10자 이상 입력해 주세요"
+            placeholder="10자 이상 입력해 주세요"
             maxLength={100}
             mt={7}
+            hiddenClose
           />
         </View>
 

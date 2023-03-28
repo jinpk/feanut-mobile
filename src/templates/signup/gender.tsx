@@ -1,6 +1,12 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, View} from 'react-native';
+import {
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {WithLocalSvg} from 'react-native-svg';
 import {SignUpTemplateProps} from '.';
 import {Radios} from '../../components';
 import {Button} from '../../components/button';
@@ -8,7 +14,7 @@ import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants} from '../../libs/common';
+import {colors, constants, svgs} from '../../libs/common';
 
 export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
   const errorsBirth = props.form.formState.errors.birth?.message as string;
@@ -35,7 +41,7 @@ export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
             onBlur={onBlur}
             maxLength={8}
             keyboardType="decimal-pad"
-            placeholder={'yyyy mm dd'}
+            placeholder={'YYYYMMDD'}
             mx={16}
             mt={14}
           />
@@ -51,13 +57,52 @@ export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
 
       <Controller
         control={props.form.control}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Radios
-            style={styles.genderRadios}
-            data={constants.genders}
-            value={value}
-            onChagne={onChange}
-          />
+        render={({field: {onChange, value}}) => (
+          <View style={styles.genders}>
+            <TouchableNativeFeedback
+              onPress={() => {
+                onChange('female');
+              }}>
+              <View style={styles.genderWrap}>
+                <WithLocalSvg
+                  width={40}
+                  height={20}
+                  asset={
+                    value === 'female' ? svgs.feanutYellow : svgs.feanutLight
+                  }
+                  fill="yellow"
+                />
+                <Text
+                  size={27}
+                  weight="medium"
+                  ml={7}
+                  color={value === 'female' ? colors.dark : colors.mediumGrey}>
+                  여자
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              onPress={() => {
+                onChange('male');
+              }}>
+              <View style={styles.genderWrap}>
+                <WithLocalSvg
+                  width={40}
+                  height={20}
+                  asset={value === 'male' ? svgs.feanutBlue : svgs.feanutLight}
+                  fill="yellow"
+                />
+
+                <Text
+                  size={27}
+                  ml={7}
+                  weight="medium"
+                  color={value === 'male' ? colors.dark : colors.mediumGrey}>
+                  남자
+                </Text>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
         )}
         name="gender"
       />
@@ -80,8 +125,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: constants.screenWidth,
   },
-  genderRadios: {
+  genders: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginHorizontal: 16,
-    marginTop: 15,
+    marginTop: 16,
+    alignSelf: 'stretch',
+  },
+  genderWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
 });

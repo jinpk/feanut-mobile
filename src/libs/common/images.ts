@@ -15,6 +15,7 @@ import back from '../../assets/svgs/back.svg';
 import close from '../../assets/svgs/close.svg';
 import feanutYellow from '../../assets/svgs/feanut-yellow.svg';
 import feanutDefault from '../../assets/svgs/feanut-default.svg';
+import feanutLight from '../../assets/svgs/feanut-light.svg';
 import pencil from '../../assets/svgs/pencil.svg';
 import feanutBlue from '../../assets/svgs/feanut-blue.svg';
 import right from '../../assets/svgs/right.svg';
@@ -44,7 +45,6 @@ import figureAwe from '../../assets/svgs/figure-awe.svg';
 import figureLove from '../../assets/svgs/figure-love.svg';
 
 import logo from '../../assets/svgs/logo.svg';
-import warning from '../../assets/svgs/warning.svg';
 import privacy from '../../assets/svgs/privacy.svg';
 
 import coin5 from '../../assets/pngs/coin5.png';
@@ -52,6 +52,7 @@ import coin10 from '../../assets/pngs/coin10.png';
 import coin30 from '../../assets/pngs/coin30.png';
 import coin50 from '../../assets/pngs/coin50.png';
 import coin100 from '../../assets/pngs/coin100.png';
+import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
 import sync from '../../assets/svgs/sync.svg';
 
@@ -59,14 +60,15 @@ export const svgs = {
   logo,
   shuffle,
   feanutDefault,
-  warning,
-  refresh,sync,
+  refresh,
+  sync,
   logoLetterBlack,
   privacy,
   back,
   close,
   logoLetter,
   logoWithLetter,
+  feanutLight,
   feanutYellow,
   feanutBlue,
   pencil,
@@ -113,5 +115,6 @@ export const pngs = {
   coin5,
   coin30,
   coin50,
+  magnifyingglass,
   coin100,
 };

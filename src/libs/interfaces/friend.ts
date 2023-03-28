@@ -3,6 +3,8 @@ import {Gender} from './user';
 
 export interface GetFriendsRequest extends PagenatedRequest {
   hidden?: QueryBoolean;
+
+  keyword?: string;
 }
 
 export interface PatchFriendHiddenRequest {

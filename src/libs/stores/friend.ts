@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {Friend, PagenatedRequest} from '../interfaces';
+import {Friend, GetFriendsRequest, PagenatedRequest} from '../interfaces';
 
 export interface FriendStore {
   friends: Friend[];
@@ -11,7 +11,7 @@ export interface FriendStore {
     updateHidden: (profileid: string, hidden: boolean) => void;
     add: (friends: Friend[]) => void;
     clear: () => void;
-    setQuery: (page: number, limit?: number) => void;
+    setQuery: (query: GetFriendsRequest) => void;
     setLoading: (loading: boolean) => void;
   };
 }
@@ -30,12 +30,12 @@ const getFriendStore = () => {
       setLoading: (loading: boolean) => {
         set({loading});
       },
-      setQuery: (page: number, limit?: number) => {
-        const query = get().query;
+      setQuery: (query: GetFriendsRequest) => {
+        const prevQuery = get().query;
         set({
           query: {
-            page: page,
-            limit: limit || query.limit,
+            ...prevQuery,
+            ...query,
           },
         });
       },

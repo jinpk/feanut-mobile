@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {colors} from '../libs/common';
 import {configs} from '../libs/common/configs';
@@ -20,7 +20,7 @@ type FriendItemProps = {
   onPress?: () => void;
 };
 
-export const FriendItem = (props: FriendItemProps) => {
+export const FriendItem = memo((props: FriendItemProps) => {
   return (
     <View style={styles.root}>
       <TouchableOpacity
@@ -66,7 +66,7 @@ export const FriendItem = (props: FriendItemProps) => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   root: {
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 7.5,
     paddingHorizontal: 16,
+    height: 57
   },
   body: {
     flex: 1,

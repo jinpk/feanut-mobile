@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {Divider, FriendItem} from '../../components';
+import {Gif} from '../../components/image';
+import {SearchInput} from '../../components/input';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, svgs} from '../../libs/common';
+import {colors, gifs, svgs} from '../../libs/common';
 import {Friend} from '../../libs/interfaces';
 
 type FreidnsListTemplateProps = {
@@ -24,47 +27,62 @@ type FreidnsListTemplateProps = {
   onLoadMore: () => void;
   onHiddenFriend: () => void;
   onRefresh: () => void;
+  loading: boolean;
+  onKeyword: (text: string) => void;
 };
 
 export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
-  const renderHeader = useCallback(() => {
-    if (props.hiddenFriend) {
-      return (
-        <View>
-          <Text color={colors.darkGrey} size={12} mx={16}>
-            숨김친구
-          </Text>
-          <Divider mt={8} mb={7.5} mx={16} />
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <Text color={colors.darkGrey} size={12} mx={16}>
-            동기화
-          </Text>
+  const insets = useSafeAreaInsets();
+  const [keyword, setKeyword] = useState('');
 
-          <Divider mt={8} mb={7.5} mx={16} />
-
-          <FriendItem
-            name="연락처 동기화"
-            button="동기화"
-            buttonColor={colors.blue}
-            onButtonPress={props.onSyncContact}
-            icon={
-              <View style={styles.sync}>
-                <WithLocalSvg width={16} height={16} asset={svgs.sync} />
-              </View>
-            }
-          />
-
-          <Text color={colors.darkGrey} size={12} mx={16} mt={22.5}>
-            친구
-          </Text>
-          <Divider mt={8} mb={7.5} mx={16} />
-        </View>
-      );
+  useEffect(() => {
+    if (keyword && keyword.length < 2) {
+      return;
     }
+    let tm = setTimeout(() => {
+      props.onKeyword(keyword);
+    }, 1500);
+    return () => {
+      clearTimeout(tm);
+    };
+  }, [keyword]);
+
+  const renderHeader = useCallback(() => {
+    return (
+      <View>
+        {props.hiddenFriend && (
+          <View>
+            <Text color={colors.darkGrey} size={12} mx={16}>
+              숨김친구
+            </Text>
+            <Divider mt={8} mb={7.5} mx={16} />
+          </View>
+        )}
+        {!props.hiddenFriend && (
+          <View>
+            <Text color={colors.darkGrey} size={12} mx={16}>
+              동기화
+            </Text>
+            <Divider mt={8} mb={7.5} mx={16} />
+            <FriendItem
+              name="연락처 동기화"
+              button="동기화"
+              buttonColor={colors.blue}
+              onButtonPress={props.onSyncContact}
+              icon={
+                <View style={styles.sync}>
+                  <WithLocalSvg width={16} height={16} asset={svgs.sync} />
+                </View>
+              }
+            />
+            <Text color={colors.darkGrey} size={12} mx={16} mt={22.5}>
+              친구
+            </Text>
+            <Divider mt={8} mb={7.5} mx={16} />
+          </View>
+        )}
+      </View>
+    );
   }, [props.hiddenFriend]);
 
   const handleKeyExtractor = useCallback((item: Friend, index: number) => {
@@ -103,6 +121,10 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     props.onRefresh();
   }, []);
 
+  const handleGetItemLayout = useCallback((_: any, index: number) => {
+    return {length: 57, offset: 57 * index, index};
+  }, []);
+
   return (
     <View style={styles.root}>
       <BackTopBar
@@ -118,9 +140,21 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
           ) : undefined
         }
       />
-      <Text weight="bold" size={18} mt={16} mb={30} ml={16}>
+      <Text weight="bold" size={18} mt={16} ml={16}>
         {props.hiddenFriend ? '숨김친구 목록' : '친구 목록'}
       </Text>
+
+      <SearchInput
+        value={keyword}
+        onChange={setKeyword}
+        maxLength={10}
+        placeholder="검색"
+        mt={7}
+        returnKeyType="search"
+        mx={16}
+        mb={15}
+      />
+
       <FlatList
         data={props.data}
         extraData={props.data}
@@ -131,6 +165,16 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         onEndReached={props.onLoadMore}
         bounces={true}
         onEndReachedThreshold={0.1}
+        getItemLayout={handleGetItemLayout}
+        ListFooterComponent={
+          props.data.length && props.loading ? (
+            <Gif
+              size={24}
+              source={gifs.dolphin}
+              style={[styles.loading, {bottom: insets.bottom + 5}]}
+            />
+          ) : undefined
+        }
         refreshControl={
           <RefreshControl
             tintColor={colors.primary}
@@ -158,4 +202,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   hiddenFriend: {paddingHorizontal: 16, paddingVertical: 15},
+  loading: {position: 'absolute', alignSelf: 'center'},
 });

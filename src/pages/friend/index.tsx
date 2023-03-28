@@ -1,5 +1,5 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Alert} from 'react-native';
 import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
@@ -118,8 +118,8 @@ function Friend() {
     if (loading) return;
 
     if (friends.length < friendsTotalCount) {
+      setQuery({page: query.page + 1, limit: 10});
       setLoading(true);
-      setQuery(query.page + 1);
     }
   }, [loading, query, friends.length, friendsTotalCount]);
 
@@ -129,6 +129,11 @@ function Friend() {
 
   const handleRefresh = useCallback(() => {
     clear();
+    setLoading(true);
+  }, []);
+
+  const handleKeyword = useCallback((keyword: string) => {
+    setQuery({page: 1, keyword: keyword || '', limit: 10});
     setLoading(true);
   }, []);
 
@@ -143,7 +148,9 @@ function Friend() {
       onSyncContact={handleSyncContact}
       onLoadMore={handleLoadMore}
       onHiddenFriend={handleHiddenFriend}
+      loading={loading}
       onRefresh={handleRefresh}
+      onKeyword={handleKeyword}
     />
   );
 }
