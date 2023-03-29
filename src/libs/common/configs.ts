@@ -3,7 +3,7 @@ import Config from 'react-native-config';
 export const configs = {
   instagramClientId: '201156389218583',
   apiBaseURL:
-    'http://192.168.45.79:3000' ||
+    'http://192.168.110.99:3000' ||
     'http://192.168.0.8:3000' ||
     'https://api.dev.feanut.com' ||
     'http://192.168.0.8:3000' ||

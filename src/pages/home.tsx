@@ -18,11 +18,13 @@ import PollLockTemplate from '../templates/poll-lock';
 import RewardTemplate from '../templates/reward';
 import FriendSyncTemplate from '../templates/friend-sync';
 import {getHasFriends} from '../libs/api/friendship';
-import {useSyncContacts} from '../hooks';
+import {usePolling, useSyncContacts} from '../hooks';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 function Home(): JSX.Element {
+  const polling2 = usePolling();
+
   const navigation = useNavigation();
   const userId = useUserStore(s => s.user?.id);
 

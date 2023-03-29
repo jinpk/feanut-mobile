@@ -6,3 +6,4 @@ export * from './use-firebase-messaging';
 export * from './use-notification-user-config';
 export * from './use-iap';
 export * from './use-init-emoji';
+export * from './use-polling';

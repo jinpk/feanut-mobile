@@ -4,3 +4,4 @@ export * from './polling';
 export * from './profile';
 export * from './friend';
 export * from './coin';
+export * from './emoji';

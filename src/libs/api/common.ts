@@ -11,7 +11,7 @@ import {
 export const getEmojis = async (
   params: PagenatedRequest,
 ): Promise<PagenatedResponse<Emoji>> => {
-  const res = await feanutAPI.get<PagenatedResponse<Emoji>>('/public/emojis', {
+  const res = await feanutAPI.get<PagenatedResponse<Emoji>>('/emojis', {
     params,
   });
   return res.data;
