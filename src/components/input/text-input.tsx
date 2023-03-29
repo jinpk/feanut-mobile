@@ -55,7 +55,10 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
   return (
     <View
       style={[
-        styles.root,
+        styles.inputWrap,
+        props.disabledBorderBottomRadius && styles.disabledBorderBottomRadius,
+        props.disabledBorderTopRadius && styles.disabledBorderTopRadius,
+        props.disabledBorderBottom && styles.disabledBorderBottom,
         {
           marginTop: props.mt,
           marginBottom: props.mb,
@@ -65,47 +68,37 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
           marginRight: props.mr,
         },
       ]}>
-      <View
-        style={[
-          styles.inputWrap,
-          props.disabledBorderBottomRadius && styles.disabledBorderBottomRadius,
-          props.disabledBorderTopRadius && styles.disabledBorderTopRadius,
-          props.disabledBorderBottom && styles.disabledBorderBottom,
-        ]}>
-        <RNTextInput
-          ref={props.inputRef}
-          editable={props.disabled ? false : true}
-          onPressOut={props.onPressOut}
-          maxLength={props.maxLength}
-          secureTextEntry={props.secureTextEntry}
-          autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
-          placeholderTextColor={colors.darkGrey}
-          style={[styles.input]}
-          placeholder={props.placeholder}
-          value={props.value}
-          onChangeText={props.onChange}
-          onBlur={props.onBlur}
-          returnKeyType={props.returnKeyType || 'done'}
-        />
-        {!props.disabled && !props.hiddenClose && (
-          <TouchableOpacity style={styles.clear} onPress={handleClear}>
-            <WithLocalSvg width={6} height={6} asset={svgs.close} />
-          </TouchableOpacity>
-        )}
-      </View>
+      <RNTextInput
+        ref={props.inputRef}
+        editable={props.disabled ? false : true}
+        onPressOut={props.onPressOut}
+        maxLength={props.maxLength}
+        secureTextEntry={props.secureTextEntry}
+        autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
+        placeholderTextColor={colors.darkGrey}
+        style={[styles.input]}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={props.onChange}
+        onBlur={props.onBlur}
+        returnKeyType={props.returnKeyType || 'done'}
+      />
+      {!props.disabled && !props.hiddenClose && (
+        <TouchableOpacity style={styles.clear} onPress={handleClear}>
+          <WithLocalSvg width={6} height={6} asset={svgs.close} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
   inputWrap: {
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.mediumGrey,
     borderRadius: 7,
     alignSelf: 'stretch',
-    height: 43,
     flexDirection: 'row',
   },
   input: {

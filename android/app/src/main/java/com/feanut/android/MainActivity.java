@@ -1,4 +1,4 @@
-package com.mobile;
+package com.feanut.android;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

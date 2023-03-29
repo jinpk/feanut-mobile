@@ -69,10 +69,14 @@ function DeleteMeTemplate(props: DeleteMeTemplateProps) {
             onChange={props.onReasonChange}
             placeholder="10자 이상 입력해 주세요"
             maxLength={100}
+            onBlur={() => {
+              props.onReasonChange(props.reason.trim());
+            }}
             mt={7}
             hiddenClose
           />
         </View>
+        <View style={styles.padding} />
 
         <Radios
           value={agreed}
@@ -106,8 +110,8 @@ const styles = StyleSheet.create({
   },
   content: {
     alignSelf: 'stretch',
-    flex: 1,
   },
+  padding: {flex: 1, paddingTop: 30},
   ol: {flexDirection: 'row', marginTop: 10, alignItems: 'center'},
   li: {
     borderRadius: 10,

@@ -33,7 +33,7 @@ export const Errors = (props: ErrorsProps): JSX.Element | null => {
             ]}
             key={i.toString()}>
             <View style={styles.warning}>
-              <Text size={12} color={colors.red} ml={1}>
+              <Text size={12} color={colors.red}>
                 {'!'}
               </Text>
             </View>

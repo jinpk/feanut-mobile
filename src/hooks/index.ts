@@ -7,3 +7,4 @@ export * from './use-notification-user-config';
 export * from './use-iap';
 export * from './use-init-emoji';
 export * from './use-polling';
+export * from './use-handle-back';

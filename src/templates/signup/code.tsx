@@ -59,8 +59,6 @@ export const SignUpCodeTemplate = (props: SignUpTemplateProps) => {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: colors.white,
     flex: 1,
-    width: constants.screenWidth,
   },
 });

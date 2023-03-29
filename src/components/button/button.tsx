@@ -93,7 +93,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
 
 const styles = StyleSheet.create({
   root: {
-    height: 42,
+    paddingVertical: 13,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',

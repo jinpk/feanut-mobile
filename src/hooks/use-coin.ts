@@ -2,11 +2,13 @@ import {useCallback, useEffect} from 'react';
 import {Alert} from 'react-native';
 import {ErrorCode, requestPurchase, setup} from 'react-native-iap';
 import {getMyCoin} from '../libs/api/coin';
-import {pngs} from '../libs/common';
+import {constants, pngs} from '../libs/common';
 import {CoinItem} from '../libs/interfaces';
 import {useCoinStore, useModalStore, useUserStore} from '../libs/stores';
 
-setup({storekitMode: 'STOREKIT2_MODE'});
+if (constants.platform === 'ios') {
+  setup({storekitMode: 'STOREKIT2_MODE'});
+}
 
 const data: CoinItem[] = [
   {

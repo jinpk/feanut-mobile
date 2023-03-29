@@ -4,7 +4,7 @@ import {Friend, GetFriendsRequest, PagenatedRequest} from '../interfaces';
 export interface FriendStore {
   friends: Friend[];
   friendsTotalCount: number;
-  query: PagenatedRequest;
+  query: GetFriendsRequest;
   loading: boolean;
   actions: {
     update: (friends: Friend[], friendsTotalCount: number) => void;
@@ -19,7 +19,7 @@ export interface FriendStore {
 const initialState = {
   friends: [],
   friendsTotalCount: 0,
-  query: {page: 1, limit: 10},
+  query: {page: 1, limit: 10, },
   loading: false,
 };
 

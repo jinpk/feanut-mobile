@@ -13,7 +13,7 @@ export const CasualTopBar = (props: CasualTopBarProps): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.root, {paddingTop: insets.top + 16}]}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
       {props.onClose && (
         <TouchableOpacity
           onPress={props.onClose}

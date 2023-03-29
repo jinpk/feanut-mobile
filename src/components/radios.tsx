@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleProp,
   StyleSheet,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -30,22 +31,23 @@ export const Radios = (props: RadiosProps) => {
       {props.data.map((x, i) => {
         const selected = x.value === props.value;
         return (
-          <TouchableOpacity
+          <TouchableNativeFeedback
             onPress={() => {
               props.onChagne(x.value);
             }}
-            key={i.toString()}
-            style={styles.radioWrap}>
-            <View style={styles.radio}>
-              {selected && <View style={styles.radioSelected} />}
+            key={i.toString()}>
+            <View style={styles.radioWrap}>
+              <View style={styles.radio}>
+                {selected && <View style={styles.radioSelected} />}
+              </View>
+              <Text
+                ml={7}
+                size={props.fontSize || 14}
+                color={selected ? colors.black : colors.darkGrey}>
+                {x.label}
+              </Text>
             </View>
-            <Text
-              ml={7}
-              size={props.fontSize || 14}
-              color={selected ? colors.black : colors.darkGrey}>
-              {x.label}
-            </Text>
-          </TouchableOpacity>
+          </TouchableNativeFeedback>
         );
       })}
     </View>

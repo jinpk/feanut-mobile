@@ -53,8 +53,8 @@ function ProfileEdit(): JSX.Element {
 
     try {
       const params: PatchProfileRequest = {
-        name: data.name,
-        statusMessage: data.statusMessage || '',
+        name: data.name.trim(),
+        statusMessage: (data.statusMessage || '').trim(),
       };
       if (needImageUpdate) {
         const fileResponse = await postFile({

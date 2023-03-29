@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "619040145320",
+    "project_id": "feanut",
+    "storage_bucket": "feanut.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619040145320:android:e832af9667be2a4252e79d",
+        "android_client_info": {
+          "package_name": "com.feanut.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619040145320-g3rn9dtdur2avbk9mnnvhe9ruf8de1r0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.feanut.android",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "619040145320-opep0bdfarkaukc0s1ji5g1ike0l4fig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.feanut.android",
+            "certificate_hash": "fc20c56bb6777751d3ac3f4b7448fab1ff40b855"
+          }
+        },
+        {
+          "client_id": "619040145320-50nr1osmg9u5jg6oksfivmn0mb8ncmuo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV2ZHZiOEfnIdGrNmtY_CGyxKVceiUmPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619040145320-50nr1osmg9u5jg6oksfivmn0mb8ncmuo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "619040145320-6h7de738j624ct41n4an459h5gk7nl05.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.feanut.ios",
+                "app_store_id": "6446508324"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

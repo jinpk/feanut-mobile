@@ -53,6 +53,7 @@ export const KeyboardLayout = (props: KeyboardLayoutProps) => {
     <View style={[styles.root, props.style]} onLayout={handleRootLayout}>
       <ScrollView
         ref={scrollRef}
+        keyboardShouldPersistTaps="handled"
         style={{backgroundColor: props.backgroundColor || colors.white}}
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}>

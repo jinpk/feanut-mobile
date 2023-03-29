@@ -1,9 +1,9 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, ScrollView} from 'react-native';
+import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {ResetPasswordForm} from '../libs/interfaces';
-import {constants, routes, yupValidators} from '../libs/common';
+import {colors, constants, routes, yupValidators} from '../libs/common';
 import {
   postResetPassword,
   postResetPasswordVerification,
@@ -146,29 +146,48 @@ function ResetPassword(): JSX.Element {
   }, []);
 
   return (
-    <ScrollView horizontal pagingEnabled scrollEnabled={false} ref={scrollRef}>
-      <FindPasswordPhoneNumberTemplate
-        form={form}
-        onConfirm={handlePhoneNumberConfirm}
-        onBack={handlePhoneNumberBack}
-        focused={pageIndex === 0}
-      />
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      horizontal
+      style={styles.scrollview}
+      pagingEnabled
+      scrollEnabled={false}
+      ref={scrollRef}>
+      <View style={styles.screen}>
+        <FindPasswordPhoneNumberTemplate
+          form={form}
+          onConfirm={handlePhoneNumberConfirm}
+          onBack={handlePhoneNumberBack}
+          focused={pageIndex === 0}
+        />
+      </View>
 
-      <FindPasswordCodeTemplate
-        form={form}
-        onConfirm={handleCodeConfirm}
-        onBack={handleCodeBack}
-        focused={pageIndex === 1}
-      />
+      <View style={styles.screen}>
+        <FindPasswordCodeTemplate
+          form={form}
+          onConfirm={handleCodeConfirm}
+          onBack={handleCodeBack}
+          focused={pageIndex === 1}
+        />
+      </View>
 
-      <FindPasswordResetTemplate
-        form={form}
-        onConfirm={handleResetConfirm}
-        onBack={handleResetBack}
-        focused={pageIndex === 2}
-      />
+      <View style={styles.screen}>
+        <FindPasswordResetTemplate
+          form={form}
+          onConfirm={handleResetConfirm}
+          onBack={handleResetBack}
+          focused={pageIndex === 2}
+        />
+      </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollview: {
+    flex: 1,
+  },
+  screen: {width: constants.screenWidth, backgroundColor: colors.white},
+});
 
 export default ResetPassword;

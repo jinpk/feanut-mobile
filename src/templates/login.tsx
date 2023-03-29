@@ -48,7 +48,7 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
       <WithLocalSvg width={58} height={30} asset={svgs.logo} />
       <WithLocalSvg
         width={76}

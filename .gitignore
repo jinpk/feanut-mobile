@@ -1,3 +1,5 @@
+# Build
+android/app/release/
 # OSX
 #
 .DS_Store
@@ -21,7 +23,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
-
+*release.keystore
 # Android/IntelliJ
 #
 build/

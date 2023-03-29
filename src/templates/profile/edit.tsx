@@ -61,12 +61,13 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
               <LineInput
                 value={value}
                 onChange={t => {
-                  onChange(t);
+                  onChange(t.trim());
                   props.form.clearErrors('name');
                 }}
                 maxLength={constants.nameMaxLength}
-                onBlur={onBlur}
-                placeholder="이름을 입력해 주세요"
+                onBlur={() => {
+                  onBlur();
+                }}
               />
             )}
             name="name"
@@ -93,8 +94,11 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
                 props.form.clearErrors('statusMessage');
               }}
               maxLength={constants.statusMessageMaxLength}
-              onBlur={onBlur}
-              placeholder="친구가 피넛 카드에서 보게 될 메시지에요"
+              onBlur={() => {
+                onChange(value.trim());
+                onBlur();
+              }}
+              placeholder="친구가 보게 될 메시지에요"
             />
           )}
           name="statusMessage"

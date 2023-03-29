@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {svgs} from '../../libs/common';
@@ -16,9 +16,11 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.root, {marginTop: insets.top}]}>
-      <TouchableOpacity onPress={props.onBack} style={[styles.leftItem]}>
-        <WithLocalSvg width={7} height={14} asset={svgs.back} />
-      </TouchableOpacity>
+      <TouchableNativeFeedback onPress={props.onBack}>
+        <View style={[styles.leftItem]}>
+          <WithLocalSvg width={7} height={14} asset={svgs.back} />
+        </View>
+      </TouchableNativeFeedback>
       <View>
         {props.logo && (
           <WithLocalSvg width={67.5} height={35} asset={svgs.logoWithLetter} />

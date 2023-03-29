@@ -3,8 +3,10 @@ import {
   Animated,
   Easing,
   StyleSheet,
+  TouchableNativeFeedback,
   TouchableOpacity,
   useAnimatedValue,
+  View,
 } from 'react-native';
 import {colors} from '../libs/common';
 
@@ -26,13 +28,14 @@ function Switch(props: SwitchProps): JSX.Element {
   }, [props.value]);
 
   return (
-    <TouchableOpacity
+    <TouchableNativeFeedback
       onPress={() => {
         props.onChange(props.value ? false : true);
-      }}
-      style={[styles.root, props.value && styles.rootOn]}>
-      <Animated.View style={[styles.ball, {transform: [{translateX}]}]} />
-    </TouchableOpacity>
+      }}>
+      <View style={[styles.root, props.value && styles.rootOn]}>
+        <Animated.View style={[styles.ball, {transform: [{translateX}]}]} />
+      </View>
+    </TouchableNativeFeedback>
   );
 }
 

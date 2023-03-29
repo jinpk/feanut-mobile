@@ -3,6 +3,7 @@ import {
   GestureResponderEvent,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {colors} from '../../libs/common';
 import {Text, TextColorProps, TextSizeProps} from '../text';
@@ -13,6 +14,7 @@ type TextButtonProps = PropsWithChildren<{
   color?: TextColorProps;
   hiddenBorder?: boolean;
   onPress?: (e: GestureResponderEvent) => void;
+  rightIcon?: JSX.Element;
 }>;
 
 export const TextButton = (props: TextButtonProps): JSX.Element => {
@@ -32,13 +34,21 @@ export const TextButton = (props: TextButtonProps): JSX.Element => {
       <Text size={props.fontSize || 12} color={color}>
         {props.title}
       </Text>
+      {props.rightIcon && (
+        <View style={styles.rightIcon}>{props.rightIcon}</View>
+      )}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: colors.blue,
+  },
+  rightIcon: {
+    marginLeft: 3,
   },
 });

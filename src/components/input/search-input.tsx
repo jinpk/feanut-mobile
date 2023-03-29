@@ -1,4 +1,4 @@
-import React, {LegacyRef, useCallback} from 'react';
+import React, {LegacyRef} from 'react';
 import {
   Image,
   KeyboardTypeOptions,
@@ -7,11 +7,9 @@ import {
   StyleSheet,
   TextInput as RNTextInput,
   TextInputFocusEventData,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import {WithLocalSvg} from 'react-native-svg';
-import {svgs, colors, pngs} from '../../libs/common';
+import {colors, pngs} from '../../libs/common';
 
 type SearchInputProps = {
   disabled?: boolean;
@@ -49,9 +47,6 @@ type SearchInputProps = {
 };
 
 export const SearchInput = (props: SearchInputProps): JSX.Element => {
-  const handleClear = useCallback(() => {
-    props.onChange('');
-  }, []);
   return (
     <View
       style={[
@@ -91,7 +86,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 7,
     alignSelf: 'stretch',
-    height: 30,
     flexDirection: 'row',
     backgroundColor: colors.lightGrey,
   },

@@ -48,7 +48,7 @@ function NavigationApp() {
       {logged && (
         <Stack.Navigator
           initialRouteName={routes.home}
-          screenOptions={{headerShown: false}}>
+          screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
           <Stack.Screen name={routes.profile} component={Profile} />

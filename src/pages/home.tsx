@@ -11,7 +11,7 @@ import {
 import {MainTopBar} from '../components/top-bar/main';
 import {PollingIndicatorFeautre} from '../features/polling';
 import {PollingsFeature} from '../features/polling/pollings';
-import {colors, gifs, routes} from '../libs/common';
+import {colors, constants, gifs, routes} from '../libs/common';
 import {useModalStore, usePollingStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import PollLockTemplate from '../templates/poll-lock';
@@ -51,6 +51,11 @@ function Home(): JSX.Element {
         ? 'dark-content'
         : 'light-content',
     );
+    if (constants.platform === 'android') {
+      StatusBar.setBackgroundColor(
+        welcomModalOpened ? '#fff' : !focused || !polling ? '#fff' : '#000',
+      );
+    }
   }, [polling, focused, welcomModalOpened]);
 
   const init = useCallback(async () => {

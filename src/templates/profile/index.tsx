@@ -62,7 +62,15 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <TextButton
               onPress={props.onCard}
               hiddenBorder
-              title="내 피넛카드 >"
+              title="내 피넛카드"
+              rightIcon={
+                <WithLocalSvg
+                  color={colors.blue}
+                  width={4.5}
+                  height={9}
+                  asset={svgs.right}
+                />
+              }
             />
           </View>
 
@@ -74,7 +82,15 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <TextButton
               onPress={props.onFriend}
               hiddenBorder
-              title="친구 관리 >"
+              title="친구 관리"
+              rightIcon={
+                <WithLocalSvg
+                  color={colors.blue}
+                  width={4.5}
+                  height={9}
+                  asset={svgs.right}
+                />
+              }
             />
           </View>
         </View>
@@ -126,7 +142,14 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text color={colors.darkGrey} size={12}>
             인스타그램
           </Text>
-          <Text mt={7}>@{props.profile.instagram}</Text>
+          {Boolean(props.profile.instagram) && (
+            <Text mt={7}>@{props.profile.instagram}</Text>
+          )}
+          {!Boolean(props.profile.instagram) && (
+            <Text mt={7} color={colors.darkGrey}>
+              연결되지 않음
+            </Text>
+          )}
         </View>
         <Switch
           value={Boolean(props.profile.instagram)}

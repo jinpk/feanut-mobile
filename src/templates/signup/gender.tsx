@@ -1,14 +1,8 @@
 import React from 'react';
 import {Controller} from 'react-hook-form';
-import {
-  StyleSheet,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {SignUpTemplateProps} from '.';
-import {Radios} from '../../components';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
@@ -121,9 +115,7 @@ export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: colors.white,
     flex: 1,
-    width: constants.screenWidth,
   },
   genders: {
     flexDirection: 'row',

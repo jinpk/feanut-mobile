@@ -1,7 +1,7 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, Keyboard, ScrollView} from 'react-native';
+import {Alert, Keyboard, ScrollView, StyleSheet, View} from 'react-native';
 import {SignUpForm} from '../libs/interfaces';
 import {
   SignUpGenderTemplate,
@@ -9,12 +9,13 @@ import {
   SignUpNameTemplate,
   SignUpCodeTemplate,
 } from '../templates/signup';
-import {constants, setCredentials, yupValidators} from '../libs/common';
+import {colors, constants, setCredentials, yupValidators} from '../libs/common';
 import {postSignUp, postSignUpVerification} from '../libs/api/auth';
 import {setAPIAuthorization} from '../libs/api';
 import {useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
 import {HttpStatusCode} from 'axios';
+import {useHandleBack} from '../hooks';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -36,6 +37,19 @@ function SignUp(): JSX.Element {
   });
 
   const [pageIndex, setPageIndex] = useState(0);
+
+  const handleBackHandler = useCallback(() => {
+    switch (pageIndex) {
+      case 0:
+        navigation.goBack();
+        break;
+      default:
+        setPageIndex(pageIndex - 1);
+        break;
+    }
+  }, [pageIndex]);
+
+  useHandleBack(handleBackHandler);
 
   const login = useUserStore(s => s.actions.login);
 
@@ -145,36 +159,60 @@ function SignUp(): JSX.Element {
   }, []);
 
   return (
-    <ScrollView horizontal pagingEnabled scrollEnabled={false} ref={scrollRef}>
-      <SignUpGenderTemplate
-        form={form}
-        onConfirm={handleGenderConfirm}
-        onBack={handleGenderBack}
-        focused={pageIndex === 0}
-      />
+    <ScrollView
+      style={styles.scrollview}
+      keyboardShouldPersistTaps="handled"
+      horizontal
+      pagingEnabled
+      scrollEnabled={false}
+      ref={scrollRef}>
+      <View style={styles.screen}>
+        <SignUpGenderTemplate
+          form={form}
+          onConfirm={handleGenderConfirm}
+          onBack={handleGenderBack}
+          focused={pageIndex === 0}
+        />
+      </View>
 
-      <SignUpNameTemplate
-        form={form}
-        focused={pageIndex === 1}
-        onConfirm={handleNameConfirm}
-        onBack={handleNameBack}
-      />
+      <View style={styles.screen}>
+        <SignUpNameTemplate
+          form={form}
+          focused={pageIndex === 1}
+          onConfirm={handleNameConfirm}
+          onBack={handleNameBack}
+        />
+      </View>
 
-      <SignUpPhoneNumberTemplate
-        form={form}
-        focused={pageIndex === 2}
-        onConfirm={handlePhoneNumberConfirm}
-        onBack={handlePhoneNumberBack}
-      />
+      <View style={styles.screen}>
+        <SignUpPhoneNumberTemplate
+          form={form}
+          focused={pageIndex === 2}
+          onConfirm={handlePhoneNumberConfirm}
+          onBack={handlePhoneNumberBack}
+        />
+      </View>
 
-      <SignUpCodeTemplate
-        form={form}
-        focused={pageIndex === 3}
-        onConfirm={handleCodeConfirm}
-        onBack={handleCodeBack}
-      />
+      <View style={styles.screen}>
+        <SignUpCodeTemplate
+          form={form}
+          focused={pageIndex === 3}
+          onConfirm={handleCodeConfirm}
+          onBack={handleCodeBack}
+        />
+      </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollview: {
+    flex: 1,
+  },
+  screen: {
+    width: constants.screenWidth,
+    backgroundColor: colors.white,
+  },
+});
 
 export default SignUp;
