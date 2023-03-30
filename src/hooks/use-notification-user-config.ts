@@ -45,7 +45,6 @@ export function useNotificationUserConfig(tokenRefresh?: boolean) {
               authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
             if (enabled) {
-              console.log(config.fcmToken);
               messaging()
                 .getToken()
                 .then(token => {

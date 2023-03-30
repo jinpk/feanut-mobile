@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropsWithChildren, useMemo} from 'react';
-import {Text as RNText} from 'react-native';
+import {StyleProp, Text as RNText, TextStyle} from 'react-native';
 import {colors, fonts} from '../../libs/common';
 
 export type TextColorProps = string | undefined;
@@ -8,6 +8,7 @@ export type TextSizeProps = 27 | 18 | 16 | 14 | 13 | 12 | 10 | undefined;
 
 type TextProps = PropsWithChildren<{
   color?: TextColorProps;
+  style?: StyleProp<TextStyle>;
   size?: TextSizeProps;
   weight?: 'bold' | 'medium' | undefined;
   align?: 'center' | 'left' | 'right';
@@ -16,6 +17,7 @@ type TextProps = PropsWithChildren<{
   my?: number;
   ml?: number;
   mx?: number;
+  numberOfLines?: number | undefined;
 }>;
 
 export const Text = (props: TextProps): JSX.Element => {
@@ -30,12 +32,13 @@ export const Text = (props: TextProps): JSX.Element => {
 
   return (
     <RNText
+      numberOfLines={props.numberOfLines}
       style={[
         {
           fontFamily: fontFamily,
           fontSize: props.size || 14,
           color: props.color || colors.dark,
-          lineHeight: (props.size || 14) * 1.1,
+          lineHeight: (props.size || 14) * 1.16,
           marginTop: props.mt,
           marginBottom: props.mb,
           textAlign: props.align,
@@ -43,6 +46,7 @@ export const Text = (props: TextProps): JSX.Element => {
           marginLeft: props.ml,
           marginHorizontal: props.mx,
         },
+        props.style,
       ]}>
       {props.children}
     </RNText>

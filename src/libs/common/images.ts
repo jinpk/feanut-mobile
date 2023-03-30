@@ -6,6 +6,7 @@ import teddyBear from '../../assets/gifs/teddy-bear.gif';
 import timerClock from '../../assets/gifs/timer-clock.gif';
 import pointingRight from '../../assets/gifs/pointing-right.gif';
 import wavingHand from '../../assets/gifs/waving-hand.gif';
+import highVoltage from '../../assets/gifs/high-voltage.gif';
 
 import logoWithLetter from '../../assets/svgs/logo-with-letter.svg';
 import logoLetter from '../../assets/svgs/logo-letter.svg';
@@ -15,6 +16,7 @@ import back from '../../assets/svgs/back.svg';
 import close from '../../assets/svgs/close.svg';
 import feanutYellow from '../../assets/svgs/feanut-yellow.svg';
 import feanutDefault from '../../assets/svgs/feanut-default.svg';
+import feanutVoltage from '../../assets/svgs/feanut-voltage.svg';
 import feanutLight from '../../assets/svgs/feanut-light.svg';
 import pencil from '../../assets/svgs/pencil.svg';
 import feanutBlue from '../../assets/svgs/feanut-blue.svg';
@@ -66,7 +68,7 @@ export const svgs = {
   privacy,
   back,
   close,
-  logoLetter,
+  logoLetter,feanutVoltage,
   logoWithLetter,
   feanutLight,
   feanutYellow,
@@ -107,6 +109,7 @@ export const gifs = {
   partyingFace,
   teddyBear,
   timerClock,
+  highVoltage,
   wavingHand,
 };
 

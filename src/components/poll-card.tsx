@@ -24,7 +24,7 @@ export const PollCard = (props: PollCardProps): JSX.Element => {
         return svgs.pollCardAwe;
       case emotions.gratitude:
         return svgs.pollCardGratitude;
-      case emotions.happiness:
+      case emotions.joy:
         return svgs.pollCardHappiness;
       case emotions.inspiration:
         return svgs.pollCardInspiration;

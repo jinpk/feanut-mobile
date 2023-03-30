@@ -162,7 +162,12 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <TouchableOpacity onPress={props.onService}>
         <View style={styles.listItem}>
           <Text>feanut 서비스 소개</Text>
-          <WithLocalSvg width={12} height={12} asset={svgs.right} />
+          <WithLocalSvg
+            width={12}
+            height={12}
+            asset={svgs.right}
+            color={colors.darkGrey}
+          />
         </View>
       </TouchableOpacity>
 
@@ -177,7 +182,12 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <TouchableOpacity onPress={props.onPrivacy}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>개인정보 처리방침</Text>
-          <WithLocalSvg width={12} height={12} asset={svgs.right} />
+          <WithLocalSvg
+            width={12}
+            height={12}
+            asset={svgs.right}
+            color={colors.darkGrey}
+          />
         </View>
       </TouchableOpacity>
 
@@ -186,7 +196,12 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <TouchableOpacity onPress={props.onTerms}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>이용약관</Text>
-          <WithLocalSvg width={12} height={12} asset={svgs.right} />
+          <WithLocalSvg
+            width={12}
+            height={12}
+            asset={svgs.right}
+            color={colors.darkGrey}
+          />
         </View>
       </TouchableOpacity>
       <Divider mx={13} />

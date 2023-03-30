@@ -31,7 +31,7 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
 
   const hasUsername = props.form.watch().hasUsername;
 
-  const handleUsernamePressOut = () => {
+  const handleUsernamePress = () => {
     if (hasUsername) {
       props.form.setValue('password', '');
       props.form.clearErrors('password');
@@ -68,7 +68,7 @@ function LoginTemplate(props: LoginTemplateProps): JSX.Element {
               <TextInput
                 inputRef={usernameRef}
                 disabled={hasUsername}
-                onPressOut={handleUsernamePressOut}
+                onPress={handleUsernamePress}
                 disabledAutoCapitalize
                 value={value}
                 onChange={onChange}

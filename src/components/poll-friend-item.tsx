@@ -1,69 +1,56 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import {
   Animated,
   GestureResponderEvent,
-  ImageSourcePropType,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   useAnimatedValue,
   View,
 } from 'react-native';
 import {Avatar} from './avatar';
 import {Text} from './text';
 import {colors} from '../libs/common';
+import {Source} from 'react-native-fast-image';
 
 type PollFriendItemProps = {
   mb?: number;
   onPress?: (e: GestureResponderEvent) => void;
   selected?: boolean;
-  percent?: number;
   color?: string;
+  label: string;
+  source: Source | number;
 };
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
-  const source = useMemo((): ImageSourcePropType | undefined => {
-    if (Math.floor(Math.random() * 100) > 50) {
-      return undefined;
-    }
-    return {
-      uri: 'https://t3.ftcdn.net/jpg/02/36/48/86/360_F_236488644_opXVvD367vGJTM2I7xTlsHB58DVbmtxR.jpg',
-    };
-  }, []);
-
   useEffect(() => {
-    if (!props.percent) {
+    if (!props.selected) {
       percentWidth.setValue(0);
-      return;
+    } else {
+      const percent = 85;
+      percentWidth.setValue(70);
+      const toValue = ((175 - 70) / 100) * percent + 70;
+      Animated.timing(percentWidth, {
+        useNativeDriver: false,
+        duration: 500,
+        toValue,
+      }).start(result => {
+        if (!result.finished) {
+          percentWidth.setValue(toValue);
+        }
+      });
     }
-
-    percentWidth.setValue(70);
-    const toValue = ((175 - 70) / 100) * props.percent + 70;
-    Animated.timing(percentWidth, {
-      useNativeDriver: false,
-      duration: 500,
-      toValue,
-    }).start(result => {
-      if (!result.finished) {
-        percentWidth.setValue(toValue);
-      }
-    });
-  }, [props.percent]);
+  }, [props.selected]);
 
   return (
-    <TouchableNativeFeedback
-      onPressIn={e => {
-        console.log('hi');
-      }}
-      onPress={props.onPress}>
+    <TouchableWithoutFeedback onPress={props.onPress}>
       <View
         style={[
           styles.root,
           {marginBottom: props.mb},
-          props.selected && styles.shadow,
-          props.selected && {borderWidth: 1.5, borderColor: colors.dark},
+          props.selected && {borderColor: props.color, borderWidth: 1},
         ]}>
-        {props.percent && (
+        {props.selected && (
           <Animated.View
             style={[
               styles.precent,
@@ -76,14 +63,12 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
             ]}
           />
         )}
-        <Avatar
-        // source={source}
-         size={54} defaultLogo={'m'} />
+        <Avatar size={54} defaultLogo={'m'} />
         <View style={styles.content}>
-          <Text>피넛유저</Text>
+          <Text numberOfLines={1}>{props.label}</Text>
         </View>
       </View>
-    </TouchableNativeFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -97,18 +82,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   content: {
-    marginLeft: 20,
+    marginLeft: 15,
+
     flex: 1,
   },
   precent: {

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {routes} from './libs/common';
+import {constants, routes} from './libs/common';
 import Login from './pages/login';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
@@ -48,7 +48,11 @@ function NavigationApp() {
       {logged && (
         <Stack.Navigator
           initialRouteName={routes.home}
-          screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
+          screenOptions={{
+            headerShown: false,
+            animation:
+              constants.platform === 'android' ? 'fade_from_bottom' : 'default',
+          }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
           <Stack.Screen name={routes.profile} component={Profile} />

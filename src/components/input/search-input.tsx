@@ -25,8 +25,6 @@ type SearchInputProps = {
   disabledAutoCapitalize?: boolean;
   secureTextEntry?: boolean;
 
-  onPressOut?: () => void;
-
   inputRef?: LegacyRef<RNTextInput>;
 
   disabledBorderBottom?: boolean;
@@ -65,7 +63,6 @@ export const SearchInput = (props: SearchInputProps): JSX.Element => {
         onFocus={props.onFocus}
         ref={props.inputRef}
         editable={props.disabled ? false : true}
-        onPressOut={props.onPressOut}
         maxLength={props.maxLength}
         secureTextEntry={props.secureTextEntry}
         autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}

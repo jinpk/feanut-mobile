@@ -33,4 +33,6 @@ export interface PostFileResponse {
 
 export interface APIError extends APIErrorData {
   status: number;
+  path: string;
+  method: string;
 }

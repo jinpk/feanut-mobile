@@ -1,5 +1,5 @@
 export const emotions = {
-  happiness: 'happiness',
+  joy: 'joy',
   gratitude: 'gratitude',
   serenity: 'serenity',
   interest: 'interest',
@@ -14,7 +14,7 @@ export const emotions = {
 export type emotions = (typeof emotions)[keyof typeof emotions];
 
 export const emotionBackgorundColor = {
-  happiness: '#FFD62B',
+  joy: '#FFD62B',
   gratitude: '#7DBCD7',
   serenity: '#B2A8D5',
   interest: '#FF9900',
@@ -26,7 +26,7 @@ export const emotionBackgorundColor = {
   love: '#FB4738',
 };
 export const emotionPointColor = {
-  happiness: '#6B99FF',
+  joy: '#6B99FF',
   gratitude: '#D1C5AE',
   serenity: '#CDCF70',
   interest: '#40BEFF',

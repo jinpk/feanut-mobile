@@ -21,7 +21,6 @@ type LineInputProps = {
   disabledAutoCapitalize?: boolean;
   secureTextEntry?: boolean;
 
-  onPressOut?: () => void;
 
   inputRef?: LegacyRef<RNTextInput>;
 
@@ -43,7 +42,6 @@ export const LineInput = (props: LineInputProps): JSX.Element => {
     <RNTextInput
       ref={props.inputRef}
       editable={props.disabled ? false : true}
-      onPressOut={props.onPressOut}
       maxLength={props.maxLength}
       secureTextEntry={props.secureTextEntry}
       autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}

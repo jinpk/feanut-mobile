@@ -23,9 +23,6 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
         </Text>
       </TouchableOpacity>
       <View>
-        {props.polling && (
-          <WithLocalSvg width={40} height={10} asset={svgs.logoLetter} />
-        )}
         {!props.polling && (
           <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
         )}
@@ -49,10 +46,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 2,
-    height: 50,
+    paddingVertical: 7,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    minHeight: 53,
   },
   optionItem: {
     paddingHorizontal: 15,

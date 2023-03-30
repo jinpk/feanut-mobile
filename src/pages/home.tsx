@@ -9,118 +9,99 @@ import {
   View,
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
-import {PollingIndicatorFeautre} from '../features/polling';
-import {PollingsFeature} from '../features/polling/pollings';
 import {colors, constants, gifs, routes} from '../libs/common';
-import {useModalStore, usePollingStore, useUserStore} from '../libs/stores';
+import {useModalStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
-import PollLockTemplate from '../templates/poll-lock';
-import RewardTemplate from '../templates/reward';
 import FriendSyncTemplate from '../templates/friend-sync';
-import {getHasFriends} from '../libs/api/friendship';
 import {usePolling, useSyncContacts} from '../hooks';
+import {LineIndicator} from '../components';
+import PollingsTemplate from '../templates/polling/pollings';
+import PollLockTemplate from '../templates/poll-lock';
+import EventModalTemplate from '../templates/polling/event-modal';
+import PollReachTemplate from '../templates/polling/reach';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 function Home(): JSX.Element {
-  const polling2 = usePolling();
-
   const navigation = useNavigation();
-  const userId = useUserStore(s => s.user?.id);
+  const focused = useIsFocused();
+
+  const polling = usePolling();
+  const syncContacts = useSyncContacts();
 
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
 
-  // polling
-  const pollingActions = usePollingStore(s => s.actions);
-
   /** 현재 투표중인지 여부 */
-  const focused = useIsFocused();
-  const polling = useMemo(() => tabIndex === 1, [tabIndex]);
-
-  const [needMoreFriends, setNeedMoreFriends] = useState(true);
-
-  const syncContacts = useSyncContacts();
-
+  const isPolling = useMemo(() => polling.state === 'polling', [polling.state]);
   const welcomModalOpened = useModalStore(s => s.welcome);
   useEffect(() => {
     StatusBar.setBarStyle(
       welcomModalOpened
         ? 'dark-content'
-        : !focused || !polling
+        : !focused || !isPolling
         ? 'dark-content'
         : 'light-content',
     );
     if (constants.platform === 'android') {
       StatusBar.setBackgroundColor(
-        welcomModalOpened ? '#fff' : !focused || !polling ? '#fff' : '#000',
+        welcomModalOpened ? '#fff' : !focused || !isPolling ? '#fff' : '#000',
       );
     }
-  }, [polling, focused, welcomModalOpened]);
-
-  const init = useCallback(async () => {
-    if (!userId) return;
-
-    pollingActions.setLoading(true);
-    try {
-      const hasFriends = await getHasFriends(userId);
-      setNeedMoreFriends(!hasFriends);
-
-      if (hasFriends) {
-        //Alert.alert('투표 불러오기!! 개발중');
-      }
-    } catch (error: any) {
-      Alert.alert(error.message || error);
-    }
-    pollingActions.setLoading(false);
-  }, [userId]);
+  }, [isPolling, focused, welcomModalOpened]);
 
   useEffect(() => {
-    init();
-  }, [userId]);
-
-  //pollingActions.setPollIndex(0);
-  //setTabIndex(1);
+    switch (polling.state) {
+      case 'reject':
+      case 'polling':
+        setTabIndex(1);
+        break;
+      case 'lock':
+      case 'reach':
+        setTabIndex(2);
+        break;
+    }
+  }, [polling.state]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
-      animated: true,
+      animated: false,
       x: tabIndex * SCREEN_WIDTH,
     });
   }, [tabIndex]);
 
-  const handleFinishPolling = useCallback(() => {
-    setTabIndex(2);
-    let tm = setTimeout(() => {
-      clearTimeout(tm);
-      setTabIndex(3);
-    }, 2000);
-  }, []);
-
-  const handleInboxPress = useCallback(() => {
-    Alert.alert('수신함!! 개발중');
-    return;
-    navigation.navigate(routes.inbox);
-  }, []);
-
-  const handleProfilePress = useCallback(() => {
-    navigation.navigate(routes.profile);
-  }, []);
-
-  const handleSyncContacts = () => {
+  const handleSyncContacts = useCallback(() => {
+    if (syncContacts.loading)
+      return Alert.alert(
+        '연락처 동기화중 ...',
+        'feanut이 회원님의 연락처를 읽어와 친구로 추가하고 있으니 잠시만 기다려주세요.',
+      );
     syncContacts.syncContacts(() => {
-      init();
+      polling.reInit();
     });
-  };
+  }, [syncContacts, polling.reInit]);
 
-  return (
-    <View style={styles.root}>
+  const renderTopBar = useCallback(() => {
+    const handleInboxPress = () => {
+      navigation.navigate(routes.inbox);
+    };
+
+    const handleProfilePress = () => {
+      navigation.navigate(routes.profile);
+    };
+
+    return (
       <MainTopBar
-        polling={polling}
+        polling={polling.state === 'polling'}
         onInboxPress={handleInboxPress}
         onProfilePress={handleProfilePress}
       />
+    );
+  }, [navigation, polling.state]);
 
+  return (
+    <View style={styles.root}>
+      {renderTopBar()}
       <ScrollView
         ref={scrollRef}
         horizontal
@@ -129,31 +110,69 @@ function Home(): JSX.Element {
         scrollEnabled={false}>
         {/** Loading */}
         <View style={styles.pollContainer}>
-          {!needMoreFriends && <LoadingTemplate label="투표 불러오는 중" />}
-          {needMoreFriends && (
+          <LoadingTemplate label="투표 불러오는 중" />
+        </View>
+        <View style={styles.pollContainer}>
+          {polling.state === 'reject' && (
             <FriendSyncTemplate
               onSyncContacts={handleSyncContacts}
               icon={gifs.teddyBear}
               title={'친구를 추가하고\n다양한 투표를 경험해 보세요!'}
+              message={
+                '4명 이상의 친구가 있어야 참여할 수 있어요!\n연락처를 동기화하여 친구를 추가할 수 있습니다.'
+              }
             />
+          )}
+          {polling.state === 'polling' && (
+            <View style={styles.polls}>
+              <PollingsTemplate
+                pollings={polling.pollings}
+                currentPollingIndex={polling.currentPollingIndex}
+                onVote={polling.vote}
+                onFriendSelected={polling.selectFriend}
+                onSkip={polling.skip}
+                onShuffle={polling.shuffle}
+              />
+              <LineIndicator
+                length={polling.pollings.length}
+                index={polling.currentPollingIndex}
+              />
+            </View>
+          )}
+        </View>
+        <View style={styles.pollContainer}>
+          {polling.state === 'reach' && (
+            <PollReachTemplate maxDailyCount={polling.maxDailyCount} />
+          )}
+          {polling.state === 'lock' && (
+            <PollLockTemplate remainTime={polling.remainTime} />
           )}
         </View>
 
+        {/**
         <View style={styles.polls}>
-          <PollingsFeature onFinish={handleFinishPolling} />
+          <PollingsFeature
+            onFinish={() => {
+              console.log('call finish');
+            }}
+          />
           <PollingIndicatorFeautre />
         </View>
-
-        {/** Reward */}
         <View style={styles.pollContainer}>
           <RewardTemplate amount={12} totalAmount={100} />
         </View>
 
-        {/** CoolTime */}
         <View style={styles.pollContainer}>
           <PollLockTemplate second={60 * 17} />
         </View>
+           */}
+        {/** Reward */}
+        {/** CoolTime */}
       </ScrollView>
+
+      {polling.event && (
+        <EventModalTemplate onClose={polling.clearEvent} {...polling.event} />
+      )}
     </View>
   );
 }
@@ -164,8 +183,6 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
   polls: {
-    backgroundColor: colors.primary,
-    width: SCREEN_WIDTH,
     flex: 1,
   },
 });

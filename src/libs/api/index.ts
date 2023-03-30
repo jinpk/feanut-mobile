@@ -29,6 +29,8 @@ feanutAPI.interceptors.response.use(
       const wrappedError: APIError = {
         ...error.response.data,
         status: error.response.status,
+        method: error.response.config.method,
+        path: error.response.config.url,
       };
 
       if (!wrappedError.message) {

@@ -31,7 +31,7 @@ export const PollCards = (): JSX.Element => {
         scrollEnabled={false}
         style={styles.polls}>
         <PollCard ml={16} emotion={emotions.pride} />
-        <PollCard ml={16} emotion={emotions.happiness} />
+        <PollCard ml={16} emotion={emotions.joy} />
         <PollCard ml={15} emotion={emotions.amusement} />
         <PollCard ml={15} emotion={emotions.gratitude} />
         <PollCard ml={15} emotion={emotions.inspiration} />
