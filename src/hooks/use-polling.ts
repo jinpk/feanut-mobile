@@ -13,8 +13,6 @@ import {
   POLLING_ERROR_EXCEED_REFRESH,
   POLLING_ERROR_EXCEED_SKIP,
   POLLING_ERROR_MIN_FRIENDS,
-  POLLING_ERROR_WAITING_NEXT_DAY,
-  POLLING_ERROR_WAITING_30_MIN,
 } from '../libs/common/errors';
 import {APIError} from '../libs/interfaces';
 import {
@@ -26,23 +24,28 @@ import {
 import {useEmojiStore, useUserStore} from '../libs/stores';
 
 type PollingState =
-  | 'loading' // 로딩
-  | 'reject' // 친구대기
+  | 'loading' // 투표 조회중
+  | 'reject' // 투표 불가능 (친구수 부족)
   | 'polling' // 투표중
-  | 'lock' // 락
+  | 'lock' // 투표대기
   | 'reach'; // 하루최대도달
 
 export function usePolling() {
   const userId = useUserStore(s => s.user?.id);
 
   const [state, setState] = useState<PollingState | undefined>();
+
   const [maxDailyCount, setMaxDailyCount] = useState(3);
+  const [todayCount, setTodayCount] = useState(1);
 
   const [pollings, setPollings] = useState<InternalPolling[]>([]);
   const [pollingIndex, setPollingIndex] = useState(0);
+  const [initialIndex, setInitialIndex] = useState(0);
 
   const [roundEvent, setRoundEvent] = useState<RoundEvent | null>(null);
   const [remainTime, setRemainTime] = useState<number | null>(null);
+
+  const [userRoundId, setUserRoundId] = useState<string | null>(null);
 
   /** Emoji */
   const emojis = useEmojiStore(s => s.emojis);
@@ -57,58 +60,62 @@ export function usePolling() {
   }, [emojis]);
 
   /** Fetch round */
-  const fetchUserRound = async () => {
-    try {
-      const pollingRound = await postPollingRound();
-      setMaxDailyCount(pollingRound.maxDailyCount);
-      if (!pollingRound.data?.complete) {
-        if (!pollingRound.data) {
-          throw new Error('조회 실패 하였습니다.');
-        }
+  useEffect(() => {
+    if (state === 'loading') {
+      const fetchUserRound = async () => {
+        try {
+          const pollingRound = await postPollingRound();
+          setMaxDailyCount(pollingRound.maxDailyCount);
+          setTodayCount(pollingRound.todayCount);
 
-        pollingRound.data!.pollingIds.forEach(e => console.log(e));
-        // 투표 진행 가능
-        const initalPolls = pollingRound.data.pollIds.map((x, i) => {
-          const polling = pollingRound.data!.pollingIds.find(
-            y => x === y.pollId,
-          );
-          const pollingId = polling?._id || undefined;
-          const isVoted = polling?.isVoted || false;
-          return {
-            userRoundId: pollingRound.data!.id,
-            pollId: x,
-            pollingId,
-            isVoted,
-            friends: [],
-          };
-        });
-        const curPollingIndex = initalPolls.findIndex(x => !x.isVoted);
+          if (!pollingRound.data?.complete) {
+            // 투표진행중
+            if (!pollingRound.data) {
+              throw new Error('조회 실패 하였습니다.');
+            }
 
-        setState('polling');
-        setPollingIndex(curPollingIndex);
-        setPollings(initalPolls);
-      } else {
-        // 투표완료
-        if (pollingRound.todayCount === pollingRound.maxDailyCount) {
-          // 하루 최대 참여
-          setState('reach');
-        } else {
-          // 30분 제한
-          // lock
-          setState('lock');
-          Alert.alert('lock 30 min');
+            setUserRoundId(pollingRound.data.id);
+            const initalPolls = pollingRound.data.pollIds.map((x, i) => {
+              const polling = pollingRound.data!.pollingIds.find(
+                y => x === y.pollId,
+              );
+              const pollingId = polling?._id || undefined;
+              const isVoted = polling?.isVoted || false;
+              return {
+                pollId: x,
+                pollingId,
+                isVoted,
+                friends: [],
+              };
+            });
+            const curPollingIndex = initalPolls.findIndex(x => !x.isVoted);
+            setInitialIndex(curPollingIndex);
+            setPollingIndex(curPollingIndex);
+            setPollings(initalPolls);
+            setState('polling');
+          } else {
+            // 투표완료
+            if (pollingRound.todayCount === pollingRound.maxDailyCount) {
+              // 하루 최대 참여
+              setState('reach');
+            } else {
+              // 시간 제한
+              setState('lock');
+              setRemainTime(pollingRound.remainTime);
+            }
+          }
+        } catch (error: any) {
+          const apiError = error as APIError;
+          if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
+            setState('reject');
+          } else {
+            Alert.alert(apiError.message);
+          }
         }
-      }
-    } catch (error: any) {
-      const apiError = error as APIError;
-      console.error(apiError);
-      if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
-        setState('reject');
-      } else {
-        Alert.alert(apiError.message);
-      }
+      };
+      fetchUserRound();
     }
-  };
+  }, [state]);
 
   /** Init */
   useEffect(() => {
@@ -116,18 +123,6 @@ export function usePolling() {
       setState('loading');
     }
   }, []);
-
-  useEffect(() => {
-    if (state === 'loading') {
-      // 1초 딜레이
-      let tm = setTimeout(() => {
-        fetchUserRound();
-      }, 1000);
-      return () => {
-        clearTimeout(tm);
-      };
-    }
-  }, [state]);
 
   /** poll & polling 조회 hooks */
   useEffect(() => {
@@ -142,7 +137,7 @@ export function usePolling() {
           // 폴링 없으면 생성
           polling = await postPolling({
             pollId: poll.pollId,
-            userRoundId: poll.userRoundId,
+            userRoundId: userRoundId as string,
           });
         }
 
@@ -169,10 +164,10 @@ export function usePolling() {
       }
     };
 
-    if (state === 'polling' && pollings.length >= 1) {
+    if (state === 'polling' && pollings.length >= 1 && userRoundId) {
       handlePolling(pollingIndex, true);
     }
-  }, [state, pollingIndex, pollings.length]);
+  }, [state, pollingIndex, pollings.length, userRoundId]);
 
   const voting = useRef(false);
   const handlePollingVote = async (
@@ -185,13 +180,12 @@ export function usePolling() {
       const res = await postPollingVote(pollingId, body);
       if (res.userroundCompleted) {
         // 끝났으면 라운드 다시 조회
-        fetchUserRound();
+        setState('loading');
         // 이벤트는 모달로 처리
         if (res.roundEvent) {
           setRoundEvent(res.roundEvent);
         }
       } else {
-        // 체크해야하는가 ?
         setPollingIndex(prev => prev + 1);
       }
     } catch (error: any) {
@@ -213,7 +207,6 @@ export function usePolling() {
 
   const handleVote = async () => {
     const poll = pollings[pollingIndex];
-
     if (!poll.pollingId) {
       Alert.alert('투표를 완료할 수 없습니다.');
     } else if (!poll.selectedProfileId) {
@@ -270,11 +263,15 @@ export function usePolling() {
   return {
     state,
     maxDailyCount,
-    reInit: fetchUserRound,
+    reInit: () => {
+      setState('loading');
+    },
     pollings,
     vote: handleVote,
+    todayCount,
     selectFriend: handleSelectFriend,
     skip: handleSkip,
+    initialIndex,
     shuffle: handleShuffle,
     currentPollingIndex: pollingIndex,
     clearEvent,

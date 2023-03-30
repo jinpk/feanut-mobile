@@ -58,7 +58,7 @@ function EventModalTemplate(props: EventModalTemplateProps) {
               <Text mt={29} align="center">
                 <Text>{props.subMessage.substring(0, markingStartIndex)}</Text>
                 <Text
-                  style={{backgroundColor: colors.yellow + '99'}}
+                  style={{backgroundColor: colors.yellow + '80'}}
                   weight="bold">
                   {props.subMessage.substring(
                     markingStartIndex,

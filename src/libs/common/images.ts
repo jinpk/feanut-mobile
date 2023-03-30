@@ -7,7 +7,7 @@ import timerClock from '../../assets/gifs/timer-clock.gif';
 import pointingRight from '../../assets/gifs/pointing-right.gif';
 import wavingHand from '../../assets/gifs/waving-hand.gif';
 import highVoltage from '../../assets/gifs/high-voltage.gif';
-
+import hourglassNotDone from '../../assets/gifs/hourglass-not-done.gif';
 import logoWithLetter from '../../assets/svgs/logo-with-letter.svg';
 import logoLetter from '../../assets/svgs/logo-letter.svg';
 import logoLetterBlack from '../../assets/svgs/logo-letter-black.svg';
@@ -68,7 +68,8 @@ export const svgs = {
   privacy,
   back,
   close,
-  logoLetter,feanutVoltage,
+  logoLetter,
+  feanutVoltage,
   logoWithLetter,
   feanutLight,
   feanutYellow,
@@ -111,6 +112,7 @@ export const gifs = {
   timerClock,
   highVoltage,
   wavingHand,
+  hourglassNotDone,
 };
 
 export const pngs = {

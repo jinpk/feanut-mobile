@@ -2,8 +2,6 @@ import {emotions} from '../common';
 import {Friend} from './friend';
 
 export interface InternalPolling {
-  userRoundId: string;
-
   pollId: string;
   pollingId?: string;
   isVoted: boolean;
@@ -34,6 +32,7 @@ export interface Polling {
 export interface PollingRound {
   maxDailyCount: number;
   todayCount: number;
+  remainTime: number;
   recentCompletedAt: string;
   data?: UserRound;
 }

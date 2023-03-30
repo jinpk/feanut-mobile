@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Avatar} from './avatar';
 import {Text} from './text';
-import {colors} from '../libs/common';
+import {colors, constants} from '../libs/common';
 import {Source} from 'react-native-fast-image';
 
 type PollFriendItemProps = {
@@ -20,6 +20,8 @@ type PollFriendItemProps = {
   label: string;
   source: Source | number;
 };
+
+const ITEM_WIDTH = constants.screenWidth * 0.4452;
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
@@ -77,8 +79,8 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     backgroundColor: colors.white,
     padding: 8,
-    width: 175,
-    height: 70,
+    width: ITEM_WIDTH,
+    height: ITEM_WIDTH * 0.4,
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -1,5 +1,13 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {Alert, PanResponder, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {
+  Alert,
+  Animated,
+  PanResponder,
+  ScrollView,
+  StyleSheet,
+  useAnimatedValue,
+  View,
+} from 'react-native';
 import {Polling} from '../../components';
 import {
   constants,
@@ -25,12 +33,15 @@ type PollingsTemplateProps = {
 
   pollings: InternalPolling[];
   currentPollingIndex: number;
+  initialPollingIndex: number;
 };
 
 const GESTURE_X_WIDTH = 30;
 
 function PollingsTemplate(props: PollingsTemplateProps) {
   const scollRef = useRef<ScrollView>(null);
+
+  const opacity = useAnimatedValue(0);
 
   // stored poll information
   const pollingRefStore = useRef<PollingRefStore>({
@@ -83,6 +94,8 @@ function PollingsTemplate(props: PollingsTemplateProps) {
     onShouldBlockNativeResponder: (_, __) => true,
   });
 
+  const [layoutInitedCount, setLayoutInitedCount] = useState(0);
+
   const handleCompleteVote = () => {
     props.onVote();
   };
@@ -124,17 +137,31 @@ function PollingsTemplate(props: PollingsTemplateProps) {
     }
   }, [isFriendSelected, props.currentPollingIndex]);
 
-  const handleFriendSelected = useCallback(
-    (pollingId: string, friendProfileId: string) => {},
-    [],
-  );
-
-  const handleSkip = useCallback((pollingId: string) => {
-    props.onSkip(pollingId);
-  }, []);
+  useEffect(() => {
+    if (layoutInitedCount === props.pollings.length) {
+      console.log('draw polling screen');
+      scollRef.current?.scrollTo({
+        animated: false,
+        x: constants.screenWidth * props.initialPollingIndex,
+      });
+      Animated.timing(opacity, {
+        duration: 1000,
+        useNativeDriver: true,
+        toValue: 1,
+      }).start(result => {
+        if (!result.finished) {
+          opacity.setValue(1);
+        }
+      });
+    } else {
+      opacity.setValue(0);
+    }
+  }, [layoutInitedCount, props.pollings.length, props.initialPollingIndex]);
 
   return (
-    <View {...slidePanResponder.panHandlers} style={styles.root}>
+    <Animated.View
+      {...slidePanResponder.panHandlers}
+      style={[styles.root, {opacity}]}>
       <ScrollView
         horizontal
         ref={scollRef}
@@ -147,12 +174,7 @@ function PollingsTemplate(props: PollingsTemplateProps) {
               style={styles.polling}
               key={i.toString()}
               onLayout={() => {
-                if (props.currentPollingIndex === i) {
-                  scollRef.current?.scrollTo({
-                    animated: false,
-                    x: constants.screenWidth * props.currentPollingIndex,
-                  });
-                }
+                setLayoutInitedCount(prev => prev + 1);
               }}>
               {Boolean(x.pollingId) && (
                 <Polling
@@ -197,7 +219,7 @@ function PollingsTemplate(props: PollingsTemplateProps) {
           );
         })}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   Alert,
@@ -16,9 +16,9 @@ import FriendSyncTemplate from '../templates/friend-sync';
 import {usePolling, useSyncContacts} from '../hooks';
 import {LineIndicator} from '../components';
 import PollingsTemplate from '../templates/polling/pollings';
-import PollLockTemplate from '../templates/poll-lock';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollReachTemplate from '../templates/polling/reach';
+import PollLockTemplate from '../templates/polling/lock';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -32,26 +32,31 @@ function Home(): JSX.Element {
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
 
-  /** 현재 투표중인지 여부 */
-  const isPolling = useMemo(() => polling.state === 'polling', [polling.state]);
   const welcomModalOpened = useModalStore(s => s.welcome);
   useEffect(() => {
-    StatusBar.setBarStyle(
-      welcomModalOpened
-        ? 'dark-content'
-        : !focused || !isPolling
-        ? 'dark-content'
-        : 'light-content',
-    );
-    if (constants.platform === 'android') {
-      StatusBar.setBackgroundColor(
-        welcomModalOpened ? '#fff' : !focused || !isPolling ? '#fff' : '#000',
-      );
+    if (
+      welcomModalOpened ||
+      !focused ||
+      polling.event ||
+      polling.state !== 'polling'
+    ) {
+      StatusBar.setBarStyle('dark-content');
+      if (constants.platform === 'android') {
+        StatusBar.setBackgroundColor('#fff');
+      }
+    } else {
+      StatusBar.setBarStyle('light-content');
+      if (constants.platform === 'android') {
+        StatusBar.setBackgroundColor('#000');
+      }
     }
-  }, [isPolling, focused, welcomModalOpened]);
+  }, [focused, welcomModalOpened, polling.event, polling.state]);
 
   useEffect(() => {
     switch (polling.state) {
+      case 'loading':
+        setTabIndex(0);
+        break;
       case 'reject':
       case 'polling':
         setTabIndex(1);
@@ -65,7 +70,7 @@ function Home(): JSX.Element {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
-      animated: false,
+      animated: tabIndex !== 0,
       x: tabIndex * SCREEN_WIDTH,
     });
   }, [tabIndex]);
@@ -132,6 +137,7 @@ function Home(): JSX.Element {
                 onFriendSelected={polling.selectFriend}
                 onSkip={polling.skip}
                 onShuffle={polling.shuffle}
+                initialPollingIndex={polling.initialIndex}
               />
               <LineIndicator
                 length={polling.pollings.length}
@@ -144,30 +150,17 @@ function Home(): JSX.Element {
           {polling.state === 'reach' && (
             <PollReachTemplate maxDailyCount={polling.maxDailyCount} />
           )}
-          {polling.state === 'lock' && (
-            <PollLockTemplate remainTime={polling.remainTime} />
+          {polling.state === 'lock' && polling.remainTime && (
+            <PollLockTemplate
+              maxDailyCount={polling.maxDailyCount}
+              todayCount={polling.todayCount}
+              remainTime={polling.remainTime}
+              onTimeout={() => {
+                polling.reInit();
+              }}
+            />
           )}
         </View>
-
-        {/**
-        <View style={styles.polls}>
-          <PollingsFeature
-            onFinish={() => {
-              console.log('call finish');
-            }}
-          />
-          <PollingIndicatorFeautre />
-        </View>
-        <View style={styles.pollContainer}>
-          <RewardTemplate amount={12} totalAmount={100} />
-        </View>
-
-        <View style={styles.pollContainer}>
-          <PollLockTemplate second={60 * 17} />
-        </View>
-           */}
-        {/** Reward */}
-        {/** CoolTime */}
       </ScrollView>
 
       {polling.event && (

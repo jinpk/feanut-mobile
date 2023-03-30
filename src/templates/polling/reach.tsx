@@ -4,7 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {Gif} from '../../components/image';
 import {Text} from '../../components/text';
-import {gifs, svgs} from '../../libs/common';
+import {colors, gifs, svgs} from '../../libs/common';
 
 type PollReachTemplateProps = {
   maxDailyCount: number;
@@ -22,7 +22,11 @@ function PollReachTemplate(props: PollReachTemplateProps): JSX.Element {
 
       <Text weight="medium" mt={30} align="center">
         투표는 하루에 {props.maxDailyCount}번만 참여할 수 있어요.{'\n'}
-        내일 투표가 준비되면 알림으로 알려드릴게요!
+        내일{' '}
+        <Text style={{backgroundColor: colors.yellow + '80'}} weight="bold">
+          투표가 준비
+        </Text>
+        되면 알림으로 알려드릴게요!
       </Text>
 
       <View style={styles.voltages}>
