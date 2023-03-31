@@ -3,11 +3,12 @@ import {StyleSheet, View} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, svgs} from '../libs/common';
+import {FeanutImageGender} from '../libs/interfaces';
 
 type AvatarProps = {
   source?: number | Source;
   size?: number;
-  defaultLogo?: 'm' | 'w';
+  defaultLogo?: FeanutImageGender;
   uri?: string;
 };
 
@@ -35,6 +36,7 @@ export function Avatar(props: AvatarProps): JSX.Element {
       return (
         <FastImage
           source={props.uri ? {uri: props.uri} : props.source}
+          resizeMode={FastImage.resizeMode.cover}
           style={[styles.image, {borderRadius: (props.size || 55) / 2}]}
           onError={() => {
             setLoadError(true);

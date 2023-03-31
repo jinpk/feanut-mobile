@@ -18,6 +18,8 @@ import {APIError} from '../libs/interfaces';
 import {
   InternalPolling,
   Polling,
+  PollingFriend,
+  PollingFriendItem,
   PostPollingVoteRequest,
   RoundEvent,
 } from '../libs/interfaces/polling';
@@ -29,6 +31,19 @@ type PollingState =
   | 'polling' // 투표중
   | 'lock' // 투표대기
   | 'reach'; // 하루최대도달
+
+const makeFriendItems = (friend: PollingFriend[]): PollingFriendItem[] => {
+  return friend.map((x, i) => {
+    return {
+      gender: i % 2 === 0 ? 'male' : 'female',
+      value: x.profileId,
+      source: x.imageFileKey
+        ? {uri: configs.cdnBaseUrl + '/' + x.imageFileKey}
+        : undefined,
+      label: x.name,
+    };
+  });
+};
 
 export function usePolling() {
   const userId = useUserStore(s => s.user?.id);
@@ -151,7 +166,7 @@ export function usePolling() {
             configs.cdnBaseUrl +
               '/' +
               emojiIdMapper.current[polling.pollId.emojiId];
-          prev[curPollingIndex].friends = polling.friendIds;
+          prev[curPollingIndex].friends = makeFriendItems(polling.friendIds);
           return [...prev];
         });
         if (preLoad && pollings.length > curPollingIndex + 1) {
@@ -239,7 +254,7 @@ export function usePolling() {
     try {
       const res = await postPollingRefresh(pollingId);
       setPollings(prev => {
-        prev[pollingIndex].friends = res.friendIds;
+        prev[pollingIndex].friends = makeFriendItems(res.friendIds);
         return [...prev];
       });
     } catch (error: any) {

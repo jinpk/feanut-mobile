@@ -2,7 +2,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert, Keyboard, ScrollView, StyleSheet, View} from 'react-native';
-import {SignUpForm} from '../libs/interfaces';
+import {APIError, SignUpForm} from '../libs/interfaces';
 import {
   SignUpGenderTemplate,
   SignUpPhoneNumberTemplate,
@@ -16,6 +16,10 @@ import {useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
 import {HttpStatusCode} from 'axios';
 import {useHandleBack} from '../hooks';
+import {
+  AUTH_ERROR_EXIST_PHONE_NUMBER,
+  AUTH_ERROR_EXIST_USERNAME,
+} from '../libs/common/errors';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -121,10 +125,16 @@ function SignUp(): JSX.Element {
       form.setValue('authId', authId);
       setPageIndex(3);
     } catch (error: any) {
-      if (error.status === HttpStatusCode.Conflict) {
+      const apiError = error as APIError;
+      if (apiError.code === AUTH_ERROR_EXIST_PHONE_NUMBER) {
         form.setError('phoneNumber', {
           message: '이미 가입된 휴대폰번호 입니다.',
         });
+      } else if (apiError.code === AUTH_ERROR_EXIST_USERNAME) {
+        Alert.alert(
+          form.getValues('username'),
+          '이미 가입된 아이디 입니다.',
+        );
       } else {
         Alert.alert(error.message || error);
       }

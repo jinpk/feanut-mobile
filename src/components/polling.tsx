@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import FastImage, {Source} from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, constants, emotions, svgs} from '../libs/common';
+import {PollingFriendItem} from '../libs/interfaces/polling';
 import {PollFriendItem} from './poll-friend-item';
 import {Text} from './text';
 
@@ -20,13 +21,6 @@ type SVGProps = {
 
 type FigureProps = {
   emotion: emotions;
-};
-
-type FriendItemValue = string;
-type FriendItem = {
-  label: string;
-  value: FriendItemValue;
-  source: Source | number;
 };
 
 const Figure = memo((props: FigureProps) => {
@@ -83,18 +77,18 @@ type PollingProps = {
   emotion: emotions;
   title: string;
   iconURI: string;
-  friends: FriendItem[];
-  selectedFriend?: FriendItemValue;
+  friends: PollingFriendItem[];
+  selectedFriend?: string;
   onShuffle: () => void;
   onSkip: () => void;
-  onSelected: (value: FriendItemValue) => void;
+  onSelected: (value: string) => void;
   focused: boolean;
 };
 
 export const Polling = (props: PollingProps) => {
   const insets = useSafeAreaInsets();
   const handleFriendSelect =
-    (friend: FriendItem) => (e: GestureResponderEvent) => {
+    (friend: PollingFriendItem) => (e: GestureResponderEvent) => {
       props.onSelected(friend.value);
     };
 
@@ -139,19 +133,21 @@ export const Polling = (props: PollingProps) => {
           </Text>
         </View>
         <View>
-          {props.friends.map((x, i) => {
-            return (
-              <PollFriendItem
-                label={x.label}
-                key={i.toString()}
-                source={1}
-                selected={props.selectedFriend === x.value}
-                color={props.color}
-                onPress={handleFriendSelect(x)}
-                mb={15}
-              />
-            );
-          })}
+          {(props.focused || props.selectedFriend) &&
+            props.friends.map((x, i) => {
+              return (
+                <PollFriendItem
+                  gender={x.gender}
+                  label={x.label}
+                  key={x.value}
+                  source={x.source}
+                  selected={props.selectedFriend === x.value}
+                  color={props.color}
+                  onPress={handleFriendSelect(x)}
+                  mb={15}
+                />
+              );
+            })}
         </View>
 
         <View style={[styles.footer]}>

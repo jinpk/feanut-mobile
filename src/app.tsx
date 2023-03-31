@@ -40,7 +40,7 @@ function NavigationApp() {
   }, []);
 
   if (loginLoading) {
-    return <Text mt={100}>Checking credidental...</Text>;
+    return <Text mt={100}></Text>;
   }
 
   return (

@@ -151,7 +151,7 @@ function Friend() {
       loading={loading}
       onRefresh={handleRefresh}
       onKeyword={handleKeyword}
-      keyword={query.keyword}
+      keyword={query.keyword || ''}
     />
   );
 }

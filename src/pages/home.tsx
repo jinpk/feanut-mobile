@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
 import {colors, constants, gifs, routes} from '../libs/common';
-import {useModalStore} from '../libs/stores';
+import {useFriendStore, useModalStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
 import {usePolling, useSyncContacts} from '../hooks';
@@ -33,6 +33,8 @@ function Home(): JSX.Element {
   const [tabIndex, setTabIndex] = useState(0);
 
   const welcomModalOpened = useModalStore(s => s.welcome);
+  const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
+
   useEffect(() => {
     if (
       welcomModalOpened ||
@@ -67,6 +69,12 @@ function Home(): JSX.Element {
         break;
     }
   }, [polling.state]);
+
+  useEffect(() => {
+    if (focused && polling.state === 'reject' && friendsTotalCount >= 4) {
+      polling.reInit();
+    }
+  }, [focused, polling.state, friendsTotalCount]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({

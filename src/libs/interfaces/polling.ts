@@ -1,5 +1,7 @@
+import {Source} from 'react-native-fast-image';
 import {emotions} from '../common';
 import {Friend} from './friend';
+import {Gender} from './user';
 
 export interface InternalPolling {
   pollId: string;
@@ -10,9 +12,22 @@ export interface InternalPolling {
   emotion?: emotions;
   emojiURI?: string;
 
-  friends: Friend[];
+  friends: PollingFriendItem[];
 
   selectedProfileId?: string;
+}
+
+export interface PollingFriendItem {
+  label: string;
+  source?: Source | number;
+  value: string;
+  gender: Gender;
+}
+
+export interface PollingFriend {
+  imageFileKey?: string;
+  name: string;
+  profileId: string;
 }
 
 export interface Poll {
@@ -25,7 +40,7 @@ export interface Polling {
   id: string;
   userRoundId: string;
   pollId: Poll;
-  friendIds: any;
+  friendIds: PollingFriend[];
   isVoted: boolean;
 }
 
@@ -72,4 +87,37 @@ export interface RoundEvent {
 export interface PostPollingVoteResponse {
   userroundCompleted: boolean;
   roundEvent?: RoundEvent;
+}
+
+export interface ReceivePolling {
+  id: string;
+  userName: string;
+}
+
+export interface PollingReceiveItem {
+  _id: string;
+  pollId: string;
+  completedAt: string;
+  isOpened?: boolean;
+  name?: string;
+  gender: Gender;
+  imageFileKey?:string
+}
+
+export interface PollingReceiveDetail {
+  _id: string;
+  pollId: Poll;
+  friendIds: PollingFriend;
+  selectedProfileId: string;
+  completedAt: string;
+
+  isOpened?: boolean;
+  name?: string;
+  gender: Gender;
+
+  voter: {
+    name?: string;
+    gender: Gender;
+    imageFileKey?: string;
+  };
 }

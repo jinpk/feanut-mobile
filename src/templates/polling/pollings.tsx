@@ -15,7 +15,6 @@ import {
   emotionBackgorundColor,
   emotionPointColor,
 } from '../../libs/common';
-import {configs} from '../../libs/common/configs';
 import {InternalPolling} from '../../libs/interfaces/polling';
 
 interface PollingRefStore {
@@ -186,23 +185,7 @@ function PollingsTemplate(props: PollingsTemplateProps) {
                   emotion={x.emotion || ''}
                   title={x.title || ''}
                   iconURI={x.emojiURI!}
-                  friends={x.friends.map(x => {
-                    return {
-                      label: x.name,
-                      value: x.profileId,
-                      source: {
-                        uri:
-                          'https://i0.wp.com/blog.valeconsulting.co.uk/wp-content/uploads/2017/07/image_thumb1.png?resize=96%2C96' ||
-                          x.profileImageKey
-                            ? configs.cdnBaseUrl + '/' + x.profileImageKey
-                            : x.gender === 'male'
-                            ? 'm'
-                            : x.gender === 'female'
-                            ? 'w'
-                            : '',
-                      },
-                    };
-                  })}
+                  friends={x.friends}
                   selectedFriend={x.selectedProfileId}
                   onSelected={(friendProfileId: string) => {
                     props.onFriendSelected(x.pollingId!, friendProfileId);

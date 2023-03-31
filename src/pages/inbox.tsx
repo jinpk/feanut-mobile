@@ -1,22 +1,22 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {BackTopBar} from '../components/top-bar';
-import {colors} from '../libs/common';
+import {useInbox} from '../hooks';
 import InboxTemplate from '../templates/inbox';
 
 function Inbox(): JSX.Element {
   const navigation = useNavigation();
+  const inbox = useInbox();
+
   return (
-    <View style={styles.root}>
-      <BackTopBar logo onBack={navigation.goBack} />
-      <InboxTemplate />
-    </View>
+    <InboxTemplate
+      data={inbox.pulls}
+      onBack={navigation.goBack}
+      onItemPress={() => {}}
+      onLoadMore={inbox.nextPage}
+      loading={inbox.loading}
+      onRefresh={inbox.refresh}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.white},
-});
 
 export default Inbox;

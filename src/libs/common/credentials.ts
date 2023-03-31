@@ -3,6 +3,10 @@ import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
 import {JWT} from '../interfaces';
 import {constants} from './constants';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const clearCredentials = async () => {
   try {

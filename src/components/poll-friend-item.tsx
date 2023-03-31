@@ -11,20 +11,41 @@ import {Avatar} from './avatar';
 import {Text} from './text';
 import {colors, constants} from '../libs/common';
 import {Source} from 'react-native-fast-image';
+import {Gender} from '../libs/interfaces';
 
 type PollFriendItemProps = {
   mb?: number;
   onPress?: (e: GestureResponderEvent) => void;
   selected?: boolean;
   color?: string;
+  gender?: Gender;
   label: string;
-  source: Source | number;
+  source?: Source | number;
 };
 
 const ITEM_WIDTH = constants.screenWidth * 0.4452;
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
+  const scale = useAnimatedValue(0.8);
+  const translateY = scale.interpolate({
+    inputRange: [0.9, 1],
+    outputRange: [20, 0],
+  });
+
+  useEffect(() => {
+    scale.setValue(0.9);
+    Animated.timing(scale, {
+      duration: 300,
+      toValue: 1,
+      useNativeDriver: true,
+    }).start(result => {
+      if (!result.finished) {
+        scale.setValue(1);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (!props.selected) {
       percentWidth.setValue(0);
@@ -46,10 +67,11 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
 
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
-      <View
+      <Animated.View
         style={[
           styles.root,
           {marginBottom: props.mb},
+          {transform: [{scale}, {translateY}]},
           props.selected && {borderColor: props.color, borderWidth: 1},
         ]}>
         {props.selected && (
@@ -65,11 +87,21 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
             ]}
           />
         )}
-        <Avatar size={54} defaultLogo={'m'} />
+        <Avatar
+          size={54}
+          source={props.source}
+          defaultLogo={
+            props.gender === 'female'
+              ? 'w'
+              : props.gender === 'male'
+              ? 'm'
+              : undefined
+          }
+        />
         <View style={styles.content}>
           <Text numberOfLines={1}>{props.label}</Text>
         </View>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 }

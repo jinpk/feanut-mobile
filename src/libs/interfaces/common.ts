@@ -1,3 +1,5 @@
+export type FeanutImageGender = 'm' | 'w';
+
 export type QueryBoolean = '0' | '1';
 
 export interface PagenatedRequest {

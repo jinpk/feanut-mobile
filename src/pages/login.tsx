@@ -92,7 +92,14 @@ function Login(): JSX.Element {
 
     try {
       await yupValidators.username.validate(username);
-      setSignUpModal(true);
+      const exist = await getExistenceUserByUsername(username);
+      if (exist) {
+        loginForm.setError('username', {
+          message: '이미 사용중인 아이디입니다.',
+        });
+      } else {
+        setSignUpModal(true);
+      }
     } catch (error: any) {
       Alert.alert('feanut ID 입력 오류', error.messasge);
     }
