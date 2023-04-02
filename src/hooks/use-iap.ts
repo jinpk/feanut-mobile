@@ -10,14 +10,11 @@ import {
   PurchaseError,
   purchaseErrorListener,
   purchaseUpdatedListener,
-  setup,
 } from 'react-native-iap';
 import {getMyCoin, postPurchaseCoin} from '../libs/api/coin';
 import {constants, pngs} from '../libs/common';
-import {CoinItem} from '../libs/interfaces';
+import {APIError, CoinItem} from '../libs/interfaces';
 import {useCoinStore, useUserStore} from '../libs/stores';
-
-setup({storekitMode: 'STOREKIT2_MODE'});
 
 const data: CoinItem[] = [
   {
@@ -53,47 +50,38 @@ const data: CoinItem[] = [
 ];
 
 export function useIAP() {
+  const userId = useUserStore(s => s.user?.id);
   const updateAmount = useCoinStore(s => s.actions.updateAmount);
   const setPending = useCoinStore(s => s.actions.setPending);
   useEffect(() => {
     let purchaseUpdateSubscription: any = null;
     let purchaseErrorSubscription: any = null;
 
-    const handleIAPListen = () => {
+    const handleIAPListen = (userId: string) => {
       purchaseUpdateSubscription = purchaseUpdatedListener(
         async (purchase: ProductPurchase) => {
           setPending(false);
-          if (!purchase.transactionReceipt) {
-            if (purchase.productId) {
-              finishTransaction({purchase, isConsumable: true});
-            }
-            return;
-          }
-
-          const userId = useUserStore().user?.id;
-          if (!userId) {
-            Alert.alert('인증 오류', '로그인 후 앱을 다시 시작해 주세요');
-            return;
-          }
-
-          await postPurchaseCoin({
-            productId: purchase.productId,
-            os: constants.platform === 'ios' ? 'ios' : 'android',
-            purchaseReceipt: (constants.platform === 'ios'
-              ? purchase.transactionReceipt
-              : purchase.purchaseToken)!,
-            userId,
-          })
-            .then(() => {
-              finishTransaction({purchase, isConsumable: true}).then(() => {
-                getMyCoin().then(result => {
-                  updateAmount(result.total);
-                });
+          const receipt = purchase.transactionReceipt;
+          if (receipt) {
+            try {
+              await postPurchaseCoin({
+                productId: purchase.productId,
+                os: constants.platform === 'ios' ? 'ios' : 'android',
+                receipt,
+                userId,
               });
-            })
-            .catch(error => {
-              Alert.alert('결제 검증 오류', error.message || error);
+              await finishTransaction({purchase, isConsumable: true});
+            } catch (error: any) {
+              const err = error as APIError;
+              Alert.alert(err.message);
+            }
+
+            getMyCoin().then(result => {
+              updateAmount(result.total);
             });
+          } else {
+            finishTransaction({purchase, isConsumable: true});
+          }
         },
       );
 
@@ -108,42 +96,43 @@ export function useIAP() {
       );
     };
 
-    initConnection()
-      .then(inited => {
-        console.log('iap inited state: ', inited);
+    if (userId) {
+      initConnection().then(inited => {
         getProducts({skus: data.map(x => x.productId)})
           .then(async products => {
-            console.log('get iap products length: ', products.length);
-
+            if (data.length !== products.length) {
+              return Alert.alert(
+                '스토어 연결 오류',
+                '인앱 결제 상품이 일치하지 않습니다.',
+              );
+            }
             if (constants.platform === 'android') {
               flushFailedPurchasesCachedAsPendingAndroid()
                 .then(() => {
-                  handleIAPListen();
+                  handleIAPListen(userId);
                 })
                 .catch((error: any) => {
                   Alert.alert(error.message || error);
                 });
             } else {
-              handleIAPListen();
+              handleIAPListen(userId);
             }
           })
           .catch(error => {
             console.error(error);
           });
-      })
-      .catch(error => {
-        console.error(error);
       });
 
-    return () => {
-      if (purchaseUpdateSubscription) {
-        purchaseUpdateSubscription.remove();
-        purchaseUpdateSubscription = null;
-      }
-      if (purchaseErrorSubscription) {
-        purchaseErrorSubscription.remove();
-        purchaseErrorSubscription = null;
-      }
-    };
-  }, []);
+      return () => {
+        if (purchaseUpdateSubscription) {
+          purchaseUpdateSubscription.remove();
+          purchaseUpdateSubscription = null;
+        }
+        if (purchaseErrorSubscription) {
+          purchaseErrorSubscription.remove();
+          purchaseErrorSubscription = null;
+        }
+      };
+    }
+  }, [userId]);
 }

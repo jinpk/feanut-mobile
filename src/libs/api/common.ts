@@ -2,6 +2,7 @@ import axios from 'axios';
 import {feanutAPI} from '.';
 import {
   Emoji,
+  LocalImageResponse,
   PagenatedRequest,
   PagenatedResponse,
   PostFileRequest,
@@ -26,15 +27,40 @@ export const postFile = async (
 
 export const putObject = async (
   signedUrl: string,
+  object: LocalImageResponse,
+): Promise<void> => {
+  try {
+    await axios({
+      url: signedUrl,
+      method: 'PUT',
+      data: object.buffer,
+      headers: {
+        'Content-Type': object.type,
+      },
+    });
+  } catch (error: any) {
+    throw new Error(error.message || JSON.stringify(error));
+  }
+};
+
+export const localImageURIToBlob = async (
   uri: string,
-  contentType: string,
-): Promise<any> => {
-  const resp = await fetch(uri);
-  const imageBody = await resp.blob();
-  const res = await axios.put(signedUrl, imageBody, {
-    headers: {
-      'Content-Type': contentType,
-    },
+): Promise<LocalImageResponse> => {
+  const data = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve({
+        buffer: xhr.response as ArrayBuffer,
+        type: xhr.getResponseHeader('content-type'),
+      } as LocalImageResponse);
+    };
+    xhr.onerror = function () {
+      reject(new TypeError('이미지 다운로드 실패 하였습니다.')); // error occurred, rejecting
+    };
+    xhr.responseType = 'arraybuffer'; // use BlobModule's UriHandler
+    xhr.open('GET', uri, true); // fetch the blob from uri in async mode
+    xhr.send(null); // no initial data
   });
-  return res.data;
+
+  return data as LocalImageResponse;
 };

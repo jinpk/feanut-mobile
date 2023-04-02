@@ -22,6 +22,7 @@ type ProfileEditTemplateProps = {
 function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
   const disabled = !props.form.watch().name;
   const profileImage = props.form.watch().profileImage;
+
   return (
     <View style={styles.root}>
       <BackTopBar

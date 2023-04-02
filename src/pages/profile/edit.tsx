@@ -1,9 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert} from 'react-native';
 import {useProfileImage} from '../../hooks';
-import {postFile, putObject} from '../../libs/api/common';
+import {localImageURIToBlob, postFile, putObject} from '../../libs/api/common';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
 import {configs} from '../../libs/common/configs';
 import {PatchProfileRequest, ProfileForm} from '../../libs/interfaces';
@@ -26,6 +26,8 @@ function ProfileEdit(): JSX.Element {
 
   const profileImage = useProfileImage();
 
+  const apiLoadingRef = useRef(false);
+
   const handleProfileImage = useCallback(() => {
     profileImage.open(asset => {
       form.setValue('profileImage', asset);
@@ -45,29 +47,27 @@ function ProfileEdit(): JSX.Element {
   }, [profile]);
 
   const onSubmit = useCallback(async (data: ProfileForm) => {
-    let needImageUpdate = false;
-
-    if (data.profileImage && data.profileImage.fileName) {
-      needImageUpdate = true;
+    if (apiLoadingRef.current) {
+      return;
     }
+
+    apiLoadingRef.current = true;
 
     try {
       const params: PatchProfileRequest = {
         name: data.name.trim(),
         statusMessage: (data.statusMessage || '').trim(),
       };
-      if (needImageUpdate) {
+
+      if (data.profileImage?.fileName) {
+        const imageData = await localImageURIToBlob(data.profileImage.uri);
         const fileResponse = await postFile({
           purpose: 'profileimage',
-          contentType: data.profileImage.type,
+          contentType: imageData.type,
         });
         params.imageFileId = fileResponse.fileId;
-        await putObject(
-          fileResponse.signedUrl,
-          data.profileImage.uri,
-          data.profileImage.type,
-        );
-      } else {
+        await putObject(fileResponse.signedUrl, imageData);
+      } else if (!data.profileImage) {
         params.imageFileId = null;
       }
       await patchProfile(profile.id, params);
@@ -76,6 +76,8 @@ function ProfileEdit(): JSX.Element {
     } catch (error: any) {
       Alert.alert(error.message || error);
     }
+
+    apiLoadingRef.current = false;
   }, []);
 
   return (

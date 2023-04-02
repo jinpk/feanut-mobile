@@ -1,3 +1,8 @@
+export type LocalImageResponse = {
+  buffer: ArrayBuffer;
+  type: string;
+};
+
 export type FeanutImageGender = 'm' | 'w';
 
 export type QueryBoolean = '0' | '1';

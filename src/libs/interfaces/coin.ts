@@ -12,6 +12,6 @@ export interface CoinItem {
 export interface PurchaseCoin {
   userId: string;
   productId: string;
-  purchaseReceipt: string;
+  receipt: string;
   os: 'android' | 'ios';
 }
