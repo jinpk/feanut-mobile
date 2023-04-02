@@ -15,7 +15,7 @@ export const configs = {
     'https://api.dev.feanut.com' ||
     'http://192.168.142.99:3000' ||
     'http://35.216.45.248' ||
-    'http://api.dev.feanut.com' ||
+    'https://api.dev.feanut.com' ||
     Config.API_BASE_URL,
   cdnBaseUrl: 'https://cdn.dev.feanut.com' || Config.CDN_BASE_URL,
 

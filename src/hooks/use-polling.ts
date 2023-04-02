@@ -88,7 +88,7 @@ export function usePolling() {
             if (!pollingRound.data) {
               throw new Error('조회 실패 하였습니다.');
             }
-            setUserRoundId(pollingRound.data._id);
+            setUserRoundId(pollingRound.data.id);
             const initalPolls = pollingRound.data.pollIds.map((x, i) => {
               const polling = pollingRound.data!.pollingIds.find(
                 y => x === y.pollId,
