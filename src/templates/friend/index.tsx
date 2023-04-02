@@ -46,7 +46,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     }
     let tm = setTimeout(() => {
       props.onKeyword(keyword);
-    }, 1000 );
+    }, 1000);
     return () => {
       clearTimeout(tm);
     };
@@ -94,19 +94,14 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     return index.toString();
   }, []);
 
-  const handleItemPress = useCallback(
-    (item: Friend, index: number) => () => {
-      props.onItemPress(item, index);
-    },
-    [],
-  );
-
   const handleRenderItem = useCallback(
     ({item, index}: {item: Friend; index: number}) => {
       return (
         <FriendItem
           {...item}
-          onPress={handleItemPress(item, index)}
+          onPress={() => {
+            props.onItemPress(item, index);
+          }}
           onButtonPress={() => {
             if (item.hidden) {
               props.onUnHide(item, index);

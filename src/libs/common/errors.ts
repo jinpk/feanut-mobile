@@ -22,3 +22,8 @@ export const POLLING_ERROR_ALREADY_DONE = 10;
 export const POLLING_ERROR_LACK_COIN_AMOUNT = 11;
 export const POLLING_ERROR_EXCEED_SKIP = 12;
 export const POLLING_ERROR_EMPTY_BODY = 13;
+
+// profile
+
+export const PROFILES_ERROR_NOT_FOUND = 1;
+export const PROFILES_ERROR_OWNER_LESS = 2;

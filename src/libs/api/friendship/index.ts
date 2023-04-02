@@ -48,6 +48,15 @@ export const getFriendshipStatus = async (
   return res.data;
 };
 
+export const getFriendshipStatusByProfile = async (
+  profileId: string,
+): Promise<FriendshipStatus> => {
+  const res = await feanutAPI.get<FriendshipStatus>(
+    `/friendships/${profileId}/stats/byprofile`,
+  );
+  return res.data;
+};
+
 export const postFriend = async (
   userId: string,
   data: AddFriendRequest,

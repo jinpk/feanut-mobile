@@ -21,6 +21,7 @@ import {
 } from './hooks';
 import Friend from './pages/friend';
 import DeleteMe from './pages/delete-me';
+import FeanutCard from './pages/feanut-card';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -55,6 +56,7 @@ function NavigationApp() {
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
+          <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
           <Stack.Screen

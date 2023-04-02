@@ -1,7 +1,9 @@
 import {feanutAPI} from '..';
 import {
+  FeanutCard,
   Polling,
   PollingRound,
+  PollingStats,
   PostPollingReqequest,
   PostPollingVoteRequest,
   PostPollingVoteResponse,
@@ -14,6 +16,16 @@ export const postPollingRound = async (): Promise<PollingRound> => {
 
 export const getPolling = async (pollingId: string): Promise<Polling> => {
   const res = await feanutAPI.get<Polling>('/pollings/' + pollingId, {});
+  return res.data;
+};
+
+export const getPollingStatsByProfile = async (
+  profileId: string,
+): Promise<PollingStats> => {
+  const res = await feanutAPI.get<PollingStats>(
+    '/pollings/' + profileId + '/stats/byprofile',
+    {},
+  );
   return res.data;
 };
 
@@ -40,6 +52,16 @@ export const postPollingRefresh = async (
 ): Promise<Polling> => {
   const res = await feanutAPI.post<Polling>(
     '/pollings/' + pollingId + '/refresh',
+  );
+  return res.data;
+};
+
+export const getFeanutCardByProfile = async (
+  profileId: string,
+): Promise<FeanutCard> => {
+  const res = await feanutAPI.get<FeanutCard>(
+    '/pollings/' + profileId + '/card/byprofile',
+    {},
   );
   return res.data;
 };

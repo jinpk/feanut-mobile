@@ -3,21 +3,23 @@ import {PropsWithChildren} from 'react';
 import {View} from 'react-native';
 import {colors} from '../../libs/common';
 
-type TextMarketProps = PropsWithChildren<{}>;
+type TextMarketProps = PropsWithChildren<{
+  color?: string;
+  height?: string;
+}>;
 
 export const TextMarker = (props: TextMarketProps): JSX.Element => {
   return (
-    <View>
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <View
         style={{
           position: 'absolute',
-          top: 0,
           right: 0,
-          bottom: 0,
           borderRadius: 10,
           left: 0,
-          backgroundColor: colors.yellow,
+          backgroundColor: props.color || colors.yellow,
           opacity: 0.5,
+          height: props.height || '100%',
           transform: [{rotate: '-3deg'}],
         }}
       />

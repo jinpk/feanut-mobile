@@ -14,4 +14,6 @@ export const routes = {
   friendHidden: '/friend/hidden',
 
   deleteMe: '/delete-me',
+
+  feanutCard: '/feanut-card',
 };

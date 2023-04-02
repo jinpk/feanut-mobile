@@ -104,7 +104,9 @@ function Friend() {
     [userId],
   );
 
-  const handleItemPress = useCallback((friend: FriendI) => {}, []);
+  const handleItemPress = useCallback((friend: FriendI) => {
+    navigation.navigate(routes.feanutCard, {profileId: friend.profileId});
+  }, []);
 
   const handleSyncContact = useCallback(() => {
     if (contact.loading) return;

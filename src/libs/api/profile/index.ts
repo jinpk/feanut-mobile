@@ -6,6 +6,11 @@ export const getMyProfile = async (): Promise<Profile> => {
   return res.data;
 };
 
+export const getProfile = async (profileId: string): Promise<Profile> => {
+  const res = await feanutAPI.get<Profile>('/profiles/' + profileId);
+  return res.data;
+};
+
 export const patchProfile = async (
   profileId: string,
   data: PatchProfileRequest,

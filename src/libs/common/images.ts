@@ -57,8 +57,35 @@ import coin100 from '../../assets/pngs/coin100.png';
 import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
 import sync from '../../assets/svgs/sync.svg';
+import share from '../../assets/svgs/share.svg';
+
+import feanutCardHappiness from '../../assets/svgs/feanut-card-happiness.svg';
+import feanutCardGratitude from '../../assets/svgs/feanut-card-gratitude.svg';
+import feanutCardSerenity from '../../assets/svgs/feanut-card-serenity.svg';
+import feanutCardInterest from '../../assets/svgs/feanut-card-interest.svg';
+import feanutCardHope from '../../assets/svgs/feanut-card-hope.svg';
+import feanutCardPride from '../../assets/svgs/feanut-card-pride.svg';
+import feanutCardAmusement from '../../assets/svgs/feanut-card-amusement.svg';
+import feanutCardInspiration from '../../assets/svgs/feanut-card-inspiration.svg';
+import feanutCardAwe from '../../assets/svgs/feanut-card-awe.svg';
+import feanutCardLove from '../../assets/svgs/feanut-card-love.svg';
+
+import visitSNS from '../../assets/svgs/visit-sns.svg';
 
 export const svgs = {
+  feanutCardHappiness,
+  feanutCardGratitude,
+  feanutCardSerenity,
+  feanutCardInterest,
+  feanutCardHope,
+  feanutCardPride,
+  feanutCardAmusement,
+  feanutCardInspiration,
+  feanutCardAwe,
+  feanutCardLove,
+
+  visitSNS,
+
   logo,
   shuffle,
   feanutDefault,
@@ -69,6 +96,7 @@ export const svgs = {
   back,
   close,
   logoLetter,
+  share,
   feanutVoltage,
   logoWithLetter,
   feanutLight,

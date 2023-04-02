@@ -116,7 +116,9 @@ function Profile(): JSX.Element {
     navigation.navigate(routes.deleteMe);
   }, []);
 
-  const handleCard = useCallback(() => {}, []);
+  const handleCard = useCallback(() => {
+    navigation.navigate(routes.feanutCard, {profileId: profile.id});
+  }, [profile.id]);
 
   const handleFriend = useCallback(() => {
     navigation.navigate(routes.friend);

@@ -101,7 +101,7 @@ export interface PollingReceiveItem {
   isOpened?: boolean;
   name?: string;
   gender: Gender;
-  imageFileKey?:string
+  imageFileKey?: string;
 }
 
 export interface PollingReceiveDetail {
@@ -120,4 +120,22 @@ export interface PollingReceiveDetail {
     gender: Gender;
     imageFileKey?: string;
   };
+}
+
+export interface PollingStats {
+  pollsCount: number;
+  pullsCount: number;
+}
+
+export interface FeanutCard {
+  joy: number;
+  gratitude: number;
+  serenity: number;
+  interest: number;
+  hope: number;
+  pride: number;
+  amusement: number;
+  inspiration: number;
+  awe: number;
+  love: number;
 }
