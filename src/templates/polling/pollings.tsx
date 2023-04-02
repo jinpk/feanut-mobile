@@ -115,7 +115,7 @@ function PollingsTemplate(props: PollingsTemplateProps) {
 
   // 첫번째 투표에서만 친구 선택하면 다음 투표 스크롤 가이드
   useEffect(() => {
-    if (isFriendSelected && props.currentPollingIndex <= 1) {
+    if (isFriendSelected && props.currentPollingIndex < 1) {
       let tm = setTimeout(() => {
         scollRef.current?.scrollTo({
           x: props.currentPollingIndex * constants.screenWidth + 80,

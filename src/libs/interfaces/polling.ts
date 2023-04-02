@@ -59,7 +59,7 @@ interface PollingId {
 }
 
 export interface UserRound {
-  id: string;
+  _id: string;
   roundId: string;
   pollIds: string[];
   pollingIds: PollingId[];
