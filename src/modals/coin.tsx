@@ -10,6 +10,7 @@ export const CoinModal = (): JSX.Element => {
 
   return (
     <CoinModalTemplate
+      loading={coin.pending}
       visible={visible}
       onClose={close}
       onPurchase={coin.purchase}

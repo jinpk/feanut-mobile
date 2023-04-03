@@ -93,6 +93,6 @@ export function useCoin() {
     data,
     openPurchaseModal: openCoinModal,
     purchase: handlePurchase,
-    fetchAmount: fetchCoinAmount,
+    fetchAmount: fetchCoinAmount,pending
   };
 }

@@ -1,7 +1,13 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {ResetPasswordForm} from '../libs/interfaces';
 import {colors, constants, routes, yupValidators} from '../libs/common';
 import {
@@ -146,40 +152,45 @@ function ResetPassword(): JSX.Element {
   }, []);
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      horizontal
+    <KeyboardAvoidingView
       style={styles.scrollview}
-      pagingEnabled
-      scrollEnabled={false}
-      ref={scrollRef}>
-      <View style={styles.screen}>
-        <FindPasswordPhoneNumberTemplate
-          form={form}
-          onConfirm={handlePhoneNumberConfirm}
-          onBack={handlePhoneNumberBack}
-          focused={pageIndex === 0}
-        />
-      </View>
+      keyboardVerticalOffset={10}
+      {...(constants.platform === 'ios' ? {behavior: 'padding'} : {})}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        horizontal
+        style={styles.scrollview}
+        pagingEnabled
+        scrollEnabled={false}
+        ref={scrollRef}>
+        <View style={[styles.screen]}>
+          <FindPasswordPhoneNumberTemplate
+            form={form}
+            onConfirm={handlePhoneNumberConfirm}
+            onBack={handlePhoneNumberBack}
+            focused={pageIndex === 0}
+          />
+        </View>
 
-      <View style={styles.screen}>
-        <FindPasswordCodeTemplate
-          form={form}
-          onConfirm={handleCodeConfirm}
-          onBack={handleCodeBack}
-          focused={pageIndex === 1}
-        />
-      </View>
+        <View style={[styles.screen]}>
+          <FindPasswordCodeTemplate
+            form={form}
+            onConfirm={handleCodeConfirm}
+            onBack={handleCodeBack}
+            focused={pageIndex === 1}
+          />
+        </View>
 
-      <View style={styles.screen}>
-        <FindPasswordResetTemplate
-          form={form}
-          onConfirm={handleResetConfirm}
-          onBack={handleResetBack}
-          focused={pageIndex === 2}
-        />
-      </View>
-    </ScrollView>
+        <View style={[styles.screen]}>
+          <FindPasswordResetTemplate
+            form={form}
+            onConfirm={handleResetConfirm}
+            onBack={handleResetBack}
+            focused={pageIndex === 2}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

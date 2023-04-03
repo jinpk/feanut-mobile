@@ -1,7 +1,14 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Alert, Keyboard, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {APIError, SignUpForm} from '../libs/interfaces';
 import {
   SignUpGenderTemplate,
@@ -166,56 +173,59 @@ function SignUp(): JSX.Element {
   }, []);
 
   return (
-    <ScrollView
+    <KeyboardAvoidingView
       style={styles.scrollview}
-      keyboardShouldPersistTaps="handled"
-      horizontal
-      pagingEnabled
-      scrollEnabled={false}
-      ref={scrollRef}>
-      <View style={styles.screen}>
-        <SignUpGenderTemplate
-          form={form}
-          onConfirm={handleGenderConfirm}
-          onBack={handleGenderBack}
-          focused={pageIndex === 0}
-        />
-      </View>
+      keyboardVerticalOffset={10}
+      {...(constants.platform === 'ios' ? {behavior: 'padding'} : {})}>
+      <ScrollView
+        style={styles.scrollview}
+        keyboardShouldPersistTaps="handled"
+        horizontal
+        pagingEnabled
+        scrollEnabled={false}
+        ref={scrollRef}>
+        <View style={styles.screen}>
+          <SignUpGenderTemplate
+            form={form}
+            onConfirm={handleGenderConfirm}
+            onBack={handleGenderBack}
+            focused={pageIndex === 0}
+          />
+        </View>
 
-      <View style={styles.screen}>
-        <SignUpNameTemplate
-          form={form}
-          focused={pageIndex === 1}
-          onConfirm={handleNameConfirm}
-          onBack={handleNameBack}
-        />
-      </View>
+        <View style={styles.screen}>
+          <SignUpNameTemplate
+            form={form}
+            focused={pageIndex === 1}
+            onConfirm={handleNameConfirm}
+            onBack={handleNameBack}
+          />
+        </View>
 
-      <View style={styles.screen}>
-        <SignUpPhoneNumberTemplate
-          form={form}
-          focused={pageIndex === 2}
-          onConfirm={handlePhoneNumberConfirm}
-          onBack={handlePhoneNumberBack}
-        />
-      </View>
+        <View style={styles.screen}>
+          <SignUpPhoneNumberTemplate
+            form={form}
+            focused={pageIndex === 2}
+            onConfirm={handlePhoneNumberConfirm}
+            onBack={handlePhoneNumberBack}
+          />
+        </View>
 
-      <View style={styles.screen}>
-        <SignUpCodeTemplate
-          form={form}
-          focused={pageIndex === 3}
-          onConfirm={handleCodeConfirm}
-          onBack={handleCodeBack}
-        />
-      </View>
-    </ScrollView>
+        <View style={styles.screen}>
+          <SignUpCodeTemplate
+            form={form}
+            focused={pageIndex === 3}
+            onConfirm={handleCodeConfirm}
+            onBack={handleCodeBack}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollview: {
-    flex: 1,
-  },
+  scrollview: {backgroundColor: colors.white, flex: 1},
   screen: {
     width: constants.screenWidth,
     backgroundColor: colors.white,

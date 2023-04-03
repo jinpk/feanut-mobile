@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {SignUpTemplateProps} from '.';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
@@ -11,6 +11,14 @@ import {colors, constants} from '../../libs/common';
 
 export const SignUpNameTemplate = (props: SignUpTemplateProps) => {
   const errorsName = props.form.formState.errors.name?.message as string;
+  const nameRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (props.focused) {
+      nameRef.current?.focus();
+    }
+  }, [props.focused]);
+
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
@@ -25,6 +33,7 @@ export const SignUpNameTemplate = (props: SignUpTemplateProps) => {
         control={props.form.control}
         render={({field: {onChange, onBlur, value}}) => (
           <LargeInput
+            inputRef={nameRef}
             autoFocus
             value={value}
             onChange={t => {

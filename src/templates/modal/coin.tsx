@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {CoinItem, Close} from '../../components';
 import {Text} from '../../components/text';
@@ -11,6 +11,7 @@ type CoinModalTemplateProps = {
   visible: boolean;
   onClose: () => void;
   onPurchase: (productId: string) => void;
+  loading: boolean;
 };
 
 export const CoinModalTemplate = (
@@ -47,6 +48,11 @@ export const CoinModalTemplate = (
             );
           })}
         </View>
+        {props.loading && (
+          <View style={styles.purchaseRoot}>
+            <ActivityIndicator color={colors.white} size="large" />
+          </View>
+        )}
       </View>
     </Modal>
   );
@@ -68,5 +74,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
+  },
+  purchaseRoot: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.dark + '80',
   },
 });

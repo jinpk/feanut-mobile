@@ -6,6 +6,7 @@ import PushNotification from 'react-native-push-notification';
 
 PushNotification.configure({
   onNotification: function (notification) {
+    console.log('hey')
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
   requestPermissions: false,
@@ -26,7 +27,8 @@ export function useFirebaseMessaging() {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // 알림만 발송
+    console.log('day')
+    // 알림만 발송
       // 포그라운드 알림 클릭시 onNotificationOpenedApp 호출됨.
       console.log('foreground: ', remoteMessage);
       if (remoteMessage.data) {
@@ -37,7 +39,6 @@ export function useFirebaseMessaging() {
       }
     });
 
-    console.log('hi1');
     return () => {
       unsubscribe();
     };
