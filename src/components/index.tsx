@@ -16,3 +16,4 @@ export * from './close';
 export * from './keyboard-layout';
 export * from './coin-item';
 export * from './friend-item';
+export * from './information';

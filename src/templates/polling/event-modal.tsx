@@ -1,9 +1,8 @@
 import {useEffect, useMemo} from 'react';
-import {Modal, StatusBar, StyleSheet, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
+import {Modal, StatusBar} from 'react-native';
+import {Information} from '../../components';
 import {Text} from '../../components/text';
 import {useCoin} from '../../hooks';
-import {colors} from '../../libs/common';
 import {configs} from '../../libs/common/configs';
 import {RoundEvent} from '../../libs/interfaces/polling';
 import {useEmojiStore} from '../../libs/stores';
@@ -36,72 +35,20 @@ function EventModalTemplate(props: EventModalTemplateProps) {
 
   return (
     <Modal visible onRequestClose={props.onClose} animationType="fade">
-      <View style={styles.root}>
-        {Boolean(emojiURI) && (
-          <FastImage
-            source={{uri: emojiURI}}
-            resizeMode={FastImage.resizeMode.contain}
-            style={styles.icon}
-          />
-        )}
-        <Text weight="bold" size={18} mt={15} align="center">
-          {props.message}
-        </Text>
-        {Boolean(props.markingText) &&
-          (() => {
-            const markingStartIndex = props.subMessage.indexOf(
-              props.markingText,
-            );
-            const markingEndIndex =
-              markingStartIndex + props.markingText.length;
-            return (
-              <Text mt={29} align="center">
-                <Text>{props.subMessage.substring(0, markingStartIndex)}</Text>
-                <Text
-                  style={{backgroundColor: colors.yellow + '80'}}
-                  weight="bold">
-                  {props.subMessage.substring(
-                    markingStartIndex,
-                    markingEndIndex,
-                  )}
-                </Text>
-                <Text>
-                  {props.subMessage.substring(
-                    markingEndIndex,
-                    props.subMessage.length,
-                  )}
-                </Text>
-              </Text>
-            );
-          })()}
-        {!Boolean(props.markingText) && (
-          <Text size={14} mt={29} align="center">
-            {props.subMessage}
-          </Text>
-        )}
-
+      <Information
+        icon={{uri: emojiURI}}
+        message={props.message}
+        subMessage={props.subMessage}
+        markingText={props.markingText}>
         <Text size={14} mt={30} align="center">
           보유 피넛
         </Text>
         <Text weight="bold" size={27} mt={7} align="center">
           {coin.amount}
         </Text>
-      </View>
+      </Information>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-  },
-  icon: {
-    width: 45,
-    height: 45,
-  },
-});
 
 export default EventModalTemplate;

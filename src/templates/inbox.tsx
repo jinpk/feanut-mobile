@@ -2,11 +2,11 @@ import dayjs from 'dayjs';
 import {useCallback} from 'react';
 import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {PullItem} from '../components';
+import {Information, PullItem} from '../components';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
 import {BackTopBar} from '../components/top-bar';
-import {colors, gifs} from '../libs/common';
+import {colors, constants, gifs} from '../libs/common';
 import {PollingReceiveItem} from '../libs/interfaces/polling';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -49,6 +49,7 @@ function InboxTemplate(props: InboxTemplateProps) {
       } else {
         time = dayjs(item.completedAt).format('YYYY-MM-DD');
       }
+
       return (
         <PullItem
           source={
@@ -111,6 +112,20 @@ function InboxTemplate(props: InboxTemplateProps) {
             onRefresh={handleRefresh}
           />
         }
+        ListEmptyComponent={
+          !props.loading ? (
+            <View style={styles.empty}>
+              <Information
+                icon={gifs.hatchingChick}
+                message="회원님의 친구들이 투표하고 있어요!"
+                subMessage={
+                  '회원님이 투표에서 선택되면\n알림으로 알려드릴게요!'
+                }
+                markingText="알림"
+              />
+            </View>
+          ) : undefined
+        }
       />
     </View>
   );
@@ -120,6 +135,9 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  empty: {
+    height: constants.screenHeight / 2,
   },
   list: {paddingBottom: 7.5},
   sync: {

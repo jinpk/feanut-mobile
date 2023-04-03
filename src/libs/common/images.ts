@@ -24,6 +24,9 @@ import right from '../../assets/svgs/right.svg';
 import shuffle from '../../assets/svgs/shuffle.svg';
 import refresh from '../../assets/svgs/refresh.svg';
 
+import hatchingChick from '../../assets/gifs/hatching-chick.gif';
+
+
 import pollCardHappiness from '../../assets/svgs/poll-card-happiness.svg';
 import pollCardGratitude from '../../assets/svgs/poll-card-gratitude.svg';
 import pollCardSerenity from '../../assets/svgs/poll-card-serenity.svg';
@@ -137,6 +140,7 @@ export const gifs = {
   pointingRight,
   partyingFace,
   teddyBear,
+  hatchingChick,
   timerClock,
   highVoltage,
   wavingHand,
