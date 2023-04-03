@@ -23,9 +23,7 @@ type FriendItemProps = {
 export const FriendItem = memo((props: FriendItemProps) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity
-        onPress={props.onPress}
-        disabled={!Boolean(props.username)}>
+      <TouchableOpacity onPress={props.onPress} disabled={!props.username}>
         {props.icon || (
           <Avatar
             size={42}
@@ -44,9 +42,7 @@ export const FriendItem = memo((props: FriendItemProps) => {
         )}
       </TouchableOpacity>
       <View style={styles.body}>
-        <TouchableOpacity
-          onPress={props.onPress}
-          disabled={!Boolean(props.username)}>
+        <TouchableOpacity onPress={props.onPress} disabled={!props.username}>
           <Text>{props.name}</Text>
           {Boolean(props.username) && (
             <Text color={colors.darkGrey} mt={1} size={12}>
@@ -75,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 7.5,
     paddingHorizontal: 16,
-    height: 57
+    height: 57,
   },
   body: {
     flex: 1,

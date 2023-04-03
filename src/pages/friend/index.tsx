@@ -72,7 +72,9 @@ function Friend() {
 
   const handleHide = useCallback(
     async (friend: FriendI) => {
-      if (!userId) return;
+      if (!userId) {
+        return;
+      }
 
       try {
         await patchFriendHidden(userId, {
@@ -89,7 +91,9 @@ function Friend() {
 
   const handleUnHide = useCallback(
     async (friend: FriendI) => {
-      if (!userId) return;
+      if (!userId) {
+        return;
+      }
 
       try {
         await patchFriendHidden(userId, {
@@ -109,7 +113,9 @@ function Friend() {
   }, []);
 
   const handleSyncContact = useCallback(() => {
-    if (contact.loading) return;
+    if (contact.loading) {
+      return;
+    }
     contact.syncContacts(() => {
       setQuery(1);
       setLoading(true);
@@ -117,7 +123,9 @@ function Friend() {
   }, [contact]);
 
   const handleLoadMore = useCallback(() => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
 
     if (friends.length < friendsTotalCount) {
       setQuery({page: query.page + 1, limit: 10});

@@ -8,13 +8,8 @@ import {
   useAnimatedValue,
   View,
 } from 'react-native';
-import {Polling} from '../../components';
-import {
-  constants,
-  colors,
-  emotionBackgorundColor,
-  emotionPointColor,
-} from '../../libs/common';
+import {Polling} from '../../components/poll';
+import {constants} from '../../libs/common';
 import {InternalPolling} from '../../libs/interfaces/polling';
 
 interface PollingRefStore {
@@ -178,10 +173,6 @@ function PollingsTemplate(props: PollingsTemplateProps) {
               {Boolean(x.pollingId) && (
                 <Polling
                   focused={props.currentPollingIndex === i}
-                  backgroundColor={
-                    emotionBackgorundColor[x.emotion] || colors.white
-                  }
-                  color={emotionPointColor[x.emotion] || colors.white}
                   emotion={x.emotion || ''}
                   title={x.title || ''}
                   iconURI={x.emojiURI!}

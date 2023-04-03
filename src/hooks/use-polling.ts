@@ -188,7 +188,9 @@ export function usePolling() {
     pollingId: string,
     body: PostPollingVoteRequest,
   ) => {
-    if (voting.current) return;
+    if (voting.current) {
+      return;
+    }
     voting.current = true;
     try {
       const res = await postPollingVote(pollingId, body);
@@ -248,7 +250,9 @@ export function usePolling() {
 
   const shuffling = useRef(false);
   const handleShuffle = async (pollingId: string) => {
-    if (shuffling.current) return;
+    if (shuffling.current) {
+      return;
+    }
     shuffling.current = true;
     try {
       const res = await postPollingRefresh(pollingId);

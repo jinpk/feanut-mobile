@@ -84,11 +84,12 @@ function Home(): JSX.Element {
   }, [tabIndex]);
 
   const handleSyncContacts = useCallback(() => {
-    if (syncContacts.loading)
+    if (syncContacts.loading) {
       return Alert.alert(
         '연락처 동기화중 ...',
         'feanut이 회원님의 연락처를 읽어와 친구로 추가하고 있으니 잠시만 기다려주세요.',
       );
+    }
     syncContacts.syncContacts(() => {
       polling.reInit();
     });

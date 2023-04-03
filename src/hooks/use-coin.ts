@@ -10,31 +10,31 @@ const data: CoinItem[] = [
   {
     amount: 5,
     icon: pngs.coin5,
-    price: `₩1,100`,
+    price: '₩1,100',
     productId: 'feanut.iap.coin.5',
   },
   {
     amount: 10,
     icon: pngs.coin10,
-    price: `₩2,200`,
+    price: '₩2,200',
     productId: 'feanut.iap.coin.10',
   },
   {
     amount: 30,
     icon: pngs.coin30,
-    price: `₩5,500`,
+    price: '₩5,500',
     productId: 'feanut.iap.coin.30',
   },
   {
     amount: 50,
     icon: pngs.coin50,
-    price: `₩8,800`,
+    price: '₩8,800',
     productId: 'feanut.iap.coin.50',
   },
   {
     amount: 100,
     icon: pngs.coin100,
-    price: `₩15,000`,
+    price: '₩15,000',
     productId: 'feanut.iap.coin.100',
   },
 ];
@@ -47,21 +47,27 @@ export function useCoin() {
   const setPending = useCoinStore(s => s.actions.setPending);
   const pending = useCoinStore(s => s.pending);
 
-  useEffect(() => {
-    if (!logged) return;
+  const fetchCoinAmount = async () => {
+    try {
+      const data = await getMyCoin();
+      updateAmount(data.total);
+    } catch (error: any) {
+      Alert.alert(error.message || error);
+    }
+  };
 
-    getMyCoin()
-      .then(result => {
-        updateAmount(result.total);
-      })
-      .catch(error => {
-        Alert.alert(error.message || error);
-      });
+  useEffect(() => {
+    if (!logged) {
+      return;
+    }
+    fetchCoinAmount();
   }, [logged]);
 
   const handlePurchase = useCallback(
     async (productId: string) => {
-      if (pending) return;
+      if (pending) {
+        return;
+      }
 
       setPending(true);
       try {
@@ -87,5 +93,6 @@ export function useCoin() {
     data,
     openPurchaseModal: openCoinModal,
     purchase: handlePurchase,
+    fetchAmount: fetchCoinAmount,
   };
 }

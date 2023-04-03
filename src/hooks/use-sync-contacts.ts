@@ -29,7 +29,9 @@ export function useSyncContacts() {
   };
 
   const handleSyncContacts = async (cb?: () => void) => {
-    if (!userId) return Alert.alert('로그인후 진행해 주세요');
+    if (!userId) {
+      return Alert.alert('로그인후 진행해 주세요');
+    }
 
     setLoading(true);
     try {
@@ -61,7 +63,9 @@ export function useSyncContacts() {
 
         let phoneNumber = '';
         contact.phoneNumbers.forEach(({number}) => {
-          if (phoneNumber) return;
+          if (phoneNumber) {
+            return;
+          }
           number = number.replace(/[^0-9]/g, '');
           if (number.startsWith('82')) {
             number = number.replace('82', '');

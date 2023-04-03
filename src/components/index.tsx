@@ -10,7 +10,6 @@ export * from './line-indicator';
 export * from './terms';
 export * from './signup-modal';
 export * from './radios';
-export * from './polling';
 export * from './privacy';
 export * from './close';
 export * from './keyboard-layout';

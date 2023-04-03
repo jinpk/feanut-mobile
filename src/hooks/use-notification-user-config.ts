@@ -63,7 +63,9 @@ export function useNotificationUserConfig(tokenRefresh?: boolean) {
 
   const handleChangePoll = useCallback(
     (state: boolean) => {
-      if (!userId) return;
+      if (!userId) {
+        return;
+      }
       patchNotificationUserConfig(userId, {receivePoll: state}).then(() => {
         setConfig(prev => ({...prev, receivePoll: state}));
       });
@@ -73,7 +75,9 @@ export function useNotificationUserConfig(tokenRefresh?: boolean) {
 
   const handleChangePull = useCallback(
     (state: boolean) => {
-      if (!userId) return;
+      if (!userId) {
+        return;
+      }
       patchNotificationUserConfig(userId, {receivePull: state}).then(() => {
         setConfig(prev => ({...prev, receivePull: state}));
       });

@@ -16,4 +16,6 @@ export const routes = {
   deleteMe: '/delete-me',
 
   feanutCard: '/feanut-card',
+
+  inboxDetail: '/inbox-detail',
 };

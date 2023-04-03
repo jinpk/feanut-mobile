@@ -531,6 +531,8 @@ PODS:
   - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
+  - RNShare (8.2.1):
+    - React-Core
   - RNSVG (13.8.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -618,6 +620,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNIap (from `../node_modules/react-native-iap`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -745,6 +748,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-iap"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -821,6 +826,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 7a3e2fa01d4b2a93b6d79fc250d50ecef3ced110
   RNIap: cc309cf426a6df5240e38108ffa6c270a52c03ac
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

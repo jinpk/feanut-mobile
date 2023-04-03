@@ -49,13 +49,17 @@ function Profile(): JSX.Element {
 
   // 프로필 조회
   useEffect(() => {
-    if (!focused) return;
+    if (!focused) {
+      return;
+    }
     fetchProfile();
   }, [focused]);
 
   // 친구 조회
   useEffect(() => {
-    if (!focused || !userId) return;
+    if (!focused || !userId) {
+      return;
+    }
 
     fetchFriendshipStatus()
       .then(result => {

@@ -5,6 +5,6 @@ export * from './common';
 export * from './auth';
 export * from './friend';
 export * from './profile';
-export * from './coin'
-export * from './notification'
-export * from './emoji'
+export * from './coin';
+export * from './notification';
+export * from './emoji';

@@ -18,5 +18,5 @@ export interface PatchProfileRequest {
   name?: string;
   statusMessage?: string;
   imageFileId?: string | null;
-  instagram?: string ;
+  instagram?: string;
 }

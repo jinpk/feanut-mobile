@@ -145,7 +145,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           {Boolean(props.profile.instagram) && (
             <Text mt={7}>@{props.profile.instagram}</Text>
           )}
-          {!Boolean(props.profile.instagram) && (
+          {!props.profile.instagram && (
             <Text mt={7} color={colors.darkGrey}>
               연결되지 않음
             </Text>

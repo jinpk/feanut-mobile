@@ -26,7 +26,9 @@ export function useProfileImage() {
                 Alert.alert(response.errorMessage);
                 return;
               }
-              if (!response.assets) return;
+              if (!response.assets) {
+                return;
+              }
 
               const file = response.assets[0];
               cb(file);
@@ -48,7 +50,9 @@ export function useProfileImage() {
           Alert.alert(response.errorMessage);
           return;
         }
-        if (!response.assets) return;
+        if (!response.assets) {
+          return;
+        }
 
         const file = response.assets[0];
         cb(file);

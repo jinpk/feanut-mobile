@@ -44,7 +44,9 @@ export const BadgeButton = (props: BadgeButtonProps): JSX.Element => {
   ]);
 
   const textColor = useMemo(() => {
-    if (props.fontColor) return props.fontColor;
+    if (props.fontColor) {
+      return props.fontColor;
+    }
     if (buttonStyle.backgroundColor === colors.lightGrey) {
       return colors.blue;
     } else {

@@ -131,10 +131,7 @@ function SignUp(): JSX.Element {
           message: '이미 가입된 휴대폰번호 입니다.',
         });
       } else if (apiError.code === AUTH_ERROR_EXIST_USERNAME) {
-        Alert.alert(
-          form.getValues('username'),
-          '이미 가입된 아이디 입니다.',
-        );
+        Alert.alert(form.getValues('username'), '이미 가입된 아이디 입니다.');
       } else {
         Alert.alert(error.message || error);
       }

@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import {Avatar} from './avatar';
 import {Text} from './text';
-import {colors, constants} from '../libs/common';
+import {colors, constants, gifs} from '../libs/common';
 import {Source} from 'react-native-fast-image';
 import {Gender} from '../libs/interfaces';
+import {Gif} from './image';
 
 type PollFriendItemProps = {
   mb?: number;
@@ -21,13 +22,15 @@ type PollFriendItemProps = {
   gender?: Gender;
   label: string;
   source?: Source | number;
+
+  isPull?: boolean;
 };
 
 const ITEM_WIDTH = constants.screenWidth * 0.4452;
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
-  const scale = useAnimatedValue(0.8);
+  const scale = useAnimatedValue(0.9);
   const translateY = scale.interpolate({
     inputRange: [0.9, 1],
     outputRange: [20, 0],
@@ -50,9 +53,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
     if (!props.selected) {
       percentWidth.setValue(0);
     } else {
-      const percent = 85;
+      const percent = props.isPull ? 100 : 85;
       percentWidth.setValue(70);
-      const toValue = ((175 - 70) / 100) * percent + 70;
+      const toValue = ((ITEM_WIDTH - 70) / 100) * percent + 70;
       Animated.timing(percentWidth, {
         useNativeDriver: false,
         duration: 500,
@@ -66,7 +69,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   }, [props.selected]);
 
   return (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableWithoutFeedback
+      disabled={Boolean(props.isPull)}
+      onPress={props.onPress}>
       <Animated.View
         style={[
           styles.root,
@@ -101,6 +106,15 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
         <View style={styles.content}>
           <Text numberOfLines={1}>{props.label}</Text>
         </View>
+
+        {props.isPull && !props.selected && (
+          <View style={styles.unselectedWrapper} />
+        )}
+        {props.isPull && props.selected && (
+          <View style={styles.selectedFinger}>
+            <Gif source={gifs.backhand} />
+          </View>
+        )}
       </Animated.View>
     </TouchableWithoutFeedback>
   );
@@ -128,4 +142,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     top: 0,
   },
+  unselectedWrapper: {
+    position: 'absolute',
+    left: 0,
+    borderRadius: 35,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    zIndex: 2,
+    backgroundColor: colors.mediumGrey + 'CC',
+  },
+  selectedFinger: {position: 'absolute', right: 0, bottom: -15},
 });

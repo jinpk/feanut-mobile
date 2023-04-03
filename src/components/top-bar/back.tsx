@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
-import {svgs} from '../../libs/common';
+import {colors, svgs} from '../../libs/common';
 import {Text} from '../text';
 
 type BackTopBar = {
@@ -10,15 +10,27 @@ type BackTopBar = {
   title?: string;
   logo?: boolean;
   rightComponent?: JSX.Element;
+
+  absolute?: boolean;
 };
 
 export const BackTopBar = (props: BackTopBar): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.root, {marginTop: insets.top}]}>
+    <View
+      style={[
+        styles.root,
+        {marginTop: insets.top},
+        props.absolute && styles.rootAbsolute,
+      ]}>
       <TouchableNativeFeedback onPress={props.onBack}>
         <View style={[styles.leftItem]}>
-          <WithLocalSvg width={7} height={14} asset={svgs.back} />
+          <WithLocalSvg
+            width={7}
+            height={14}
+            asset={svgs.back}
+            color={props.absolute ? colors.white : colors.darkGrey}
+          />
         </View>
       </TouchableNativeFeedback>
       <View>
@@ -44,6 +56,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  rootAbsolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 10,
+    right: 0,
   },
   leftItem: {
     left: 0,

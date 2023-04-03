@@ -21,7 +21,6 @@ type LineInputProps = {
   disabledAutoCapitalize?: boolean;
   secureTextEntry?: boolean;
 
-
   inputRef?: LegacyRef<RNTextInput>;
 
   mt?: number;

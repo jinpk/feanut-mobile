@@ -26,6 +26,7 @@ export interface PollingFriendItem {
 
 export interface PollingFriend {
   imageFileKey?: string;
+  gender?: Gender;
   name: string;
   profileId: string;
 }
@@ -107,18 +108,18 @@ export interface PollingReceiveItem {
 export interface PollingReceiveDetail {
   _id: string;
   pollId: Poll;
-  friendIds: PollingFriend;
+  userRoundId: string;
+  friendIds: PollingFriend[];
   selectedProfileId: string;
   completedAt: string;
 
   isOpened?: boolean;
-  name?: string;
-  gender: Gender;
 
   voter: {
     name?: string;
     gender: Gender;
     imageFileKey?: string;
+    profileId?: string;
   };
 }
 

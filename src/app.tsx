@@ -5,7 +5,6 @@ import {constants, routes} from './libs/common';
 import Login from './pages/login';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
-import {Text} from './components/text';
 import {CoinModal, WelcomeModal} from './modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
@@ -22,6 +21,7 @@ import {
 import Friend from './pages/friend';
 import DeleteMe from './pages/delete-me';
 import FeanutCard from './pages/feanut-card';
+import InboxDetail from './pages/inbox/detail';
 
 type AppProps = React.PropsWithChildren<{}>;
 
@@ -41,7 +41,7 @@ function NavigationApp() {
   }, []);
 
   if (loginLoading) {
-    return <Text mt={100}></Text>;
+    return null;
   }
 
   return (
@@ -56,6 +56,7 @@ function NavigationApp() {
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
+          <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
           <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />

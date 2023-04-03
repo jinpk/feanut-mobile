@@ -43,7 +43,7 @@ export const Information = (props: InformationProps) => {
             </Text>
           );
         })()}
-      {!Boolean(props.markingText) && (
+      {!props.markingText && (
         <Text size={14} mt={29} align="center">
           {props.subMessage}
         </Text>

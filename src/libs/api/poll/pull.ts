@@ -26,3 +26,11 @@ export const getPollingReceiveDetail = async (
   );
   return res.data;
 };
+
+export const openPull = async (pollingId: string): Promise<void> => {
+  const res = await feanutAPI.post(
+    '/pollings/receive/' + pollingId + '/open',
+    {},
+  );
+  return res.data;
+};

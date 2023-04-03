@@ -3,12 +3,14 @@ import fire from '../../assets/gifs/fire.gif';
 import partyPopper from '../../assets/gifs/party-popper.gif';
 import partyingFace from '../../assets/gifs/partying-face.gif';
 import teddyBear from '../../assets/gifs/teddy-bear.gif';
+import backhand from '../../assets/gifs/backhand.gif';
 import timerClock from '../../assets/gifs/timer-clock.gif';
 import pointingRight from '../../assets/gifs/pointing-right.gif';
 import wavingHand from '../../assets/gifs/waving-hand.gif';
 import highVoltage from '../../assets/gifs/high-voltage.gif';
 import hourglassNotDone from '../../assets/gifs/hourglass-not-done.gif';
 import logoWithLetter from '../../assets/svgs/logo-with-letter.svg';
+import lock from '../../assets/svgs/lock.svg';
 import logoLetter from '../../assets/svgs/logo-letter.svg';
 import logoLetterBlack from '../../assets/svgs/logo-letter-black.svg';
 import logoSimple from '../../assets/svgs/logo-simple.svg';
@@ -25,7 +27,6 @@ import shuffle from '../../assets/svgs/shuffle.svg';
 import refresh from '../../assets/svgs/refresh.svg';
 
 import hatchingChick from '../../assets/gifs/hatching-chick.gif';
-
 
 import pollCardHappiness from '../../assets/svgs/poll-card-happiness.svg';
 import pollCardGratitude from '../../assets/svgs/poll-card-gratitude.svg';
@@ -89,6 +90,7 @@ export const svgs = {
 
   visitSNS,
 
+  lock,
   logo,
   shuffle,
   feanutDefault,
@@ -142,6 +144,7 @@ export const gifs = {
   teddyBear,
   hatchingChick,
   timerClock,
+  backhand,
   highVoltage,
   wavingHand,
   hourglassNotDone,
