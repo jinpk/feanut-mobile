@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
 import {colors, constants, gifs, routes} from '../libs/common';
-import {useFriendStore, useModalStore} from '../libs/stores';
+import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
 import {usePolling, useSyncContacts} from '../hooks';
@@ -31,6 +31,20 @@ function Home(): JSX.Element {
 
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
+
+  // 초기 알림 클릭 이벤트처리
+  const initialNotification = useUserStore(s => s.notification);
+  const clearNotification = useUserStore(s => s.actions.clearNotification);
+  useEffect(() => {
+    if (initialNotification) {
+      const {action, value} = initialNotification;
+      if (action === 'pull') {
+        navigation.navigate(routes.inbox);
+        navigation.navigate(routes.inboxDetail, {pollingId: value});
+        clearNotification();
+      }
+    }
+  }, [initialNotification]);
 
   const welcomModalOpened = useModalStore(s => s.welcome);
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);

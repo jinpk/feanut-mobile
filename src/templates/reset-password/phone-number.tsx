@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {ResetPasswordTemplateProps} from '.';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
@@ -17,6 +17,15 @@ export const FindPasswordPhoneNumberTemplate = (
     ?.message as string;
 
   const sendingCode = props.form.watch().sendingCode;
+
+  const phoneRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (props.focused) {
+      phoneRef.current?.focus();
+    }
+  }, [props.focused]);
+
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
@@ -34,6 +43,7 @@ export const FindPasswordPhoneNumberTemplate = (
             autoFocus
             value={value}
             disabled={sendingCode}
+            inputRef={phoneRef}
             onChange={t => {
               onChange(t);
               props.form.clearErrors('phoneNumber');

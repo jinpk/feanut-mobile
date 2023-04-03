@@ -35,6 +35,11 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+   <string>instagram</string>
+  </array>
+  
   <key>NSLocationWhenInUseUsageDescription</key>
   <string/>
 	<key>NSContactsUsageDescription</key>

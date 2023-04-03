@@ -1,16 +1,22 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import {ResetPasswordTemplateProps} from '.';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants} from '../../libs/common';
 
 export const FindPasswordCodeTemplate = (props: ResetPasswordTemplateProps) => {
   const errorscode = props.form.formState.errors.code?.message as string;
+  const codeRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (props.focused) {
+      codeRef.current?.focus();
+    }
+  }, [props.focused]);
 
   return (
     <View style={styles.root}>
@@ -27,6 +33,7 @@ export const FindPasswordCodeTemplate = (props: ResetPasswordTemplateProps) => {
         render={({field: {onChange, onBlur, value}}) => (
           <LargeInput
             autoFocus
+            inputRef={codeRef}
             value={value}
             keyboardType="decimal-pad"
             onChange={t => {

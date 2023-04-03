@@ -7,7 +7,7 @@ import {Errors} from '../../components/errors';
 import {TextInput} from '../../components/input';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants} from '../../libs/common';
+import {constants} from '../../libs/common';
 
 export const FindPasswordResetTemplate = (
   props: ResetPasswordTemplateProps,

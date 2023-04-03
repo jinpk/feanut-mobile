@@ -1,8 +1,13 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  Link,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
-import {Alert} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
 import Share from 'react-native-share';
 import {routes} from '../../libs/common';

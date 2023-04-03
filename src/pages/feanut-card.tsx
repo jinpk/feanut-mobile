@@ -1,6 +1,6 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {BackTopBar} from '../components/top-bar';
 import {getFriendshipStatusByProfile} from '../libs/api/friendship';
 import {
@@ -93,7 +93,15 @@ function FeanutCard() {
       });
   }, [profileId]);
 
-  const handleShare = useCallback(() => {}, []);
+  const handleShare = useCallback(() => {
+    Linking.canOpenURL('instagram://user?username=feanutofficial').then(c => {
+      if (c) {
+        Linking.openURL('instagram://user?username=feanutofficial');
+      } else {
+        Linking.openURL('https://www.instagram.com/feanutofficial/');
+      }
+    });
+  }, [profileId, myProfileId]);
 
   if (!profile) {
     return <BackTopBar logo onBack={navigation.goBack} />;

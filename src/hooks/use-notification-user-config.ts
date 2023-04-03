@@ -48,7 +48,6 @@ export function useNotificationUserConfig(tokenRefresh?: boolean) {
               messaging()
                 .getToken()
                 .then(token => {
-                  console.log(token);
                   // 다른 경우만 업데이트
                   if (token !== config.fcmToken) {
                     patchNotificationUserConfig(userId, {fcmToken: token});

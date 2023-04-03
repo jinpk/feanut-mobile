@@ -12,23 +12,36 @@ import Profile from './pages/profile';
 import SignUp from './pages/signup';
 import ResetPassword from './pages/reset-password';
 import ProfileEdit from './pages/profile/edit';
-import {
-  useFirebaseMessaging,
-  useIAP,
-  useInitEmoji,
-  useNotificationUserConfig,
-} from './hooks';
+import {useIAP, useInitEmoji, useNotificationUserConfig} from './hooks';
 import Friend from './pages/friend';
 import DeleteMe from './pages/delete-me';
 import FeanutCard from './pages/feanut-card';
 import InboxDetail from './pages/inbox/detail';
+import PushNotification from 'react-native-push-notification';
+import {NotificationAction} from './libs/interfaces';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import messaging from '@react-native-firebase/messaging';
+
+PushNotification.configure({
+  onNotification: notification => {
+    const data = {
+      action: notification.data.action as NotificationAction,
+      value: notification.data.value,
+    };
+    useUserStore.setState(prev => ({
+      ...prev,
+      notification: data,
+    }));
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+  requestPermissions: false,
+});
 
 type AppProps = React.PropsWithChildren<{}>;
 
 const Stack = createNativeStackNavigator();
 
 function NavigationApp() {
-  useFirebaseMessaging();
   useIAP();
   useInitEmoji();
   useNotificationUserConfig(true);
@@ -38,6 +51,17 @@ function NavigationApp() {
 
   useEffect(() => {
     checkLogin();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      PushNotification.localNotification({
+        title: remoteMessage.notification?.title,
+        message: remoteMessage.notification?.body as string,
+        userInfo: remoteMessage.data,
+      });
+    });
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   if (loginLoading) {

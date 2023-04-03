@@ -197,6 +197,7 @@ function ResetPassword(): JSX.Element {
 const styles = StyleSheet.create({
   scrollview: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   screen: {width: constants.screenWidth, backgroundColor: colors.white},
 });

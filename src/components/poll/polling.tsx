@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {
   colors,
@@ -32,6 +33,7 @@ type PollingProps = {
 };
 
 export const Polling = (props: PollingProps) => {
+  const insets = useSafeAreaInsets();
   const handleFriendSelect =
     (friend: PollingFriendItem) => (e: GestureResponderEvent) => {
       props.onSelected(friend.value);
@@ -78,7 +80,7 @@ export const Polling = (props: PollingProps) => {
             })}
         </View>
 
-        <View style={[styles.footer]}>
+        <View style={[styles.footer, {marginBottom: insets.bottom}]}>
           <TouchableOpacity onPress={props.onSkip} style={styles.footerButton}>
             <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
             <Text ml={7} color={colors.white} size={12}>

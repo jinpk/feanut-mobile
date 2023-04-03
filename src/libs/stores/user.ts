@@ -7,7 +7,7 @@ import {
   isTokenExpired,
   setCredentials,
 } from '../common';
-import {TokenResponse, User} from '../interfaces';
+import {NotificationData, TokenResponse, User} from '../interfaces';
 import {postToken} from '../api/auth';
 
 export interface UserStore {
@@ -16,10 +16,13 @@ export interface UserStore {
   // 로그인 여부
   logged: boolean;
   user: User | null;
+
+  notification?: NotificationData;
   actions: {
     login: (user: User) => void;
     logout: () => Promise<void>;
     check: () => Promise<void>;
+    clearNotification: () => void;
   };
 }
 
@@ -63,6 +66,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         set({loading: false});
       }
     },
+    clearNotification: () => set({notification: undefined}),
     login: (user: User) => set({logged: true, user, loading: false}),
     logout: async () => {
       console.log('logout');
