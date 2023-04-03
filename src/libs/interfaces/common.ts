@@ -1,3 +1,7 @@
+export type Colors = {
+  [key: string]: string
+};
+
 export type LocalImageResponse = {
   buffer: ArrayBuffer;
   type: string;
