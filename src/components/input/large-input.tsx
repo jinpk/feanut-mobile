@@ -36,6 +36,9 @@ type LargeInputProps = {
   maxLength?: number;
 
   autoFocus?: boolean;
+
+  textContentType?: 'oneTimeCode';
+  autoComplete?: 'one-time-code';
 };
 
 export const LargeInput = (props: LargeInputProps): JSX.Element => {
@@ -51,6 +54,8 @@ export const LargeInput = (props: LargeInputProps): JSX.Element => {
       onSubmitEditing={props.onSubmitEditing}
       autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
       placeholderTextColor={colors.mediumGrey}
+      textContentType={props.textContentType}
+      autoComplete={props.autoComplete}
       style={[
         styles.input,
         {

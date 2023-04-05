@@ -43,6 +43,8 @@ function PhoneNumberCodeTemplate(props: PhoneNumberCodeTemplateProps) {
             inputRef={codeRef}
             value={value}
             keyboardType="decimal-pad"
+            textContentType="oneTimeCode"
+            autoComplete="one-time-code"
             onChange={t => {
               onChange(t);
               props.form.clearErrors('code');
