@@ -1,15 +1,17 @@
-export interface LoginForm {
-  username: string;
-  password: string;
-  hasUsername: boolean;
+export interface SignInVerificationRequest {
+  phoneNumber: string;
 }
 
-export interface LoginRequest {
-  username: string;
-  password: string;
+export interface SignInRequest {
+  authId: string;
+  code: string;
 }
 
 export interface TokenResponse {
   accessToken: string;
   refreshToken: string;
+}
+
+export interface AuthResponse {
+  authId: string;
 }

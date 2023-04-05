@@ -15,7 +15,6 @@ import {configs} from '../../libs/common/configs';
 
 type ProfileTemplateProps = {
   profile: Profile;
-  username: string;
   friendsCount: number;
   feanutAmount: number;
   onLogout: () => void;
@@ -126,21 +125,22 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </Text>
       </View>
 
-      <Divider mt={16} mx={13} />
-
-      <View style={styles.listItem}>
+      <Divider mt={16} mx={13} mb={15} />
+      {/**
+        <View style={styles.listItem}>
         <View>
           <Text color={colors.darkGrey} size={12}>
-            feanut ID
+            내 전화번호
           </Text>
-          <Text mt={7}>{props.username}</Text>
+          <Text mt={7}>01021883985</Text>
         </View>
       </View>
+       */}
 
       <View style={styles.listAccountItem}>
         <View>
           <Text color={colors.darkGrey} size={12}>
-            인스타그램
+            인스타그램 계정
           </Text>
           {Boolean(props.profile.instagram) && (
             <Text mt={7}>@{props.profile.instagram}</Text>

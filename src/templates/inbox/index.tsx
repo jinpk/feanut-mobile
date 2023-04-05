@@ -114,7 +114,7 @@ function InboxTemplate(props: InboxTemplateProps) {
         }
         ListEmptyComponent={
           !props.loading ? (
-            <View style={styles.empty}>
+            <View style={[styles.empty, {paddingTop: insets.top}]}>
               <Information
                 icon={gifs.hatchingChick}
                 message="회원님의 친구들이 투표하고 있어요!"
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   empty: {
-    marginTop: '50%',
+    marginTop: constants.screenHeight / 5,
   },
   list: {paddingBottom: 7.5},
   sync: {

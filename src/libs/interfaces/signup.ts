@@ -1,12 +1,6 @@
+import {Gender} from './user';
+
 export interface SignUpForm {
-  username: string;
-  birth: string;
-  gender: 'male' | 'female';
+  gender: '' | Gender;
   name: string;
-  phoneNumber: string;
-
-  sendingCode: boolean;
-
-  authId: string;
-  code: string;
 }

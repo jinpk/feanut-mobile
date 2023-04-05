@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {constants, routes} from './libs/common';
-import Login from './pages/login';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {CoinModal, WelcomeModal} from './modals';
@@ -10,7 +9,6 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
 import SignUp from './pages/signup';
-import ResetPassword from './pages/reset-password';
 import ProfileEdit from './pages/profile/edit';
 import {useIAP, useInitEmoji, useNotificationUserConfig} from './hooks';
 import Friend from './pages/friend';
@@ -21,6 +19,8 @@ import PushNotification from 'react-native-push-notification';
 import {NotificationAction} from './libs/interfaces';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
+import Start from './pages/start';
+import Verification from './pages/verification';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -99,11 +99,14 @@ function NavigationApp() {
       )}
       {!logged && (
         <Stack.Navigator
-          initialRouteName={routes.login}
+          initialRouteName={routes.start}
           screenOptions={{headerShown: false}}>
-          <Stack.Screen name={routes.login} component={Login} />
+          <Stack.Screen name={routes.start} component={Start} />
+          {
+            //              <Stack.Screen name={routes.login} component={Login} />
+          }
           <Stack.Screen name={routes.signup} component={SignUp} />
-          <Stack.Screen name={routes.resetPassword} component={ResetPassword} />
+          <Stack.Screen name={routes.verification} component={Verification} />
         </Stack.Navigator>
       )}
     </NavigationContainer>

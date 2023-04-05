@@ -1,16 +1,26 @@
 import React, {useEffect, useRef} from 'react';
-import {Controller} from 'react-hook-form';
+import {Controller, UseFormReturn} from 'react-hook-form';
 import {StyleSheet, TextInput, View} from 'react-native';
-import {SignUpTemplateProps} from '.';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
 import {Privacy} from '../../components';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants} from '../../libs/common';
+import {constants} from '../../libs/common';
+import {PhoneNumberForm} from '../../libs/interfaces';
 
-export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
+export type PhoneNumberTemplateProps = {
+  form: UseFormReturn<PhoneNumberForm>;
+  focused: boolean;
+  onConfirm: () => void;
+  onBack: () => void;
+
+  title: string;
+  message: string;
+};
+
+function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
   const errorsphoneNumber = props.form.formState.errors.phoneNumber
     ?.message as string;
 
@@ -19,19 +29,22 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
   const phoneRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    if (props.focused) {
+    let tm = setTimeout(() => {
       phoneRef.current?.focus();
-    }
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
   }, [props.focused]);
 
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
       <Text weight="bold" size={18} mt={15} mx={16}>
-        휴대폰번호를 입력해 주세요
+        {props.title}
       </Text>
       <Text mt={30} mx={16}>
-        친구가 이미 회원님의 번호로 투표했을 수 있어요 {':)'}
+        {props.message}
       </Text>
 
       <Controller
@@ -46,12 +59,15 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
               onChange(t);
               props.form.clearErrors('phoneNumber');
             }}
-            keyboardType="number-pad"
             onBlur={onBlur}
             maxLength={constants.phoneNumberMaxLength}
             placeholder={'01012345678'}
             mx={16}
             mt={14}
+            keyboardType="number-pad"
+            onSubmitEditing={() => {
+              props.onConfirm();
+            }}
           />
         )}
         name="phoneNumber"
@@ -77,10 +93,12 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
   },
 });
+
+export default PhoneNumberTemplate;

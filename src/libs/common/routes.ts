@@ -1,7 +1,10 @@
 export const routes = {
+  start: '/start',
+
   login: '/login',
   signup: '/signup',
-  resetPassword: '/reset-password',
+
+  verification: '/verification',
 
   main: '/main',
   home: '/home',

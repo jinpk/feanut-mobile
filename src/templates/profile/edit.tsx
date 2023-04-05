@@ -113,12 +113,14 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
           </Text>
           <Text>{props.profile.gender === 'male' ? '남자' : '여자'}</Text>
         </View>
+        {/**
         <View style={styles.formContent}>
           <Text color={colors.darkGrey} size={12} mb={6}>
             생년월일
           </Text>
           <Text>{dayjs(props.profile.birth).format('YYYY년 MM월 DD일')}</Text>
         </View>
+         */}
       </View>
     </View>
   );

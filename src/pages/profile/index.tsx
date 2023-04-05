@@ -13,7 +13,6 @@ import ProfileTemplate from '../../templates/profile';
 
 function Profile(): JSX.Element {
   const navigation = useNavigation();
-  const username = useUserStore(s => s.user?.username);
   const userId = useUserStore(s => s.user?.id);
   const logout = useUserStore(s => s.actions.logout);
   const focused = useIsFocused();
@@ -130,13 +129,12 @@ function Profile(): JSX.Element {
 
   return (
     <View style={styles.root}>
-      <BackTopBar title={username} onBack={navigation.goBack} />
+      <BackTopBar title={'프로필'} onBack={navigation.goBack} />
       {Boolean(profile) && (
         <ProfileTemplate
           friendsCount={friendsCount}
           onEditProfile={handleEditProfile}
           profile={profile}
-          username={username!}
           onLogout={logout}
           feanutAmount={coin.amount}
           onPurchaseFeanut={coin.openPurchaseModal}

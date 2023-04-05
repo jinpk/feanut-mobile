@@ -11,10 +11,15 @@ type TermsProps = {
 export const Terms = (props: TermsProps): JSX.Element => {
   return (
     <View style={styles.terms}>
-      <TextButton onPress={props.onPrivacyTerm} title="개인정보 처리방침" />
-      <Text size={12}>과 </Text>
-      <TextButton onPress={props.onServiceTerm} title="서비스 이용약관" />
-      <Text size={12}>에 동의합니다.</Text>
+      <View style={styles.term}>
+        <Text size={12}>계속 진행하시면 feanut의 </Text>
+        <TextButton onPress={props.onServiceTerm} title="서비스 이용약관" />
+        <Text size={12}>과 </Text>
+      </View>
+      <View style={styles.term}>
+        <TextButton onPress={props.onPrivacyTerm} title="개인정보 처리방침" />
+        <Text size={12}>에 동의하는 것 입니다.</Text>
+      </View>
     </View>
   );
 };
@@ -22,6 +27,10 @@ export const Terms = (props: TermsProps): JSX.Element => {
 const styles = StyleSheet.create({
   terms: {
     marginTop: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  term: {
     flexDirection: 'row',
     alignItems: 'center',
   },
