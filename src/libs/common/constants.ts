@@ -6,12 +6,6 @@ export const constants = {
   platform: Platform.OS,
   nameMaxLength: 6,
 
-  usernameMinLength: 2,
-  usernameMaxLength: 15,
-
-  passwordMinLength: 6,
-  passwordMaxLength: 20,
-
   statusMessageMaxLength: 50,
 
   phoneNumberMaxLength: 11,

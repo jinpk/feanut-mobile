@@ -20,7 +20,6 @@ export interface AddFriend {
 export interface Friend {
   name: string;
   profileId: string;
-  username?: string;
   hidden?: boolean;
   gender?: Gender;
   profileImageKey?: string;

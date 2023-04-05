@@ -1,6 +1,5 @@
 import React, {memo} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {colors} from '../libs/common';
 import {configs} from '../libs/common/configs';
 import {Gender} from '../libs/interfaces';
 import {Avatar} from './avatar';
@@ -9,7 +8,6 @@ import {Text} from './text';
 
 type FriendItemProps = {
   gender?: Gender;
-  username?: string;
   name: string;
   profileImageKey?: string;
   button?: string;
@@ -23,7 +21,7 @@ type FriendItemProps = {
 export const FriendItem = memo((props: FriendItemProps) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity onPress={props.onPress} disabled={!props.username}>
+      <TouchableOpacity onPress={props.onPress}>
         {props.icon || (
           <Avatar
             size={42}
@@ -42,13 +40,8 @@ export const FriendItem = memo((props: FriendItemProps) => {
         )}
       </TouchableOpacity>
       <View style={styles.body}>
-        <TouchableOpacity onPress={props.onPress} disabled={!props.username}>
+        <TouchableOpacity onPress={props.onPress}>
           <Text>{props.name}</Text>
-          {Boolean(props.username) && (
-            <Text color={colors.darkGrey} mt={1} size={12}>
-              {props.username}
-            </Text>
-          )}
         </TouchableOpacity>
       </View>
 
