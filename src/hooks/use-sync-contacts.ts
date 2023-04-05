@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {Alert, PermissionsAndroid} from 'react-native';
-import Contacts from 'react-native-contacts';
+import {Alert, Linking, PermissionsAndroid} from 'react-native';
+import Contacts, {requestPermission} from 'react-native-contacts';
 import {postFriend} from '../libs/api/friendship';
 import {constants} from '../libs/common';
 import {useUserStore} from '../libs/stores';
@@ -21,16 +21,49 @@ export function useSyncContacts() {
       );
 
       if (res !== 'granted') {
-        throw new Error(
-          '설정 > 애플리케이션 > feanut에서 연락처 권한을 허용후 다시 시도해 주세요!',
-        );
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      const res = await requestPermission();
+      if (res === 'authorized') {
+        return true;
+      } else {
+        return false;
       }
     }
   };
 
   const handleSyncContacts = async (cb?: () => void) => {
-    if (!userId) {
+    if (loading) {
+      return;
+    } else if (!userId) {
       return Alert.alert('로그인후 진행해 주세요');
+    }
+
+    try {
+      const granted = await checkPermissions();
+      if (!granted) {
+        Alert.alert(
+          '연락처를 읽어올 수 없습니다',
+          '설정에서 feanut 연락처 접근 허용후 다시 시도해 주세요.',
+          [
+            {
+              text: '설정',
+              isPreferred: true,
+              onPress: () => {
+                Linking.openSettings();
+              },
+            },
+            {text: '다음에', style: 'cancel'},
+          ],
+        );
+        return;
+      }
+    } catch (error: any) {
+      Alert.alert('연락처 권한 오류', error.message || error);
+      return;
     }
 
     setLoading(true);
@@ -41,7 +74,6 @@ export function useSyncContacts() {
         );
       }
 
-      await checkPermissions();
       const contacts = await Contacts.getAll();
 
       let succeedCount = 0;
@@ -95,10 +127,12 @@ export function useSyncContacts() {
           failedCount++;
         }
       }
+
       console.log('친구 동기화 성공: ', succeedCount, ', 실패: ', failedCount);
     } catch (error: any) {
       Alert.alert('연락처 동기화 오류', error.message || error);
     }
+
     if (cb) {
       cb();
     }

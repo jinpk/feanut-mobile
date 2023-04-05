@@ -41,6 +41,8 @@ export const SignUpNameTemplate = (props: SignUpTemplateProps) => {
               props.form.clearErrors('name');
             }}
             onBlur={onBlur}
+            returnKeyType="next"
+            onSubmitEditing={props.onConfirm}
             maxLength={constants.nameMaxLength}
             placeholder={'피넛'}
             mx={16}

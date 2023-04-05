@@ -1,5 +1,5 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, Linking} from 'react-native';
 import {BackTopBar} from '../components/top-bar';
 import {getFriendshipStatusByProfile} from '../libs/api/friendship';
@@ -17,6 +17,8 @@ import {
 } from '../libs/interfaces/polling';
 import {useProfileStore} from '../libs/stores';
 import FeanutCardTemplate from '../templates/feanut-card';
+import ViewShot from 'react-native-view-shot';
+import Share from 'react-native-share';
 
 function FeanutCard() {
   const navigation = useNavigation();
@@ -43,6 +45,8 @@ function FeanutCard() {
     awe: 0,
     love: 0,
   });
+
+  const drawViewRef = useRef<ViewShot>(null);
 
   useEffect(() => {
     // 기본정보 조회
@@ -94,14 +98,32 @@ function FeanutCard() {
   }, [profileId]);
 
   const handleShare = useCallback(() => {
-    Linking.canOpenURL('instagram://user?username=feanutofficial').then(c => {
-      if (c) {
-        Linking.openURL('instagram://user?username=feanutofficial');
-      } else {
-        Linking.openURL('https://www.instagram.com/feanutofficial/');
+    if (profileId === myProfileId) {
+      if (drawViewRef.current?.capture) {
+        drawViewRef.current.capture().then(uri => {
+          const title = `${profile!.name}님의 피넛카드`;
+          Share.open({
+            title: title,
+            filename: title,
+            type: 'image/*',
+            url: uri,
+          });
+        });
       }
-    });
-  }, [profileId, myProfileId]);
+    } else {
+      if (!profile?.instagram) return;
+
+      const instagramURL = `instagram://user?username=${profile.instagram}`;
+      const instagramWebsiteURL = `https://www.instagram.com/${profile.instagram}`;
+      Linking.canOpenURL(instagramURL).then(can => {
+        if (can) {
+          Linking.openURL(instagramURL);
+        } else {
+          Linking.openURL(instagramWebsiteURL);
+        }
+      });
+    }
+  }, [profileId, myProfileId, profile?.instagram, profile?.name]);
 
   if (!profile) {
     return <BackTopBar logo onBack={navigation.goBack} />;
@@ -109,6 +131,7 @@ function FeanutCard() {
 
   return (
     <FeanutCardTemplate
+      drawViewRef={drawViewRef}
       onBack={navigation.goBack}
       onShare={handleShare}
       gender={profile.gender}

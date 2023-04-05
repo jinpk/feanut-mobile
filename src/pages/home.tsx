@@ -17,7 +17,6 @@ import {usePolling, useSyncContacts} from '../hooks';
 import {LineIndicator} from '../components';
 import PollingsTemplate from '../templates/polling/pollings';
 import EventModalTemplate from '../templates/polling/event-modal';
-import PollReachTemplate from '../templates/polling/reach';
 import PollLockTemplate from '../templates/polling/lock';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -170,14 +169,13 @@ function Home(): JSX.Element {
           )}
         </View>
         <View style={styles.pollContainer}>
-          {polling.state === 'reach' && (
-            <PollReachTemplate maxDailyCount={polling.maxDailyCount} />
-          )}
-          {polling.state === 'lock' && polling.remainTime && (
+          {((polling.state === 'lock' && polling.remainTime) ||
+            polling.state === 'reach') && (
             <PollLockTemplate
               maxDailyCount={polling.maxDailyCount}
               todayCount={polling.todayCount}
-              remainTime={polling.remainTime}
+              remainTime={polling.remainTime || undefined}
+              isReached={polling.state === 'reach'}
               onTimeout={() => {
                 polling.reInit();
               }}

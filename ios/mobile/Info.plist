@@ -35,17 +35,16 @@
 			</dict>
 		</dict>
 	</dict>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-   <string>instagram</string>
-  </array>
-  
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>instagram</string>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
 	<key>NSContactsUsageDescription</key>
-	<string>회원님의 연락처에있는 친구들과 재미있는 투표를 진행할 수 있도록 연락처 접근 권한을 허용해 주세요</string>
+	<string>회원님의 연락처의 친구를 읽어와서 서버에 암호화하여 저장하고 친구목록에 등록하기 위해 권한을 요청합니다</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>친구가 투표할 때 회원님을 알아볼 수 있도록 프로필 이미지를 설정하기 위해 권한이 필요합니다</string>
+	<string>친구가 투표할 때 회원님을 알아볼 수 있도록 프로필을 설정하기 위해 권한을 요청합니다</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Regular.ttf</string>

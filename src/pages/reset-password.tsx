@@ -21,6 +21,7 @@ import {
   FindPasswordResetTemplate,
 } from '../templates/reset-password';
 import {HttpStatusCode} from 'axios';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const initialFormValues: ResetPasswordForm = {
   phoneNumber: '',
@@ -33,6 +34,7 @@ const initialFormValues: ResetPasswordForm = {
 };
 
 function ResetPassword(): JSX.Element {
+  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const navigation = useNavigation();
   const route = useRoute();
@@ -154,7 +156,6 @@ function ResetPassword(): JSX.Element {
   return (
     <KeyboardAvoidingView
       style={styles.scrollview}
-      keyboardVerticalOffset={10}
       {...(constants.platform === 'ios' ? {behavior: 'padding'} : {})}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -163,7 +164,7 @@ function ResetPassword(): JSX.Element {
         pagingEnabled
         scrollEnabled={false}
         ref={scrollRef}>
-        <View style={[styles.screen]}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <FindPasswordPhoneNumberTemplate
             form={form}
             onConfirm={handlePhoneNumberConfirm}
@@ -172,7 +173,7 @@ function ResetPassword(): JSX.Element {
           />
         </View>
 
-        <View style={[styles.screen]}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <FindPasswordCodeTemplate
             form={form}
             onConfirm={handleCodeConfirm}
@@ -181,7 +182,7 @@ function ResetPassword(): JSX.Element {
           />
         </View>
 
-        <View style={[styles.screen]}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <FindPasswordResetTemplate
             form={form}
             onConfirm={handleResetConfirm}

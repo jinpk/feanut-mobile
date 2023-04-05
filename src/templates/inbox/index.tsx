@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   empty: {
-    height: constants.screenHeight / 2,
+    marginTop: '50%',
   },
   list: {paddingBottom: 7.5},
   sync: {

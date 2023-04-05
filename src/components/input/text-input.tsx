@@ -46,6 +46,8 @@ type TextInputProps = {
   autoFocus?: boolean;
 
   hiddenClose?: boolean;
+
+  onSubmitEditing?: () => void;
 };
 
 export const TextInput = (props: TextInputProps): JSX.Element => {
@@ -79,6 +81,7 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
         style={[styles.input]}
         placeholder={props.placeholder}
         value={props.value}
+        onSubmitEditing={props.onSubmitEditing}
         onChangeText={props.onChange}
         onBlur={props.onBlur}
         returnKeyType={props.returnKeyType || 'done'}

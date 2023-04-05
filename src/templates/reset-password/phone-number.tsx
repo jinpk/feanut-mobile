@@ -8,7 +8,7 @@ import {LargeInput} from '../../components/input/large-input';
 import {Privacy} from '../../components';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants} from '../../libs/common';
+import {constants} from '../../libs/common';
 
 export const FindPasswordPhoneNumberTemplate = (
   props: ResetPasswordTemplateProps,
@@ -21,9 +21,12 @@ export const FindPasswordPhoneNumberTemplate = (
   const phoneRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    if (props.focused) {
+    let tm = setTimeout(() => {
       phoneRef.current?.focus();
-    }
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
   }, [props.focused]);
 
   return (
@@ -48,12 +51,15 @@ export const FindPasswordPhoneNumberTemplate = (
               onChange(t);
               props.form.clearErrors('phoneNumber');
             }}
-            keyboardType="decimal-pad"
             onBlur={onBlur}
             maxLength={constants.phoneNumberMaxLength}
             placeholder={'01012345678'}
             mx={16}
             mt={14}
+            keyboardType="number-pad"
+            onSubmitEditing={() => {
+              props.onConfirm();
+            }}
           />
         )}
         name="phoneNumber"

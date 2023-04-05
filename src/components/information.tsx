@@ -23,26 +23,33 @@ export const Information = (props: InformationProps) => {
         {props.message}
       </Text>
       {Boolean(props.markingText) &&
-        (() => {
-          const markingStartIndex = props.subMessage.indexOf(props.markingText);
+        props.subMessage.split('\n').map((sentence, si) => {
+          const markingStartIndex = sentence.indexOf(props.markingText);
           const markingEndIndex = markingStartIndex + props.markingText.length;
+
           return (
-            <Text mt={29} align="center">
-              <Text>{props.subMessage.substring(0, markingStartIndex)}</Text>
-              <Text
-                style={{backgroundColor: colors.yellow + '80'}}
-                weight="bold">
-                {props.subMessage.substring(markingStartIndex, markingEndIndex)}
-              </Text>
-              <Text>
-                {props.subMessage.substring(
-                  markingEndIndex,
-                  props.subMessage.length,
-                )}
-              </Text>
-            </Text>
+            <View
+              style={[styles.wrap, {marginTop: si === 0 ? 29 : 0}]}
+              key={si.toString()}>
+              {markingStartIndex < 0 && <Text>{sentence}</Text>}
+
+              {markingStartIndex >= 0 && (
+                <View style={styles.textLines}>
+                  <Text>{sentence.substring(0, markingStartIndex)}</Text>
+                  <View style={{paddingHorizontal: 2}}>
+                    <Text style={{zIndex: 2}} weight="bold">
+                      {sentence.substring(markingStartIndex, markingEndIndex)}
+                    </Text>
+                    <View style={styles.marker} />
+                  </View>
+                  <Text>
+                    {sentence.substring(markingEndIndex, sentence.length)}
+                  </Text>
+                </View>
+              )}
+            </View>
           );
-        })()}
+        })}
       {!props.markingText && (
         <Text size={14} mt={29} align="center">
           {props.subMessage}
@@ -63,5 +70,24 @@ const styles = StyleSheet.create({
   icon: {
     width: 45,
     height: 45,
+  },
+  wrap: {
+    marginTop: 29,
+    flexDirection: 'row',
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
+  textLines: {
+    flexDirection: 'row',
+  },
+  marker: {
+    position: 'absolute',
+    bottom: '10%',
+    left: 0,
+    right: 0,
+    top: '20%',
+    backgroundColor: colors.yellow + '80',
+    transform: [{rotate: '-10deg'}],
+    borderRadius: 12,
   },
 });

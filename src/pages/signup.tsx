@@ -27,6 +27,7 @@ import {
   AUTH_ERROR_EXIST_PHONE_NUMBER,
   AUTH_ERROR_EXIST_USERNAME,
 } from '../libs/common/errors';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -40,6 +41,7 @@ const initialFormValues: SignUpForm = {
 };
 
 function SignUp(): JSX.Element {
+  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const navigation = useNavigation();
   const route = useRoute();
@@ -175,7 +177,6 @@ function SignUp(): JSX.Element {
   return (
     <KeyboardAvoidingView
       style={styles.scrollview}
-      keyboardVerticalOffset={10}
       {...(constants.platform === 'ios' ? {behavior: 'padding'} : {})}>
       <ScrollView
         style={styles.scrollview}
@@ -184,7 +185,7 @@ function SignUp(): JSX.Element {
         pagingEnabled
         scrollEnabled={false}
         ref={scrollRef}>
-        <View style={styles.screen}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <SignUpGenderTemplate
             form={form}
             onConfirm={handleGenderConfirm}
@@ -193,7 +194,7 @@ function SignUp(): JSX.Element {
           />
         </View>
 
-        <View style={styles.screen}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <SignUpNameTemplate
             form={form}
             focused={pageIndex === 1}
@@ -202,7 +203,7 @@ function SignUp(): JSX.Element {
           />
         </View>
 
-        <View style={styles.screen}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <SignUpPhoneNumberTemplate
             form={form}
             focused={pageIndex === 2}
@@ -211,7 +212,7 @@ function SignUp(): JSX.Element {
           />
         </View>
 
-        <View style={styles.screen}>
+        <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <SignUpCodeTemplate
             form={form}
             focused={pageIndex === 3}

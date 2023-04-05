@@ -49,7 +49,6 @@ export const Errors = (props: ErrorsProps): JSX.Element | null => {
 
 const styles = StyleSheet.create({
   root: {
-    marginTop: 4,
   },
   errorWrap: {
     marginBottom: 7,

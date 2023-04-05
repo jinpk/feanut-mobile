@@ -1,6 +1,11 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {SignUpTemplateProps} from '.';
 import {Button} from '../../components/button';
@@ -12,6 +17,19 @@ import {colors, constants, svgs} from '../../libs/common';
 
 export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
   const errorsBirth = props.form.formState.errors.birth?.message as string;
+  const birthRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (props.focused) {
+      let tm = setTimeout(() => {
+        birthRef.current?.focus();
+      }, 1000);
+      return () => {
+        clearTimeout(tm);
+      };
+    }
+  }, [props.focused]);
+
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
@@ -26,15 +44,15 @@ export const SignUpGenderTemplate = (props: SignUpTemplateProps) => {
         control={props.form.control}
         render={({field: {onChange, onBlur, value}}) => (
           <LargeInput
-            autoFocus
             value={value}
+            inputRef={birthRef}
             onChange={t => {
               onChange(t);
               props.form.clearErrors('birth');
             }}
             onBlur={onBlur}
             maxLength={8}
-            keyboardType="decimal-pad"
+            keyboardType="number-pad"
             placeholder={'YYYYMMDD'}
             mx={16}
             mt={14}

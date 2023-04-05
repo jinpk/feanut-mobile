@@ -37,7 +37,8 @@ export const SignUpModal = (props: SignUpModalProps) => {
             ID입니다.
             {'\n'}
             {'\n'}
-            지금 바로 가입하고{'\n'}친구들과 재미있는 투표를 진행하세요!
+            지금 바로 가입하고{'\n'}다양한 주제의 투표를 통해 친구 몰래{'\n'}
+            마음을 표현해 보세요!
           </Text>
           <Button onPress={props.onSignUp} title="가입하기" />
           <Terms {...props} />

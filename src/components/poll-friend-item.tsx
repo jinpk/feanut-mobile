@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   precent: {
     position: 'absolute',
     left: 0,
-    borderRadius: 35,
+    borderRadius: 32,
     bottom: 0,
     top: 0,
   },

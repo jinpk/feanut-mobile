@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {Button} from '../components/button';
 import {Gif} from '../components/image';
 import {Text} from '../components/text';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type FriendSyncTemplateProps = PropsWithChildren<{
   title: string;
@@ -12,9 +13,19 @@ type FriendSyncTemplateProps = PropsWithChildren<{
 }>;
 
 function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
+  const insets = useSafeAreaInsets();
   return (
     <View style={styles.root}>
-      <View style={styles.body}>
+      <View
+        style={[
+          styles.body,
+          {
+            paddingTop:
+              insets.top +
+              // topbar height
+              57,
+          },
+        ]}>
         <Gif source={props.icon} />
         <Text mt={14} size={18} weight="bold" align="center">
           {props.title}
@@ -35,6 +46,7 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
         onPress={props.onSyncContacts}
         title="연락처 동기화"
         mx={16}
+        mb={100 + insets.bottom}
       />
     </View>
   );
@@ -42,13 +54,11 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    paddingTop: 57,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
   },
   body: {
     alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
   },
 });

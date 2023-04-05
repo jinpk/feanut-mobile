@@ -36,7 +36,7 @@ export const SignUpCodeTemplate = (props: SignUpTemplateProps) => {
             autoFocus
             inputRef={codeRef}
             value={value}
-            keyboardType="decimal-pad"
+            keyboardType="number-pad"
             onChange={t => {
               onChange(t);
               props.form.clearErrors('code');

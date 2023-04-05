@@ -26,6 +26,7 @@ feanutAPI.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     } else if (error.response.status !== 401) {
+      console.log(error)
       const wrappedError: APIError = {
         ...error.response.data,
         status: error.response.status,

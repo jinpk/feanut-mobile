@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput as RNTextInput,
   TextInputFocusEventData,
+  ReturnKeyTypeOptions,
 } from 'react-native';
 import {colors, fonts} from '../../libs/common';
 
@@ -30,6 +31,8 @@ type LargeInputProps = {
   mr?: number;
 
   keyboardType?: KeyboardTypeOptions;
+  returnKeyType?: ReturnKeyTypeOptions;
+  onSubmitEditing?: () => void;
   maxLength?: number;
 
   autoFocus?: boolean;
@@ -44,6 +47,8 @@ export const LargeInput = (props: LargeInputProps): JSX.Element => {
       editable={props.disabled ? false : true}
       secureTextEntry={props.secureTextEntry}
       maxLength={props.maxLength}
+      returnKeyType={props.returnKeyType}
+      onSubmitEditing={props.onSubmitEditing}
       autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
       placeholderTextColor={colors.mediumGrey}
       style={[
@@ -61,7 +66,6 @@ export const LargeInput = (props: LargeInputProps): JSX.Element => {
       value={props.value}
       onChangeText={props.onChange}
       onBlur={props.onBlur}
-      returnKeyType="done"
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {RefObject, useCallback} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {Avatar} from '../components';
@@ -6,8 +6,11 @@ import {Text, TextMarker} from '../components/text';
 import {BackTopBar} from '../components/top-bar';
 import {colors, constants, svgs} from '../libs/common';
 import {Gender} from '../libs/interfaces';
+import ViewShot from 'react-native-view-shot';
 
 type FeanutCardTemplateProps = {
+  drawViewRef: RefObject<ViewShot>;
+
   onBack: () => void;
   onShare: () => void;
 
@@ -66,7 +69,10 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} logo />
       <View style={styles.body}>
-        <View style={styles.content}>
+        <ViewShot
+          ref={props.drawViewRef}
+          style={styles.content}
+          options={{format: 'jpg', quality: 0.7}}>
           <View style={styles.alignSelft}>
             <Avatar
               uri={props.uri}
@@ -234,7 +240,7 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
               </Text>
             </View>
           </View>
-        </View>
+        </ViewShot>
 
         <TouchableOpacity onPress={props.onShare} style={styles.share}>
           <WithLocalSvg
@@ -252,8 +258,9 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1,
     justifyContent: 'center',
+    paddingVertical: 40,
+    borderRadius: 20,
   },
   root: {
     flex: 1,
@@ -262,6 +269,7 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'stretch',
+    justifyContent: 'center',
   },
   stats: {
     flexDirection: 'row',
@@ -297,7 +305,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 55,
     paddingHorizontal: 43,
-    marginBottom: 70,
+    marginTop: 30,
   },
   shareIcon: {
     position: 'absolute',

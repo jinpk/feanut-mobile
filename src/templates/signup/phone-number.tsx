@@ -46,7 +46,7 @@ export const SignUpPhoneNumberTemplate = (props: SignUpTemplateProps) => {
               onChange(t);
               props.form.clearErrors('phoneNumber');
             }}
-            keyboardType="decimal-pad"
+            keyboardType="number-pad"
             onBlur={onBlur}
             maxLength={constants.phoneNumberMaxLength}
             placeholder={'01012345678'}

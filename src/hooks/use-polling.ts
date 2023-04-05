@@ -161,10 +161,9 @@ export function usePolling() {
           prev[curPollingIndex].title = polling.pollId.contentText;
           prev[curPollingIndex].emotion = polling.pollId.emotion;
           prev[curPollingIndex].emojiURI =
-            'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Beating%20Heart.png' ||
             configs.cdnBaseUrl +
-              '/' +
-              emojiIdMapper.current[polling.pollId.emojiId];
+            '/' +
+            emojiIdMapper.current[polling.pollId.emojiId];
           prev[curPollingIndex].friends = makeFriendItems(polling.friendIds);
           return [...prev];
         });

@@ -25,7 +25,6 @@ export function useInbox() {
       }));
       setQuery(prev => ({...prev, loading: false}));
     } catch (error: any) {
-      console.error(error);
       Alert.alert(error.message || error);
     }
   };
