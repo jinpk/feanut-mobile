@@ -93,7 +93,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
           />
         )}
         <Avatar
-          size={54}
+          size={ITEM_WIDTH * 0.3142}
           source={props.source}
           defaultLogo={
             props.gender === 'female'
@@ -122,9 +122,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    borderRadius: 35,
+    borderRadius: ITEM_WIDTH * 0.2,
     backgroundColor: colors.white,
-    padding: 8,
+    padding: ITEM_WIDTH * 0.0457,
     width: ITEM_WIDTH,
     height: ITEM_WIDTH * 0.4,
     flexDirection: 'row',
@@ -138,14 +138,15 @@ const styles = StyleSheet.create({
   precent: {
     position: 'absolute',
     left: 0,
-    borderRadius: 32,
+    borderRadius: ITEM_WIDTH * 0.1828,
     bottom: 0,
     top: 0,
   },
   unselectedWrapper: {
     position: 'absolute',
     left: 0,
-    borderRadius: 35,
+    borderRadius: ITEM_WIDTH * 0.1828,
+
     right: 0,
     top: 0,
     bottom: 0,

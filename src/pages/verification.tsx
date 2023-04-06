@@ -155,7 +155,8 @@ function Verification(): JSX.Element {
         setAPIAuthorization(token.accessToken);
         /** 로그인 완료시 자동 화면 이동됨. app.tsx */
         useUserStore.getState().actions.login(await getMe());
-        openGuideModal();
+        // 애니메이션 적용후 오픈
+        //openGuideModal();
       } else if (params.type === 'signin') {
         const token = await postSignIn(data);
         setCredentials(token);

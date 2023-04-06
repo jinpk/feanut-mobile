@@ -64,6 +64,7 @@ export function usePolling() {
 
   /** Emoji */
   const emojis = useEmojiStore(s => s.emojis);
+  const emojiInitialized = useEmojiStore(s => s.initialized);
   const emojiIdMapper = useRef<{[emojiId: string]: string}>({});
   useEffect(() => {
     emojiIdMapper.current = emojis.reduce((prev, cur) => {
@@ -72,11 +73,12 @@ export function usePolling() {
         [cur.id]: cur.key,
       };
     }, {});
-  }, [emojis]);
+  }, [emojis, emojiInitialized]);
 
   /** Fetch round */
   useEffect(() => {
-    if (state === 'loading') {
+    // 이모지 초기화 선행 필요.
+    if (state === 'loading' && emojiInitialized) {
       const fetchUserRound = async () => {
         try {
           const pollingRound = await postPollingRound();
@@ -129,7 +131,7 @@ export function usePolling() {
       };
       fetchUserRound();
     }
-  }, [state]);
+  }, [state, emojiInitialized]);
 
   /** Init */
   useEffect(() => {
@@ -256,6 +258,7 @@ export function usePolling() {
     try {
       const res = await postPollingRefresh(pollingId);
       setPollings(prev => {
+        prev[pollingIndex].selectedProfileId = undefined;
         prev[pollingIndex].friends = makeFriendItems(res.friendIds);
         return [...prev];
       });

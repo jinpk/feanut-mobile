@@ -6,40 +6,22 @@ import {useEmojiStore} from '../libs/stores';
 
 export function useInitEmoji() {
   const update = useEmojiStore(s => s.actions.update);
-  const push = useEmojiStore(s => s.actions.push);
+  const initialize = useEmojiStore(s => s.actions.initialize);
 
   useEffect(() => {
-    const fetchEmojis = (page: number, limit: number) => {
-      console.log('fetched emoji query: ', {page, limit});
-      getEmojis({
-        page,
-        limit,
-      })
-        .then(res => {
-          const uris = res.data.map(x => ({
-            uri: configs.cdnBaseUrl + '/' + x.key,
-          }));
+    getEmojis({
+      page: 1,
+      // 하드코딩
+      limit: 1000000000,
+    }).then(res => {
+      update(res.data);
+      initialize();
 
-          FastImage.preload(uris);
-
-          // set to store
-          if (page === 1) {
-            update(res.data);
-          } else {
-            push(res.data);
-          }
-
-          if (res.total > page * limit) {
-            let tm = setTimeout(() => {
-              clearTimeout(tm);
-              fetchEmojis(page + 1, limit);
-            }, 1000);
-          }
-        })
-        .catch(hi => {});
-    };
-
-    fetchEmojis(1, 10);
+      const uris = res.data.map(x => ({
+        uri: configs.cdnBaseUrl + '/' + x.key,
+      }));
+      FastImage.preload(uris);
+    });
   }, []);
   return [];
 }
