@@ -40,12 +40,15 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
-      <Text weight="bold" size={18} mt={15} mx={16}>
+      <Text weight="bold" size={18} mt={15} mx={16} mb={props.message ? 0 : 16}>
         {props.title}
       </Text>
-      <Text mt={30} mx={16}>
-        {props.message}
-      </Text>
+
+      {Boolean(props.message) && (
+        <Text mt={30} mx={16}>
+          {props.message}
+        </Text>
+      )}
 
       <Controller
         control={props.form.control}

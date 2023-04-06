@@ -109,7 +109,12 @@ function Friend() {
   );
 
   const handleItemPress = useCallback((friend: FriendI) => {
-    navigation.navigate(routes.feanutCard, {profileId: friend.profileId});
+    if (friend.profileId) {
+      navigation.navigate(routes.feanutCard, {
+        profileId: friend.profileId,
+        name: friend.name,
+      });
+    }
   }, []);
 
   const handleSyncContact = useCallback(() => {

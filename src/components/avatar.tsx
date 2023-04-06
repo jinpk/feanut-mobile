@@ -23,6 +23,9 @@ export function Avatar(props: AvatarProps): JSX.Element {
         <WithLocalSvg
           width={width}
           height={height}
+          {...(!props.defaultLogo && {
+            color: colors.darkGrey,
+          })}
           asset={
             !props.defaultLogo
               ? svgs.feanutDefault

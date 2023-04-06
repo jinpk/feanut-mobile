@@ -16,7 +16,7 @@ type FeanutCardTemplateProps = {
 
   name: string;
   statusMessage: string;
-  gender: Gender;
+  gender?: Gender;
   uri: string;
 
   friendsCount: number;
@@ -76,7 +76,13 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
           <View style={styles.alignSelft}>
             <Avatar
               uri={props.uri}
-              defaultLogo={props.gender === 'male' ? 'm' : 'w'}
+              defaultLogo={
+                props.gender === 'male'
+                  ? 'm'
+                  : props.gender === 'female'
+                  ? 'w'
+                  : undefined
+              }
               size={constants.screenWidth * 0.35}
             />
           </View>

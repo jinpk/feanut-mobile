@@ -20,7 +20,11 @@ function StartTemplate(props: StartTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.root, {paddingTop: insets.top}]}>
+    <View
+      style={[
+        styles.root,
+        {paddingTop: insets.top, paddingBottom: insets.bottom},
+      ]}>
       <StatusBar barStyle="dark-content" backgroundColor={'#fff'} />
 
       <View style={styles.body}>
@@ -36,21 +40,16 @@ function StartTemplate(props: StartTemplateProps): JSX.Element {
 
           <Gif source={gifs.wavingHand} style={styles.waving} />
         </View>
+      </View>
 
-        <View>
-          <Terms
-            onPrivacyTerm={props.onPrivacy}
-            onServiceTerm={props.onTerms}
-          />
-          <Button
-            mt={30}
-            onPress={props.onStart}
-            title={'휴대폰번호로 시작하기'}
-          />
-        </View>
+      <View style={styles.footer}>
+        <Terms onPrivacyTerm={props.onPrivacy} onServiceTerm={props.onTerms} />
+        <Button mt={30} onPress={props.onStart} title={'전화번호로 가입하기'} />
 
         <View style={styles.login}>
-          <Text size={12}>이미 feanut에 가입한적 있으신가요? </Text>
+          <Text size={12} color={colors.darkGrey}>
+            이미 feanut에 가입하셨나요?{' '}
+          </Text>
           <TextButton title="로그인하기" onPress={props.onLogin} />
         </View>
       </View>
@@ -68,13 +67,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 44,
   },
   header: {
     alignItems: 'center',
   },
   logo: {marginTop: 9},
   waving: {
-    marginTop: 50,
+    marginTop: 30,
   },
   body: {
     flex: 1,
@@ -82,6 +82,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   button: {},
+  footer: {
+    paddingHorizontal: 16,
+    paddingVertical: 48,
+  },
 });
 
 export default StartTemplate;

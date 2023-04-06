@@ -40,16 +40,16 @@
 		<string>instagram</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSContactsUsageDescription</key>
 	<string>회원님의 연락처의 친구를 읽어와서 서버에 암호화하여 저장하고 친구목록에 등록하기 위해 권한을 요청합니다</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>친구가 투표할 때 회원님을 알아볼 수 있도록 프로필을 설정하기 위해 권한을 요청합니다</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Pretendard-Regular.ttf</string>
 		<string>Pretendard-Bold.ttf</string>
 		<string>Pretendard-Medium.ttf</string>
+		<string>Pretendard-SemiBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -62,7 +62,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarStyle</key>
-	<string></string>
+	<string/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

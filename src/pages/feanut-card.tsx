@@ -24,8 +24,11 @@ function FeanutCard() {
   const navigation = useNavigation();
   const myProfileId = useProfileStore(s => s.profile.id);
   const {
-    params: {profileId},
-  } = useRoute<RouteProp<{FeanutCard: {profileId: string}}, 'FeanutCard'>>();
+    params: {profileId, name},
+  } =
+    useRoute<
+      RouteProp<{FeanutCard: {profileId: string; name?: string}}, 'FeanutCard'>
+    >();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [friendsCount, setFriendsCount] = useState(0);
@@ -86,7 +89,7 @@ function FeanutCard() {
         }
       });
 
-    // 투표수 조회
+    // 피넛카드 조회
     getFeanutCardByProfile(profileId)
       .then(card => {
         setFeanutCard(card);
@@ -129,13 +132,14 @@ function FeanutCard() {
     return <BackTopBar logo onBack={navigation.goBack} />;
   }
 
+
   return (
     <FeanutCardTemplate
       drawViewRef={drawViewRef}
       onBack={navigation.goBack}
       onShare={handleShare}
       gender={profile.gender}
-      name={profile.name}
+      name={profile.name || name || ''}
       statusMessage={profile.statusMessage}
       instagram={profile.instagram}
       uri={

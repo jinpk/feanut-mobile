@@ -129,7 +129,7 @@ function Profile(): JSX.Element {
 
   return (
     <View style={styles.root}>
-      <BackTopBar title={'프로필'} onBack={navigation.goBack} />
+      <BackTopBar logo onBack={navigation.goBack} />
       {Boolean(profile) && (
         <ProfileTemplate
           friendsCount={friendsCount}

@@ -3,9 +3,11 @@ import {StyleSheet, View} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
 import {Text} from '../components/text';
 import {colors} from '../libs/common';
+import {WithLocalSvg} from 'react-native-svg';
 
 type InformationProps = PropsWithChildren<{
   icon: Source | number;
+  iconIsSvg?: boolean;
   message: string;
   subMessage: string;
   markingText: string;
@@ -14,11 +16,16 @@ type InformationProps = PropsWithChildren<{
 export const Information = (props: InformationProps) => {
   return (
     <View style={styles.root}>
-      <FastImage
-        source={props.icon}
-        resizeMode={FastImage.resizeMode.contain}
-        style={styles.icon}
-      />
+      {props.iconIsSvg && (
+        <WithLocalSvg width={45} height={45} asset={props.icon as number} />
+      )}
+      {!props.iconIsSvg && (
+        <FastImage
+          source={props.icon}
+          resizeMode={FastImage.resizeMode.contain}
+          style={styles.icon}
+        />
+      )}
       <Text weight="bold" size={18} mt={15} align="center">
         {props.message}
       </Text>
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: '20%',
     backgroundColor: colors.yellow + '80',
-    transform: [{rotate: '-10deg'}],
+    transform: [{rotate: '-3deg'}],
     borderRadius: 12,
   },
 });

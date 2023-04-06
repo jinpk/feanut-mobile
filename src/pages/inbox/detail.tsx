@@ -1,22 +1,20 @@
-import {
-  Link,
-  RouteProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
-import {Alert, Linking} from 'react-native';
+import {Alert} from 'react-native';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
-import Share from 'react-native-share';
 import {routes} from '../../libs/common';
 import {APIError} from '../../libs/interfaces';
 import {
   POLLING_ERROR_ALREADY_DONE,
   POLLING_ERROR_LACK_COIN_AMOUNT,
 } from '../../libs/common/errors';
-import {useCoin} from '../../hooks';
+import {useCoin, useGetEmojiURI} from '../../hooks';
+import DrawedShareTemplate from '../../templates/inbox/drawed-share';
+import {useProfileStore} from '../../libs/stores';
+import {getMyProfile} from '../../libs/api/profile';
+import {configs} from '../../libs/common/configs';
 
 function InboxDetail() {
   const {
@@ -25,6 +23,19 @@ function InboxDetail() {
   const navigation = useNavigation();
   const [pull, setPull] = useState<PollingReceiveDetail | undefined>(undefined);
   const fetchAmount = useCoin().fetchAmount;
+  const [shareMode, setShareMode] = useState(false);
+
+  /** 공유하기 기능용 프로필 업데이트 */
+  const name = useProfileStore(s => s.profile.name);
+  const profileImageKey = useProfileStore(s => s.profile.profileImageKey);
+  const updateProfile = useProfileStore(s => s.actions.update);
+  useEffect(() => {
+    if (!name) {
+      getMyProfile().then(updateProfile);
+    }
+  }, [name]);
+
+  const pullEmojiURI = useGetEmojiURI(pull?.pollId?.emojiId);
 
   const fetchData = async (pollingId: string) => {
     try {
@@ -39,21 +50,7 @@ function InboxDetail() {
   }, [pollingId]);
 
   const handleShare = () => {
-    Share.open({
-      title: '친구가 나를 투표했어요!',
-      message: '친구가 나를 투표했어요!',
-      //url?: ;
-      //urls?: string[];
-      //type?: string;
-      subject: '친구가 나를 투표했어요!',
-      showAppsToView: true,
-      //filename?: string;
-      //saveToFiles?: boolean;
-      //activityItemSources?: ActivityItemSource[];
-      isNewTask: true,
-    })
-      .then(res => {})
-      .catch(err => {});
+    setShareMode(true);
   };
 
   const handleOnOpen = async (pollingId: string) => {
@@ -98,12 +95,31 @@ function InboxDetail() {
   };
 
   return (
-    <InboxDetailTemplate
-      onBack={navigation.goBack}
-      pull={pull}
-      onShare={handleShare}
-      onOpen={handleOpen}
-    />
+    <>
+      <InboxDetailTemplate
+        onBack={navigation.goBack}
+        pull={pull}
+        onShare={handleShare}
+        onOpen={handleOpen}
+      />
+      {shareMode && pull && (
+        <DrawedShareTemplate
+          name={name}
+          profileImage={
+            profileImageKey
+              ? configs.cdnBaseUrl + '/' + profileImageKey
+              : undefined
+          }
+          icon={pullEmojiURI}
+          emotion={pull.pollId.emotion}
+          title={pull.pollId.contentText}
+          completedAt={pull.completedAt}
+          onClose={() => {
+            setShareMode(false);
+          }}
+        />
+      )}
+    </>
   );
 }
 

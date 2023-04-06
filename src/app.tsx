@@ -21,6 +21,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import Start from './pages/start';
 import Verification from './pages/verification';
+import {GuideModal} from './modals/guide';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -106,7 +107,13 @@ function NavigationApp() {
             //              <Stack.Screen name={routes.login} component={Login} />
           }
           <Stack.Screen name={routes.signup} component={SignUp} />
-          <Stack.Screen name={routes.verification} component={Verification} />
+          <Stack.Screen
+            name={routes.verification}
+            component={Verification}
+            options={{
+              gestureEnabled: false,
+            }}
+          />
         </Stack.Navigator>
       )}
     </NavigationContainer>
@@ -118,6 +125,7 @@ function FeanutApp(props: AppProps): JSX.Element {
     <SafeAreaProvider>
       <NavigationApp />
       {/** Modals */}
+      <GuideModal />
       <WelcomeModal />
       <CoinModal />
     </SafeAreaProvider>

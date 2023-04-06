@@ -60,6 +60,10 @@ import coin50 from '../../assets/pngs/coin50.png';
 import coin100 from '../../assets/pngs/coin100.png';
 import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
+import deviceLayer from '../../assets/pngs/device-layer.png';
+import guide1 from '../../assets/pngs/guide-1.png';
+import guide2 from '../../assets/pngs/guide-2.png';
+
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
 
@@ -74,6 +78,17 @@ import feanutCardInspiration from '../../assets/svgs/feanut-card-inspiration.svg
 import feanutCardAwe from '../../assets/svgs/feanut-card-awe.svg';
 import feanutCardLove from '../../assets/svgs/feanut-card-love.svg';
 
+import pullHappiness from '../../assets/svgs/pull-joy.svg';
+import pullGratitude from '../../assets/svgs/pull-gratitude.svg';
+import pullSerenity from '../../assets/svgs/pull-serenity.svg';
+import pullInterest from '../../assets/svgs/pull-interest.svg';
+import pullHope from '../../assets/svgs/pull-hope.svg';
+import pullPride from '../../assets/svgs/pull-pride.svg';
+import pullAmusement from '../../assets/svgs/pull-amusement.svg';
+import pullInspiration from '../../assets/svgs/pull-inspiration.svg';
+import pullAwe from '../../assets/svgs/pull-awe.svg';
+import pullLove from '../../assets/svgs/pull-love.svg';
+
 import visitSNS from '../../assets/svgs/visit-sns.svg';
 
 export const svgs = {
@@ -87,6 +102,17 @@ export const svgs = {
   feanutCardInspiration,
   feanutCardAwe,
   feanutCardLove,
+
+  pullHappiness,
+  pullGratitude,
+  pullSerenity,
+  pullInterest,
+  pullHope,
+  pullPride,
+  pullAmusement,
+  pullInspiration,
+  pullAwe,
+  pullLove,
 
   visitSNS,
 
@@ -152,6 +178,9 @@ export const gifs = {
 
 export const pngs = {
   coin10,
+  deviceLayer,
+  guide1,
+  guide2,
   coin5,
   coin30,
   coin50,

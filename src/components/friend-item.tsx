@@ -1,5 +1,10 @@
 import React, {memo} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {configs} from '../libs/common/configs';
 import {Gender} from '../libs/interfaces';
 import {Avatar} from './avatar';
@@ -39,11 +44,12 @@ export const FriendItem = memo((props: FriendItemProps) => {
           />
         )}
       </TouchableOpacity>
-      <View style={styles.body}>
-        <TouchableOpacity onPress={props.onPress}>
+
+      <TouchableWithoutFeedback onPress={props.onPress}>
+        <View style={styles.body}>
           <Text>{props.name}</Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
 
       {Boolean(props.button) && (
         <BadgeButton

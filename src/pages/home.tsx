@@ -144,10 +144,8 @@ function Home(): JSX.Element {
             <FriendSyncTemplate
               onSyncContacts={handleSyncContacts}
               icon={gifs.teddyBear}
-              title={'친구를 추가하고\n다양한 투표를 경험해 보세요!'}
-              message={
-                '4명 이상의 친구가 있어야 참여할 수 있어요!\n연락처를 동기화하여 친구를 추가할 수 있습니다.'
-              }
+              title={'4명 이상의 친구가 있어야 참여할 수 있어요!'}
+              message={'연락처를 동기화하여 친구를 추가할 수 있습니다.'}
             />
           )}
           {polling.state === 'polling' && (

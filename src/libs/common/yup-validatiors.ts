@@ -12,7 +12,7 @@ export const yupValidators = {
 
   phoneNumber: yup
     .string()
-    .required('휴대폰번호를 입력해 주세요')
+    .required('전화번호를 입력해 주세요')
     .length(
       constants.phoneNumberMaxLength,
       `${constants.phoneNumberMaxLength}자리로 입력해 주세요`,

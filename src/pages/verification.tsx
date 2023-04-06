@@ -38,7 +38,7 @@ import {
   AUTH_ERROR_VERIFICATION_TIMEOUT,
 } from '../libs/common/errors';
 import {setAPIAuthorization} from '../libs/api';
-import {useUserStore} from '../libs/stores';
+import {useModalStore, useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
 
 const initialFormValues: PhoneNumberForm = {
@@ -55,11 +55,14 @@ function Verification(): JSX.Element {
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const navigation = useNavigation();
+
   const form = useForm<PhoneNumberForm>({
     defaultValues: initialFormValues,
   });
 
   const [pageIndex, setPageIndex] = useState(0);
+
+  const openGuideModal = useModalStore(s => s.actions.openGuide);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -121,11 +124,11 @@ function Verification(): JSX.Element {
         });
       } else if (apiError.code === AUTH_ERROR_EXIST_PHONE_NUMBER) {
         form.setError('phoneNumber', {
-          message: '이미 가입된 휴대폰번호 입니다.',
+          message: '이미 가입된 전화번호 입니다.',
         });
       } else if (apiError.code === AUTH_ERROR_NOT_FOUND_PHONE_NUMBER) {
         form.setError('phoneNumber', {
-          message: '가입되지 않은 휴대폰번호 입니다.',
+          message: '가입되지 않은 전화번호 입니다.',
         });
       } else {
         Alert.alert('인증번호 전송 오류', error.message || error);
@@ -152,6 +155,7 @@ function Verification(): JSX.Element {
         setAPIAuthorization(token.accessToken);
         /** 로그인 완료시 자동 화면 이동됨. app.tsx */
         useUserStore.getState().actions.login(await getMe());
+        openGuideModal();
       } else if (params.type === 'signin') {
         const token = await postSignIn(data);
         setCredentials(token);
@@ -181,15 +185,15 @@ function Verification(): JSX.Element {
 
   const title = useMemo(() => {
     if (params.type === 'signin') {
-      return '휴대폰번호 입력';
+      return '가입시 입력했던 전화번호를 입력해 주세요';
     }
 
-    return '휴대폰번호 입력해 주세요';
+    return '전화번호를 입력해 주세요';
   }, []);
 
   const message = useMemo(() => {
     if (params.type === 'signin') {
-      return '가입시 입력했던 휴대폰번호를 입력해 주세요';
+      return '';
     }
     return '친구가 이미 회원님을 투표했을 수도 있어요';
   }, [params.type]);

@@ -4,7 +4,7 @@ import {StyleProp, Text as RNText, TextStyle} from 'react-native';
 import {colors, fonts} from '../../libs/common';
 
 export type TextColorProps = string | undefined;
-export type TextSizeProps = 27 | 18 | 16 | 14 | 13 | 12 | 10 | undefined;
+export type TextSizeProps = 27 | 18 | 16 | 14 | 13 | 12 | 10 | undefined | number;
 
 type TextProps = PropsWithChildren<{
   color?: TextColorProps;
@@ -25,9 +25,9 @@ export const Text = (props: TextProps): JSX.Element => {
     if (props.weight === 'bold') {
       return fonts.pretendard.bold;
     } else if (props.weight === 'medium') {
-      return fonts.pretendard.medium;
+      return fonts.pretendard.semiBold;
     }
-    return fonts.pretendard.regular;
+    return fonts.pretendard.medium;
   }, [props.weight]);
 
   return (
