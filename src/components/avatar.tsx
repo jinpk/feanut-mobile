@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
 import {WithLocalSvg} from 'react-native-svg';
@@ -14,6 +14,10 @@ type AvatarProps = {
 
 export function Avatar(props: AvatarProps): JSX.Element {
   const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    setLoadError(false);
+  }, [props.source, props.uri]);
 
   const renderImage = useCallback(() => {
     if (loadError || (!props.source && !props.uri)) {
