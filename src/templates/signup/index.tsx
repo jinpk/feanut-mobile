@@ -3,7 +3,7 @@ import {Controller} from 'react-hook-form';
 import {
   StyleSheet,
   TextInput,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
@@ -81,7 +81,7 @@ function SignUpTemplate(props: SignUpTemplateProps) {
         control={props.form.control}
         render={({field: {onChange, value}}) => (
           <View style={styles.genders}>
-            <TouchableNativeFeedback
+            <TouchableWithoutFeedback
               onPress={() => {
                 onChange('female');
                 props.form.clearErrors('gender');
@@ -103,8 +103,8 @@ function SignUpTemplate(props: SignUpTemplateProps) {
                   여자
                 </Text>
               </View>
-            </TouchableNativeFeedback>
-            <TouchableNativeFeedback
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
               onPress={() => {
                 onChange('male');
                 props.form.clearErrors('gender');
@@ -125,7 +125,7 @@ function SignUpTemplate(props: SignUpTemplateProps) {
                   남자
                 </Text>
               </View>
-            </TouchableNativeFeedback>
+            </TouchableWithoutFeedback>
           </View>
         )}
         name="gender"

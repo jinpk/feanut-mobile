@@ -128,7 +128,14 @@ export function useSyncContacts() {
         }
       }
 
-      console.log('친구 동기화 성공: ', succeedCount, ', 실패: ', failedCount);
+      if (__DEV__) {
+        console.log(
+          '친구 동기화 성공: ',
+          succeedCount,
+          ', 실패: ',
+          failedCount,
+        );
+      }
     } catch (error: any) {
       Alert.alert('연락처 동기화 오류', error.message || error);
     }

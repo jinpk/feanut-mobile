@@ -111,6 +111,13 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
               padding: 75 * ratio,
               backgroundColor: emotionBackgorundColor[props.emotion],
             }}>
+            <WithLocalSvg
+              style={styles.figure}
+              asset={figure}
+              width={546 * ratio}
+              height={815 * ratio}
+            />
+
             <Text weight="medium" color={colors.white} size={25 * ratio}>
               {dayjs(props.completedAt).format('YYYY. MM. DD')}
             </Text>
@@ -220,12 +227,6 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
                 height={21 * ratio}
               />
             </View>
-            <WithLocalSvg
-              style={styles.figure}
-              asset={figure}
-              width={546 * ratio}
-              height={815 * ratio}
-            />
           </ViewShot>
         </Animated.View>
       </View>

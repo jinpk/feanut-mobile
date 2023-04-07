@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   Animated,
-  PanResponder,
   ScrollView,
   StyleSheet,
   useAnimatedValue,
@@ -30,8 +29,6 @@ type PollingsTemplateProps = {
   initialPollingIndex: number;
 };
 
-const GESTURE_X_WIDTH = 30;
-
 function PollingsTemplate(props: PollingsTemplateProps) {
   const scollRef = useRef<ScrollView>(null);
 
@@ -53,46 +50,7 @@ function PollingsTemplate(props: PollingsTemplateProps) {
       : false;
   }, [props.pollings, props.currentPollingIndex]);
 
-  const gestureX = useRef(0);
-  const slidePanResponder = PanResponder.create({
-    onPanResponderRelease: (evt, gestureState) => {
-      // 다음 투표로
-      if (gestureX.current < -GESTURE_X_WIDTH) {
-        // 친구선택후 다음투표로 이동 가능
-        if (!pollingRefStore.current.selected) {
-          Alert.alert('투표 알림', '질문을 건너뛰거나 친구를 투표해 주세요!');
-        } else {
-          // 투표 저장
-          handleCompleteVote();
-        }
-      }
-      // 이전 투표로
-      else if (gestureX.current > GESTURE_X_WIDTH) {
-        Alert.alert('투표 알림', '이미 진행한 투표로 되돌릴 수 없어요.');
-      }
-    },
-    onPanResponderGrant: (_, __) => {
-      gestureX.current = 0;
-    },
-    onPanResponderMove: (evt, gestureState) => {
-      gestureX.current = gestureState.dx;
-    },
-    onPanResponderTerminate: (evt, gestureState) => {
-      gestureX.current = 0;
-    },
-    onStartShouldSetPanResponderCapture: (_, __) => false,
-    onStartShouldSetPanResponder: (_, __) => true,
-    onMoveShouldSetPanResponder: (_, __) => true,
-    onMoveShouldSetPanResponderCapture: (_, __) => true,
-    onPanResponderTerminationRequest: (_, __) => true,
-    onShouldBlockNativeResponder: (_, __) => true,
-  });
-
   const [layoutInitedCount, setLayoutInitedCount] = useState(0);
-
-  const handleCompleteVote = () => {
-    props.onVote();
-  };
 
   // 폴링 index 스크롤 이동
   useEffect(() => {
@@ -133,7 +91,6 @@ function PollingsTemplate(props: PollingsTemplateProps) {
 
   useEffect(() => {
     if (layoutInitedCount === props.pollings.length) {
-      console.log('draw polling screen');
       scollRef.current?.scrollTo({
         animated: false,
         x: constants.screenWidth * props.initialPollingIndex,
@@ -153,14 +110,13 @@ function PollingsTemplate(props: PollingsTemplateProps) {
   }, [layoutInitedCount, props.pollings.length, props.initialPollingIndex]);
 
   return (
-    <Animated.View
-      {...slidePanResponder.panHandlers}
-      style={[styles.root, {opacity}]}>
+    <Animated.View style={[styles.root, {opacity}]}>
       <ScrollView
         horizontal
         ref={scollRef}
         pagingEnabled
         scrollEnabled={false}
+        removeClippedSubviews
         showsHorizontalScrollIndicator={false}>
         {props.pollings.map((x, i) => {
           return (
@@ -186,6 +142,18 @@ function PollingsTemplate(props: PollingsTemplateProps) {
                   }}
                   onShuffle={() => {
                     props.onShuffle(x.pollingId!);
+                  }}
+                  onNext={() => {
+                    // 친구선택후 다음투표로 이동 가능
+                    if (!pollingRefStore.current.selected) {
+                      Alert.alert(
+                        '투표 알림',
+                        '질문을 건너뛰거나 친구를 투표해 주세요!',
+                      );
+                    } else {
+                      // 투표 저장
+                      props.onVote();
+                    }
                   }}
                 />
               )}

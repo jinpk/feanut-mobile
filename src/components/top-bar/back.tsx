@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, svgs} from '../../libs/common';
@@ -23,7 +23,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
         {marginTop: insets.top},
         props.absolute && styles.rootAbsolute,
       ]}>
-      <TouchableNativeFeedback onPress={props.onBack}>
+      <TouchableWithoutFeedback onPress={props.onBack}>
         <View style={[styles.leftItem]}>
           <WithLocalSvg
             width={7}
@@ -32,7 +32,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
             color={props.absolute ? colors.white : colors.darkGrey}
           />
         </View>
-      </TouchableNativeFeedback>
+      </TouchableWithoutFeedback>
       <View>
         {props.logo && (
           <WithLocalSvg width={67.5} height={35} asset={svgs.logoWithLetter} />

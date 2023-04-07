@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingLeft: 55,
     paddingHorizontal: 43,
-    marginBottom: 50,
     marginRight: 16,
   },
   shareIcon: {

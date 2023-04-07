@@ -26,13 +26,15 @@ feanutAPI.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     } else if (error.response.status !== 401) {
-      console.log(error)
       const wrappedError: APIError = {
         ...error.response.data,
         status: error.response.status,
         method: error.response.config.method,
         path: error.response.config.url,
       };
+      if (__DEV__) {
+        console.error(wrappedError);
+      }
 
       if (!wrappedError.message) {
         wrappedError.message = '오류입니다.';
@@ -64,7 +66,9 @@ feanutAPI.interceptors.response.use(
 
       return feanutAPI(error.config);
     } catch (tokenError: any) {
-      console.log(tokenError);
+      if (__DEV__) {
+        console.log(tokenError);
+      }
       await useUserStore.getState().actions.logout();
       return Promise.reject(error);
     }

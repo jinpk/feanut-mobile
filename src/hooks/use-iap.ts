@@ -14,7 +14,7 @@ import {
 import {getMyCoin, postPurchaseCoin} from '../libs/api/coin';
 import {constants, pngs} from '../libs/common';
 import {APIError, CoinItem} from '../libs/interfaces';
-import {useCoinStore, useUserStore} from '../libs/stores';
+import {useCoinStore, useModalStore, useUserStore} from '../libs/stores';
 
 const data: CoinItem[] = [
   {
@@ -53,6 +53,8 @@ export function useIAP() {
   const userId = useUserStore(s => s.user?.id);
   const updateAmount = useCoinStore(s => s.actions.updateAmount);
   const setPending = useCoinStore(s => s.actions.setPending);
+  const closeCoin = useModalStore(s => s.actions.closeCoin);
+
   useEffect(() => {
     let purchaseUpdateSubscription: any = null;
     let purchaseErrorSubscription: any = null;
@@ -78,6 +80,7 @@ export function useIAP() {
 
             getMyCoin().then(result => {
               updateAmount(result.total);
+              closeCoin();
             });
           } else {
             finishTransaction({purchase, isConsumable: true});
@@ -119,7 +122,9 @@ export function useIAP() {
             }
           })
           .catch(error => {
-            console.error(error);
+            if (__DEV__) {
+              console.error(error);
+            }
           });
       });
 

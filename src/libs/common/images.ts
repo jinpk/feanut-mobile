@@ -28,17 +28,6 @@ import refresh from '../../assets/svgs/refresh.svg';
 
 import hatchingChick from '../../assets/gifs/hatching-chick.gif';
 
-import pollCardHappiness from '../../assets/svgs/poll-card-happiness.svg';
-import pollCardGratitude from '../../assets/svgs/poll-card-gratitude.svg';
-import pollCardSerenity from '../../assets/svgs/poll-card-serenity.svg';
-import pollCardInterest from '../../assets/svgs/poll-card-interest.svg';
-import pollCardHope from '../../assets/svgs/poll-card-hope.svg';
-import pollCardPride from '../../assets/svgs/poll-card-pride.svg';
-import pollCardAmusement from '../../assets/svgs/poll-card-amusement.svg';
-import pollCardInspiration from '../../assets/svgs/poll-card-inspiration.svg';
-import pollCardAwe from '../../assets/svgs/poll-card-awe.svg';
-import pollCardLove from '../../assets/svgs/poll-card-love.svg';
-
 import figureHappiness from '../../assets/svgs/figure-happiness.svg';
 import figureGratitude from '../../assets/svgs/figure-gratitude.svg';
 import figureSerenity from '../../assets/svgs/figure-serenity.svg';
@@ -136,18 +125,6 @@ export const svgs = {
   pencil,
   right,
   logoSimple,
-
-  // poll cards
-  pollCardHappiness,
-  pollCardGratitude,
-  pollCardSerenity,
-  pollCardInterest,
-  pollCardHope,
-  pollCardPride,
-  pollCardAmusement,
-  pollCardInspiration,
-  pollCardAwe,
-  pollCardLove,
 
   figureHappiness,
   figureGratitude,

@@ -20,9 +20,12 @@ function PhoneNumberCodeTemplate(props: PhoneNumberCodeTemplateProps) {
   const codeRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    if (props.focused) {
+    let tm = setTimeout(() => {
       codeRef.current?.focus();
-    }
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
   }, [props.focused]);
 
   return (

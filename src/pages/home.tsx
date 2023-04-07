@@ -67,6 +67,7 @@ function Home(): JSX.Element {
     }
   }, [focused, welcomModalOpened, polling.event, polling.state]);
 
+
   useEffect(() => {
     switch (polling.state) {
       case 'loading':

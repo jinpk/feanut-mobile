@@ -86,21 +86,23 @@ export const PollLayout = (props: PollLayoutProps) => {
   return (
     <View style={[styles.root, {backgroundColor: backgroundColor}]}>
       <Figure emotion={props.emotion} />
-      <View
-        style={[
-          styles.header,
-          {
-            marginTop: insets.top,
-          },
-        ]}>
-        <WithLocalSvg
-          width={67}
-          height={35}
-          color={pointColor}
-          asset={svgs.logoSimple}
-        />
+      <View style={styles.container}>
+        <View
+          style={[
+            styles.header,
+            {
+              marginTop: insets.top,
+            },
+          ]}>
+          <WithLocalSvg
+            width={67}
+            height={35}
+            color={pointColor}
+            asset={svgs.logoSimple}
+          />
+        </View>
+        {props.children}
       </View>
-      {props.children}
     </View>
   );
 };
@@ -108,6 +110,11 @@ export const PollLayout = (props: PollLayoutProps) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  container: {
+    flex: 1,
+    zIndex: 5,
+    elevation: 5,
   },
   header: {
     zIndex: 3,
@@ -120,11 +127,13 @@ const styles = StyleSheet.create({
   figureRightBottom: {
     position: 'absolute',
     zIndex: 1,
+    elevation: 1,
     bottom: 0,
     right: 0,
   },
   figureLeftBottom: {
     position: 'absolute',
+    elevation: 1,
     zIndex: 1,
     bottom: 0,
     left: 0,

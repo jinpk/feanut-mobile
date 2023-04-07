@@ -3,7 +3,7 @@ import {
   Animated,
   Easing,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   TouchableOpacity,
   useAnimatedValue,
   View,
@@ -28,14 +28,14 @@ function Switch(props: SwitchProps): JSX.Element {
   }, [props.value]);
 
   return (
-    <TouchableNativeFeedback
+    <TouchableWithoutFeedback
       onPress={() => {
         props.onChange(props.value ? false : true);
       }}>
       <View style={[styles.root, props.value && styles.rootOn]}>
         <Animated.View style={[styles.ball, {transform: [{translateX}]}]} />
       </View>
-    </TouchableNativeFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 

@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {Friend, GetFriendsRequest, PagenatedRequest} from '../interfaces';
+import {Friend, GetFriendsRequest} from '../interfaces';
 
 export interface FriendStore {
   friends: Friend[];
@@ -19,7 +19,7 @@ export interface FriendStore {
 const initialState = {
   friends: [],
   friendsTotalCount: 0,
-  query: {page: 1, limit: 10},
+  query: {page: 1, limit: 20},
   loading: false,
 };
 

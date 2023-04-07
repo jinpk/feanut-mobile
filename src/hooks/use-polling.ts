@@ -54,13 +54,19 @@ export function usePolling() {
   const [todayCount, setTodayCount] = useState(1);
 
   const [pollings, setPollings] = useState<InternalPolling[]>([]);
-  const [pollingIndex, setPollingIndex] = useState(0);
   const [initialIndex, setInitialIndex] = useState(0);
 
   const [roundEvent, setRoundEvent] = useState<RoundEvent | null>(null);
   const [remainTime, setRemainTime] = useState<number | null>(null);
 
   const [userRoundId, setUserRoundId] = useState<string | null>(null);
+
+  /** Polling Index */
+  const [pollingIndex, setPollingIndex] = useState(0);
+  const pollingIndexRef = useRef(0);
+  useEffect(() => {
+    pollingIndexRef.current = pollingIndex;
+  }, [pollingIndex]);
 
   /** Emoji */
   const emojis = useEmojiStore(s => s.emojis);
@@ -174,7 +180,9 @@ export function usePolling() {
           handlePolling(curPollingIndex + 1, false);
         }
       } catch (error: any) {
-        console.error(error, 'handlePolling');
+        if (__DEV__) {
+          console.error(error, 'handlePolling');
+        }
         Alert.alert(error.message || error);
       }
     };
@@ -206,8 +214,10 @@ export function usePolling() {
         setPollingIndex(prev => prev + 1);
       }
     } catch (error: any) {
-      console.error(error, 'handlePollingVote');
       const apiError = error as APIError;
+      if (__DEV__) {
+        console.error(apiError, 'handlePollingVote');
+      }
       if (apiError.code === POLLING_ERROR_ALREADY_DONE) {
         Alert.alert('이미 참여한 투표입니다.');
       } else if (apiError.code === POLLING_ERROR_EXCEED_SKIP) {
@@ -223,7 +233,7 @@ export function usePolling() {
   };
 
   const handleVote = async () => {
-    const poll = pollings[pollingIndex];
+    const poll = pollings[pollingIndexRef.current];
     if (!poll.pollingId) {
       Alert.alert('투표를 완료할 수 없습니다.');
     } else if (!poll.selectedProfileId) {
@@ -258,8 +268,8 @@ export function usePolling() {
     try {
       const res = await postPollingRefresh(pollingId);
       setPollings(prev => {
-        prev[pollingIndex].selectedProfileId = undefined;
-        prev[pollingIndex].friends = makeFriendItems(res.friendIds);
+        prev[pollingIndexRef.current].selectedProfileId = undefined;
+        prev[pollingIndexRef.current].friends = makeFriendItems(res.friendIds);
         return [...prev];
       });
     } catch (error: any) {

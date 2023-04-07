@@ -35,11 +35,13 @@ function Friend() {
   useEffect(() => {
     if (userId && loading) {
       let tm = setTimeout(() => {
-        console.log(
-          hiddeFriend ? 'hidden' : 'active',
-          'friends fetch :',
-          query,
-        );
+        if (__DEV__) {
+          console.log(
+            hiddeFriend ? 'hidden' : 'active',
+            'friends fetch :',
+            query,
+          );
+        }
         getFriends(userId, {...query, hidden: hiddeFriend ? '1' : '0'})
           .then(result => {
             if (query.page === 1) {
@@ -133,7 +135,7 @@ function Friend() {
     }
 
     if (friends.length < friendsTotalCount) {
-      setQuery({page: query.page + 1, limit: 10});
+      setQuery({page: query.page + 1, limit: 20});
       setLoading(true);
     }
   }, [loading, query, friends.length, friendsTotalCount]);
@@ -148,7 +150,7 @@ function Friend() {
   }, []);
 
   const handleKeyword = useCallback((keyword: string) => {
-    setQuery({page: 1, keyword: keyword || '', limit: 10});
+    setQuery({page: 1, keyword: keyword || '', limit: 20});
     setLoading(true);
   }, []);
 

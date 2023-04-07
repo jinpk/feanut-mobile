@@ -25,6 +25,12 @@ import {GuideModal} from './modals/guide';
 
 PushNotification.configure({
   onNotification: notification => {
+    if (constants.platform === 'android' && notification.foreground) {
+      if (notification['channelId'] !== 'feanut-android-notification-channel') {
+        return;
+      }
+    }
+
     const data = {
       action: notification.data.action as NotificationAction,
       value: notification.data.value,
@@ -58,6 +64,9 @@ function NavigationApp() {
         title: remoteMessage.notification?.title,
         message: remoteMessage.notification?.body as string,
         userInfo: remoteMessage.data,
+        ...(constants.platform === 'android' && {
+          channelId: 'feanut-android-notification-channel',
+        }),
       });
     });
     return () => {
@@ -77,7 +86,7 @@ function NavigationApp() {
           screenOptions={{
             headerShown: false,
             animation:
-              constants.platform === 'android' ? 'fade_from_bottom' : 'default',
+              constants.platform === 'android' ? 'slide_from_right' : 'default',
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />

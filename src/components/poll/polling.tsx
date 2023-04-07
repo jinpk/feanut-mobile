@@ -1,6 +1,7 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {
   GestureResponderEvent,
+  PanResponder,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -20,6 +21,8 @@ import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
 import {PollLayout} from './layout';
 
+const GESTURE_X_WIDTH = 30;
+
 type PollingProps = {
   emotion: emotions;
   title: string;
@@ -30,6 +33,8 @@ type PollingProps = {
   onSkip: () => void;
   onSelected: (value: string) => void;
   focused: boolean;
+
+  onNext: () => void;
 };
 
 export const Polling = (props: PollingProps) => {
@@ -43,9 +48,43 @@ export const Polling = (props: PollingProps) => {
     return emotionPointColor[props.emotion];
   }, [props.emotion]);
 
+  const gestureX = useRef(0);
+  const slidePanResponder = useRef(
+    PanResponder.create({
+      onPanResponderRelease: (evt, gestureState) => {
+        if (gestureX.current < -GESTURE_X_WIDTH) {
+          props.onNext();
+        }
+      },
+      onPanResponderGrant: (_, __) => {
+        gestureX.current = 0;
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        gestureX.current = gestureState.dx;
+      },
+      onPanResponderTerminate: (evt, gestureState) => {
+        gestureX.current = 0;
+      },
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return true;
+      },
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+        if (Math.abs(gestureState.dx) < GESTURE_X_WIDTH) {
+          evt.stopPropagation();
+          return false;
+        }
+        return true;
+      },
+      onPanResponderTerminationRequest: (_, __) => true,
+      onShouldBlockNativeResponder: (_, __) => true,
+    }),
+  ).current;
+
   return (
     <PollLayout emotion={props.emotion}>
-      <View style={styles.body}>
+      <View {...slidePanResponder.panHandlers} style={styles.body}>
         <View style={styles.titleArea}>
           <FastImage
             style={styles.icon}

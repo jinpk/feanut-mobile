@@ -6,6 +6,7 @@ buildscript {
         buildToolsVersion = "33.0.0"
         compileSdkVersion = 33
         targetSdkVersion = 33
+
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
         minSdkVersion = 24

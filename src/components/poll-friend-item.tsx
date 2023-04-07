@@ -27,6 +27,7 @@ type PollFriendItemProps = {
 };
 
 const ITEM_WIDTH = constants.screenWidth * 0.4452;
+const ITEM_HEIGHT = ITEM_WIDTH * 0.4;
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
@@ -54,8 +55,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
       percentWidth.setValue(0);
     } else {
       const percent = props.isPull ? 100 : 85;
-      percentWidth.setValue(70);
-      const toValue = ((ITEM_WIDTH - 70) / 100) * percent + 70;
+      percentWidth.setValue(ITEM_HEIGHT);
+      const toValue =
+        ((ITEM_WIDTH - ITEM_HEIGHT) / 100) * percent + ITEM_HEIGHT;
       Animated.timing(percentWidth, {
         useNativeDriver: false,
         duration: 500,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: ITEM_WIDTH * 0.0457,
     width: ITEM_WIDTH,
-    height: ITEM_WIDTH * 0.4,
+    height: ITEM_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
   },

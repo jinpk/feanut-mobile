@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleProp,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -31,7 +31,7 @@ export const Radios = (props: RadiosProps) => {
       {props.data.map((x, i) => {
         const selected = x.value === props.value;
         return (
-          <TouchableNativeFeedback
+          <TouchableWithoutFeedback
             onPress={() => {
               props.onChagne(x.value);
             }}
@@ -47,7 +47,7 @@ export const Radios = (props: RadiosProps) => {
                 {x.label}
               </Text>
             </View>
-          </TouchableNativeFeedback>
+          </TouchableWithoutFeedback>
         );
       })}
     </View>

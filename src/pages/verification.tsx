@@ -40,6 +40,7 @@ import {
 import {setAPIAuthorization} from '../libs/api';
 import {useModalStore, useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
+import {useHandleBack} from '../hooks';
 
 const initialFormValues: PhoneNumberForm = {
   phoneNumber: '',
@@ -61,13 +62,28 @@ function Verification(): JSX.Element {
   });
 
   const [pageIndex, setPageIndex] = useState(0);
+  const pageIndexRef = useRef(0);
+  useEffect(() => {
+    pageIndexRef.current = pageIndex;
+  }, [pageIndex]);
+  const handleBack = useCallback(() => {
+    switch (pageIndexRef.current) {
+      case 0:
+        navigation.goBack();
+        break;
+      default:
+        setPageIndex(pageIndexRef.current - 1);
+        break;
+    }
+  }, []);
+  useHandleBack(handleBack);
 
   const openGuideModal = useModalStore(s => s.actions.openGuide);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
       x: pageIndex * constants.screenWidth,
-      animated: true,
+      animated: constants.platform === 'ios',
     });
   }, [pageIndex]);
 
@@ -206,10 +222,12 @@ function Verification(): JSX.Element {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         horizontal
-        style={styles.scrollview}
         pagingEnabled
         scrollEnabled={false}
-        ref={scrollRef}>
+        style={styles.scrollview}
+        ref={scrollRef}
+        showsHorizontalScrollIndicator={false}
+        removeClippedSubviews>
         <View style={[styles.screen, {paddingBottom: insets.bottom}]}>
           <PhoneNumberTemplate
             form={form}
