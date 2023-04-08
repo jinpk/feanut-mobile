@@ -131,6 +131,7 @@ function Verification(): JSX.Element {
       }
 
       form.setValue('authId', response.authId);
+      form.setValue('code', '');
       setPageIndex(1);
     } catch (error: any) {
       const apiError = error as APIError;

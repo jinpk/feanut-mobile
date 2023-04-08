@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {constants, routes} from './libs/common';
+import {clearUser, constants, routes, setUser} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {CoinModal, WelcomeModal} from './modals';
@@ -22,6 +22,8 @@ import messaging from '@react-native-firebase/messaging';
 import Start from './pages/start';
 import Verification from './pages/verification';
 import {GuideModal} from './modals/guide';
+import NetInfo from '@react-native-community/netinfo';
+import {Alert} from 'react-native';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -56,6 +58,16 @@ function NavigationApp() {
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
 
+  // 로그인후 사용자 정보 받아오면 로컬 스토리지에 업데이트
+  const user = useUserStore(state => state.user);
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user]);
+
+  const internetConnected = useRef(false);
+
   useEffect(() => {
     checkLogin();
 
@@ -69,8 +81,22 @@ function NavigationApp() {
         }),
       });
     });
+
+    const unsubscribe2 = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        if (internetConnected.current) return;
+        Alert.alert('오프라인 상태입니다.', '인터넷에 연결을 확인해 주세요', [
+          {text: '확인'},
+        ]);
+        internetConnected.current = true;
+      } else {
+        internetConnected.current = false;
+      }
+    });
+
     return () => {
       unsubscribe();
+      unsubscribe2();
     };
   }, []);
 
@@ -110,11 +136,12 @@ function NavigationApp() {
       {!logged && (
         <Stack.Navigator
           initialRouteName={routes.start}
-          screenOptions={{headerShown: false}}>
+          screenOptions={{
+            headerShown: false,
+            animation:
+              constants.platform === 'android' ? 'slide_from_right' : 'default',
+          }}>
           <Stack.Screen name={routes.start} component={Start} />
-          {
-            //              <Stack.Screen name={routes.login} component={Login} />
-          }
           <Stack.Screen name={routes.signup} component={SignUp} />
           <Stack.Screen
             name={routes.verification}

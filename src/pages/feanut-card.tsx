@@ -19,6 +19,8 @@ import {useProfileStore} from '../libs/stores';
 import FeanutCardTemplate from '../templates/feanut-card';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
+import {View} from 'react-native';
+import {colors} from '../libs/common';
 
 function FeanutCard() {
   const navigation = useNavigation();
@@ -129,9 +131,12 @@ function FeanutCard() {
   }, [profileId, myProfileId, profile?.instagram, profile?.name]);
 
   if (!profile) {
-    return <BackTopBar logo onBack={navigation.goBack} />;
+    return (
+      <View style={{flex: 1, backgroundColor: colors.white}}>
+        <BackTopBar logo onBack={navigation.goBack} />
+      </View>
+    );
   }
-
 
   return (
     <FeanutCardTemplate

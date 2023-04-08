@@ -1,9 +1,14 @@
 import dayjs from 'dayjs';
 import {useCallback} from 'react';
-import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Information, PullItem} from '../../components';
-import {Gif} from '../../components/image';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
 import {colors, constants, gifs} from '../../libs/common';
@@ -98,19 +103,11 @@ function InboxTemplate(props: InboxTemplateProps) {
         getItemLayout={handleGetItemLayout}
         ListFooterComponent={
           props.data.length && props.loading ? (
-            <Gif
-              size={24}
-              source={gifs.dolphin}
-              style={[styles.loading, {bottom: insets.bottom + 5}]}
-            />
+            <ActivityIndicator color={colors.primary} />
           ) : undefined
         }
         refreshControl={
-          <RefreshControl
-            tintColor={colors.primary}
-            refreshing={false}
-            onRefresh={handleRefresh}
-          />
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
         }
         ListEmptyComponent={
           !props.loading ? (

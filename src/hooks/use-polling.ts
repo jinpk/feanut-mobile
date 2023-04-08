@@ -24,6 +24,7 @@ import {
   RoundEvent,
 } from '../libs/interfaces/polling';
 import {useEmojiStore, useUserStore} from '../libs/stores';
+import FastImage from 'react-native-fast-image';
 
 type PollingState =
   | 'loading' // 투표 조회중
@@ -85,7 +86,7 @@ export function usePolling() {
   useEffect(() => {
     // 이모지 초기화 선행 필요.
     if (state === 'loading' && emojiInitialized) {
-      const fetchUserRound = async () => {
+      const fetchUserRound = async (): Promise<PollingState | undefined> => {
         try {
           const pollingRound = await postPollingRound();
           setMaxDailyCount(pollingRound.maxDailyCount);
@@ -114,28 +115,47 @@ export function usePolling() {
             setInitialIndex(curPollingIndex);
             setPollingIndex(curPollingIndex);
             setPollings(initalPolls);
-            setState('polling');
+            return 'polling';
           } else {
             // 투표완료
             if (pollingRound.todayCount === pollingRound.maxDailyCount) {
               // 하루 최대 참여
-              setState('reach');
+              return 'reach';
             } else {
               // 시간 제한
-              setState('lock');
               setRemainTime(pollingRound.remainTime);
+              return 'lock';
             }
           }
         } catch (error: any) {
           const apiError = error as APIError;
           if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
-            setState('reject');
+            return 'reject';
           } else {
             Alert.alert(apiError.message);
           }
         }
       };
-      fetchUserRound();
+
+      let stateStore: PollingState;
+
+      fetchUserRound().then(state => {
+        if (state) {
+          stateStore = state;
+        } else {
+          // 오류 알림 처리 후 처리 필요하면
+        }
+      });
+
+      // 로딩 딜레이 1초
+      let tm = setInterval(() => {
+        if (stateStore) {
+          setState(stateStore);
+        }
+      }, 1500);
+      return () => {
+        clearInterval(tm);
+      };
     }
   }, [state, emojiInitialized]);
 
@@ -163,15 +183,26 @@ export function usePolling() {
           });
         }
 
+        const emojiURI =
+          configs.cdnBaseUrl +
+          '/' +
+          emojiIdMapper.current[polling.pollId.emojiId];
+
+        // 이모지 화면 그려지기전 preLoad
+        if (emojiURI) {
+          FastImage.preload([
+            {
+              uri: configs.cdnBaseUrl + '/',
+            },
+          ]);
+        }
+
         // 투표 셋팅
         setPollings(prev => {
           prev[curPollingIndex].pollingId = polling.id;
           prev[curPollingIndex].title = polling.pollId.contentText;
           prev[curPollingIndex].emotion = polling.pollId.emotion;
-          prev[curPollingIndex].emojiURI =
-            configs.cdnBaseUrl +
-            '/' +
-            emojiIdMapper.current[polling.pollId.emojiId];
+          prev[curPollingIndex].emojiURI = emojiURI;
           prev[curPollingIndex].friends = makeFriendItems(polling.friendIds);
           return [...prev];
         });
@@ -196,9 +227,9 @@ export function usePolling() {
   const handlePollingVote = async (
     pollingId: string,
     body: PostPollingVoteRequest,
-  ) => {
+  ): Promise<boolean> => {
     if (voting.current) {
-      return;
+      return false;
     }
     voting.current = true;
     try {
@@ -213,6 +244,7 @@ export function usePolling() {
       } else {
         setPollingIndex(prev => prev + 1);
       }
+      return true;
     } catch (error: any) {
       const apiError = error as APIError;
       if (__DEV__) {
@@ -228,21 +260,20 @@ export function usePolling() {
       } else {
         Alert.alert(error.message || error);
       }
+      return false;
+    } finally {
+      voting.current = false;
     }
-    voting.current = false;
   };
 
-  const handleVote = async () => {
+  const handleVote = async (): Promise<boolean> => {
     const poll = pollings[pollingIndexRef.current];
-    if (!poll.pollingId) {
-      Alert.alert('투표를 완료할 수 없습니다.');
-    } else if (!poll.selectedProfileId) {
-      Alert.alert('친구를 선택해 주세요.');
-    } else {
-      handlePollingVote(poll.pollingId!, {
+    if (poll.selectedProfileId) {
+      return handlePollingVote(poll.pollingId!, {
         selectedProfileId: poll.selectedProfileId,
       });
     }
+    return false;
   };
 
   const handleSkip = async (pollingId: string) => {

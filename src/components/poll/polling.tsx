@@ -1,10 +1,12 @@
-import React, {useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   GestureResponderEvent,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -12,6 +14,7 @@ import {WithLocalSvg} from 'react-native-svg';
 import {
   colors,
   constants,
+  emotionBackgorundColor,
   emotionPointColor,
   emotions,
   svgs,
@@ -19,11 +22,12 @@ import {
 import {PollingFriendItem} from '../../libs/interfaces/polling';
 import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
-import {PollLayout} from './layout';
-
-const GESTURE_X_WIDTH = 30;
+import {Feanut, Figure, PollLayout} from './layout';
+import {Animated} from 'react-native';
 
 type PollingProps = {
+  style?: ViewStyle;
+
   emotion: emotions;
   title: string;
   iconURI: string;
@@ -32,9 +36,11 @@ type PollingProps = {
   onShuffle: () => void;
   onSkip: () => void;
   onSelected: (value: string) => void;
+
+  readyToFocus: boolean;
   focused: boolean;
 
-  onNext: () => void;
+  onNext: () => Promise<boolean>;
 };
 
 export const Polling = (props: PollingProps) => {
@@ -43,48 +49,102 @@ export const Polling = (props: PollingProps) => {
     (friend: PollingFriendItem) => (e: GestureResponderEvent) => {
       props.onSelected(friend.value);
     };
-
   const pointColor = useMemo(() => {
     return emotionPointColor[props.emotion];
   }, [props.emotion]);
 
-  const gestureX = useRef(0);
-  const slidePanResponder = useRef(
+  const translateX = useRef(new Animated.Value(0)).current;
+  const translateXValue = useRef(0);
+
+  const isSelectedStore = useRef(false);
+  useEffect(() => {
+    isSelectedStore.current = props.selectedFriend ? true : false;
+  }, [props.selectedFriend]);
+  const panResponder = useRef(
     PanResponder.create({
-      onPanResponderRelease: (evt, gestureState) => {
-        if (gestureX.current < -GESTURE_X_WIDTH) {
-          props.onNext();
-        }
-      },
-      onPanResponderGrant: (_, __) => {
-        gestureX.current = 0;
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        gestureX.current = gestureState.dx;
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-        gestureX.current = 0;
-      },
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        return true;
-      },
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-        if (Math.abs(gestureState.dx) < GESTURE_X_WIDTH) {
-          evt.stopPropagation();
+      onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+        const {dx, dy} = gestureState;
+        // 10 이하 무조건 터치
+        if (Math.abs(dx) < 3 && Math.abs(dy) < 10) {
+          e.stopPropagation();
           return false;
         }
+
         return true;
       },
-      onPanResponderTerminationRequest: (_, __) => true,
-      onShouldBlockNativeResponder: (_, __) => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, {dx: translateX}], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: () => {
+        if (translateXValue.current < -(constants.screenWidth / 5)) {
+          Animated.spring(translateX, {
+            toValue: -(constants.screenWidth * 1.3),
+            useNativeDriver: true,
+          }).start();
+
+          props.onNext().then(result => {
+            if (!result) {
+              console.log('false');
+              Animated.spring(translateX, {
+                toValue: 0,
+                useNativeDriver: true,
+              }).start();
+            }
+          });
+        } else {
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
     }),
   ).current;
 
+  /*const scale = translateX.interpolate({
+    inputRange: [0, constants.screenWidth / 5],
+    outputRange: [1, 1.1],
+  });
+
+  const rotate = translateX.interpolate({
+    inputRange: [0, constants.screenWidth / 5],
+    outputRange: ['0deg', '-10deg'],
+  });*/
+
+  useEffect(() => {
+    const id = translateX.addListener(result => {
+      translateXValue.current = result.value;
+    });
+    return () => {
+      translateX.removeListener(id);
+    };
+  }, []);
+
+  const backgroundColor = useMemo(() => {
+    return emotionBackgorundColor[props.emotion];
+  }, [props.emotion]);
+
+  if (!props.focused && !props.readyToFocus) {
+    return null;
+  }
+
   return (
-    <PollLayout emotion={props.emotion}>
-      <View {...slidePanResponder.panHandlers} style={styles.body}>
+    <Animated.View
+      style={[
+        props.style,
+        {
+          backgroundColor,
+          transform: [
+            {translateX},
+            // {scale}, {rotate}
+          ],
+        },
+      ]}
+      {...panResponder.panHandlers}>
+      <Figure emotion={props.emotion} />
+      <Feanut emotion={props.emotion} />
+      <View style={styles.body}>
         <View style={styles.titleArea}>
           <FastImage
             style={styles.icon}
@@ -102,7 +162,7 @@ export const Polling = (props: PollingProps) => {
           </Text>
         </View>
         <View>
-          {(props.focused || props.selectedFriend) &&
+          {props.focused || props.selectedFriend ? (
             props.friends.map((x, i) => {
               return (
                 <PollFriendItem
@@ -116,30 +176,38 @@ export const Polling = (props: PollingProps) => {
                   mb={15}
                 />
               );
-            })}
+            })
+          ) : (
+            <ActivityIndicator color={colors.white} />
+          )}
         </View>
 
-        <View style={[styles.footer, {marginBottom: insets.bottom}]}>
-          <TouchableOpacity onPress={props.onSkip} style={styles.footerButton}>
-            <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
-            <Text ml={7} color={colors.white} size={12}>
-              투표 건너뛰기
-            </Text>
-          </TouchableOpacity>
+        {props.focused && (
+          <View style={[styles.footer, {marginBottom: insets.bottom}]}>
+            <TouchableOpacity
+              onPress={props.onSkip}
+              style={styles.footerButton}>
+              <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
+              <Text ml={7} color={colors.white} size={12}>
+                투표 건너뛰기
+              </Text>
+            </TouchableOpacity>
 
-          <View style={styles.footerDivider} />
+            <View style={styles.footerDivider} />
 
-          <TouchableOpacity
-            onPress={props.onShuffle}
-            style={styles.footerButton}>
-            <WithLocalSvg width={14} height={14} asset={svgs.refresh} />
-            <Text ml={7} color={colors.white} size={12}>
-              친구 다시찾기
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={props.onShuffle}
+              style={styles.footerButton}>
+              <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
+              <Text ml={7} color={colors.white} size={12}>
+                친구 다시찾기
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {!props.focused && <View />}
       </View>
-    </PollLayout>
+    </Animated.View>
   );
 };
 

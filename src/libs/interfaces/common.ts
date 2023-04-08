@@ -1,5 +1,5 @@
 export type Colors = {
-  [key: string]: string
+  [key: string]: string;
 };
 
 export type LocalImageResponse = {
@@ -14,6 +14,11 @@ export type QueryBoolean = '0' | '1';
 export interface PagenatedRequest {
   page: number;
   limit: number;
+}
+
+export interface OptionalPagingReqDto {
+  page?: number;
+  limit?: number;
 }
 
 export interface PagenatedResponse<T> {

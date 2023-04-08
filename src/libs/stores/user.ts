@@ -1,14 +1,12 @@
 import {create} from 'zustand';
 import {setAPIAuthorization} from '../api';
-import {getMe} from '../api/users';
 import {
   clearCredentials,
+  clearUser,
   getCredentials,
-  isTokenExpired,
-  setCredentials,
+  getUserFromStorage,
 } from '../common';
 import {NotificationData, TokenResponse, User} from '../interfaces';
-import {postToken} from '../api/auth';
 
 export interface UserStore {
   // 세션정보 조회중 상태
@@ -37,40 +35,28 @@ export const useUserStore = create<UserStore>((set, get) => ({
   actions: {
     check: async () => {
       try {
-        let credentials = await getCredentials();
-        if (!credentials) {
-          set({loading: false});
-        } else {
-          let token = credentials as TokenResponse;
-
-          // 토큰 만료 체크
-          if (isTokenExpired(token.accessToken)) {
-            console.log(
-              'access token expired. please reissue token by refresh token',
-            );
-            if (isTokenExpired(token.refreshToken)) {
-              throw new Error('refresh token expired. please login again');
-            }
-            token = await postToken({refreshToken: token.refreshToken});
-            console.log('successfully reissued token');
-            setCredentials(token);
-          }
-
-          // 로그인
+        const user = await getUserFromStorage();
+        const credentials = await getCredentials();
+        // 로컬 정보만 있으면 유효성 검사 없이 자동 로그인
+        // 토큰 인증은 axios interceptor에게 위임
+        if (user && credentials) {
+          const token = credentials as TokenResponse;
           setAPIAuthorization(token.accessToken);
-          get().actions.login(await getMe());
+          get().actions.login(user);
         }
-      } catch (error: any) {
-        console.error('Check credentials failed.', error);
-        clearCredentials();
-        set({loading: false});
+      } catch (error) {
+        await clearUser();
+        await clearCredentials();
       }
+
+      set({loading: false});
     },
     clearNotification: () => set({notification: undefined}),
     login: (user: User) => set({logged: true, user, loading: false}),
     logout: async () => {
       console.log('logout');
       await clearCredentials();
+      await clearUser();
       setAPIAuthorization('');
       set({logged: false, loading: false, user: null});
     },

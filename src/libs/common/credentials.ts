@@ -1,12 +1,45 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import dayjs from 'dayjs';
 import jwtDecode from 'jwt-decode';
-import {JWT} from '../interfaces';
+import {JWT, User} from '../interfaces';
 import {constants} from './constants';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+export const clearUser = async () => {
+  try {
+    await AsyncStorage.removeItem(constants.userStorageKey);
+    console.log('claer user');
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const setUser = async (user: User) => {
+  try {
+    await AsyncStorage.setItem(constants.userStorageKey, JSON.stringify(user));
+    console.log('set user');
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getUserFromStorage = async () => {
+  try {
+    let user = await AsyncStorage.getItem(constants.userStorageKey);
+
+    if (user != null) {
+      return JSON.parse(user) as User;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return null;
+};
 
 export const clearCredentials = async () => {
   try {

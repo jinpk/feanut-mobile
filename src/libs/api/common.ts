@@ -3,14 +3,14 @@ import {feanutAPI} from '.';
 import {
   Emoji,
   LocalImageResponse,
-  PagenatedRequest,
+  OptionalPagingReqDto,
   PagenatedResponse,
   PostFileRequest,
   PostFileResponse,
 } from '../interfaces';
 
 export const getEmojis = async (
-  params: PagenatedRequest,
+  params: OptionalPagingReqDto,
 ): Promise<PagenatedResponse<Emoji>> => {
   const res = await feanutAPI.get<PagenatedResponse<Emoji>>('/emojis', {
     params,

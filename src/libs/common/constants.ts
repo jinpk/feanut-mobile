@@ -11,6 +11,7 @@ export const constants = {
   phoneNumberMaxLength: 11,
 
   credentialsStorageKey: 'credentials',
+  userStorageKey: 'user',
 
   genders: [
     {label: '여자', value: 'female'},

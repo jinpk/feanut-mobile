@@ -1,22 +1,31 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
+  Animated,
   Dimensions,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
+  useAnimatedValue,
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
-import {colors, constants, gifs, routes} from '../libs/common';
+import {
+  colors,
+  constants,
+  emotionBackgorundColor,
+  gifs,
+  routes,
+} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
 import {usePolling} from '../hooks';
 import {LineIndicator} from '../components';
-import PollingsTemplate from '../templates/polling/pollings';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import {Polling} from '../components/poll';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -56,11 +65,14 @@ function Home(): JSX.Element {
       StatusBar.setBarStyle('dark-content');
       if (constants.platform === 'android') {
         StatusBar.setBackgroundColor('#fff');
+        // 안드로이드 기본 제공 navigation bar 컬러와 흰색 배경시 navigation font color 변경 안되고 있음.
+        changeNavigationBarColor(colors.white, true, true);
       }
     } else {
       StatusBar.setBarStyle('light-content');
       if (constants.platform === 'android') {
-        StatusBar.setBackgroundColor('#000');
+        StatusBar.setBackgroundColor(colors.dark);
+        changeNavigationBarColor(colors.dark, false, true);
       }
     }
   }, [focused, welcomModalOpened, polling.event, polling.state]);
@@ -95,10 +107,6 @@ function Home(): JSX.Element {
     });
   }, [tabIndex]);
 
-  const handleSyncContacts = useCallback(() => {
-    navigation.navigate(routes.friend);
-  }, []);
-
   const renderTopBar = useCallback(() => {
     const handleInboxPress = () => {
       navigation.navigate(routes.inbox);
@@ -118,78 +126,94 @@ function Home(): JSX.Element {
   }, [navigation, polling.state]);
 
   return (
-    <View style={styles.root}>
+    <Animated.View style={[styles.root]}>
       {renderTopBar()}
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        scrollEnabled={false}>
-        {/** Loading */}
-        <View style={styles.pollContainer}>
-          <LoadingTemplate label="투표 불러오는 중" />
-        </View>
-        <View style={styles.pollContainer}>
-          {polling.state === 'reject' && (
-            <FriendSyncTemplate
-              onSyncContacts={handleSyncContacts}
-              icon={gifs.teddyBear}
-              title={'연락처를 동기화하여 친구를 추가할 수 있어요!'}
-              message={
-                '투표에 참여하려면 4명 이상의 친구가 등록되어 있어야 합니다.'
-              }
-            />
-          )}
-          {polling.state === 'polling' && (
-            <View style={styles.polls}>
-              <PollingsTemplate
-                pollings={polling.pollings}
-                currentPollingIndex={polling.currentPollingIndex}
-                onVote={polling.vote}
-                onFriendSelected={polling.selectFriend}
-                onSkip={polling.skip}
-                onShuffle={polling.shuffle}
-                initialPollingIndex={polling.initialIndex}
+      {polling.state === 'polling' && (
+        <>
+          {polling.pollings.map((item, index) => {
+            const zIndex = polling.pollings.length - index;
+            return (
+              <Polling
+                key={index.toString()}
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  elevation: zIndex,
+                  zIndex,
+                }}
+                emotion={item.emotion!}
+                title={item.title!}
+                iconURI={item.emojiURI!}
+                friends={item.friends}
+                selectedFriend={item.selectedProfileId}
+                onNext={polling.vote}
+                onSelected={(selectedProfileId: string) => {
+                  polling.selectFriend(item.pollingId!, selectedProfileId);
+                }}
+                onSkip={() => {
+                  polling.skip(item.pollingId!);
+                }}
+                onShuffle={() => {
+                  polling.shuffle(item.pollingId!);
+                }}
+                focused={index === polling.currentPollingIndex}
+                readyToFocus={index === polling.currentPollingIndex + 1}
               />
-              <LineIndicator
-                length={polling.pollings.length}
-                index={polling.currentPollingIndex}
-              />
-            </View>
-          )}
-        </View>
-        <View style={styles.pollContainer}>
-          {((polling.state === 'lock' && polling.remainTime) ||
-            polling.state === 'reach') && (
-            <PollLockTemplate
-              maxDailyCount={polling.maxDailyCount}
-              todayCount={polling.todayCount}
-              remainTime={polling.remainTime || undefined}
-              isReached={polling.state === 'reach'}
-              onTimeout={() => {
-                polling.reInit();
-              }}
-            />
-          )}
-        </View>
-      </ScrollView>
+            );
+          })}
+          <LineIndicator
+            length={polling.pollings.length}
+            index={polling.currentPollingIndex}
+          />
+        </>
+      )}
+
+      {polling.state === 'loading' && (
+        <LoadingTemplate label="투표 불러오는 중" />
+      )}
+
+      {polling.state === 'reject' && (
+        <FriendSyncTemplate
+          onSyncContacts={() => {
+            navigation.navigate(routes.friend, {
+              autoSync: true,
+            });
+          }}
+          icon={gifs.teddyBear}
+          title={'연락처를 동기화하여 친구를 추가할 수 있어요!'}
+          message={
+            '투표에 참여하려면 4명 이상의 친구가 등록되어 있어야 합니다.'
+          }
+        />
+      )}
+
+      {((polling.state === 'lock' && polling.remainTime) ||
+        polling.state === 'reach') &&
+        // 이벤트 보여줄떄는 대기
+        !polling.event && (
+          <PollLockTemplate
+            maxDailyCount={polling.maxDailyCount}
+            todayCount={polling.todayCount}
+            remainTime={polling.remainTime || undefined}
+            isReached={polling.state === 'reach'}
+            onTimeout={() => {
+              polling.reInit();
+            }}
+          />
+        )}
 
       {polling.event && (
         <EventModalTemplate onClose={polling.clearEvent} {...polling.event} />
       )}
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: colors.white},
-  pollContainer: {
-    width: SCREEN_WIDTH,
-  },
-  polls: {
-    flex: 1,
-  },
 });
 
 export default Home;

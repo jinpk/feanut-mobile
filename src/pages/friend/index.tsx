@@ -14,7 +14,10 @@ import {FreidnsListTemplate} from '../../templates/friend';
 
 function Friend() {
   const navigation = useNavigation();
-  const {params} = useRoute<RouteProp<{Friend: {hidden: boolean}}, 'Friend'>>();
+  const {params} =
+    useRoute<
+      RouteProp<{Friend: {hidden: boolean; autoSync?: boolean}}, 'Friend'>
+    >();
 
   const hiddeFriend = params.hidden;
   const ueeStore = hiddeFriend ? useHiddenFriendStore : useFriendStore;
@@ -32,6 +35,15 @@ function Friend() {
   const loading = ueeStore(s => s.loading);
   const setLoading = ueeStore(s => s.actions.setLoading);
   const contact = useSyncContacts();
+
+  useEffect(() => {
+    if (params.autoSync) {
+      contact.syncContacts(() => {
+        setQuery({page: 1, limit: 20});
+        setLoading(true);
+      });
+    }
+  }, [params.autoSync]);
 
   useEffect(() => {
     if (userId && loading) {

@@ -1,11 +1,13 @@
-import {useEffect, useMemo} from 'react';
-import {Modal, StatusBar} from 'react-native';
+import {useEffect, useMemo, useRef} from 'react';
+import {Animated} from 'react-native';
 import {Information} from '../../components';
 import {Text} from '../../components/text';
 import {useCoin} from '../../hooks';
 import {configs} from '../../libs/common/configs';
 import {RoundEvent} from '../../libs/interfaces/polling';
 import {useEmojiStore} from '../../libs/stores';
+import {StyleSheet} from 'react-native';
+import {colors} from '../../libs/common';
 
 type EventModalTemplateProps = {
   onClose: () => void;
@@ -14,6 +16,9 @@ type EventModalTemplateProps = {
 function EventModalTemplate(props: EventModalTemplateProps) {
   const emojis = useEmojiStore(s => s.emojis);
   const coin = useCoin();
+
+  const opacity = useRef(new Animated.Value(0)).current;
+
   const emojiURI = useMemo(() => {
     const key = emojis.find(x => x.id === props.emojiId)?.key;
     if (key) {
@@ -22,19 +27,35 @@ function EventModalTemplate(props: EventModalTemplateProps) {
       return '';
     }
   }, [emojis]);
+
   useEffect(() => {
-    StatusBar.setBarStyle('dark-content');
-    let tm = setTimeout(() => {
-      StatusBar.setBarStyle('light-content');
-      props.onClose();
-    }, 3000);
-    return () => {
-      clearTimeout(tm);
-    };
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(result => {
+      if (!result.finished) {
+        opacity.setValue(1);
+      }
+      let tm = setTimeout(() => {
+        clearTimeout(tm);
+        // hide
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }).start(result => {
+          if (!result.finished) {
+            opacity.setValue(0);
+          }
+          props.onClose();
+        });
+      }, 5000);
+    });
   }, []);
 
   return (
-    <Modal visible onRequestClose={props.onClose} animationType="fade">
+    <Animated.View style={[styles.root, {opacity}]}>
       <Information
         icon={{uri: emojiURI}}
         message={props.message}
@@ -47,8 +68,20 @@ function EventModalTemplate(props: EventModalTemplateProps) {
           {coin.amount}
         </Text>
       </Information>
-    </Modal>
+    </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: colors.white,
+    zIndex: 10,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+});
 
 export default EventModalTemplate;

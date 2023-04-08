@@ -20,7 +20,7 @@ type FigureProps = {
   emotion: emotions;
 };
 
-const Figure = memo((props: FigureProps) => {
+export const Figure = memo((props: FigureProps) => {
   const svgProps: SVGProps = {
     asset: 0,
     style: {},
@@ -68,39 +68,48 @@ const Figure = memo((props: FigureProps) => {
   );
 });
 
-type PollLayoutProps = PropsWithChildren<{
+type FeanutProps = {
   emotion: emotions;
-}>;
+};
 
-export const PollLayout = (props: PollLayoutProps) => {
+export const Feanut = memo((props: FeanutProps) => {
   const insets = useSafeAreaInsets();
-
-  const backgroundColor = useMemo(() => {
-    return emotionBackgorundColor[props.emotion];
-  }, [props.emotion]);
-
   const pointColor = useMemo(() => {
     return emotionPointColor[props.emotion];
   }, [props.emotion]);
 
   return (
-    <View style={[styles.root, {backgroundColor: backgroundColor}]}>
+    <View
+      style={[
+        styles.header,
+        {
+          marginTop: insets.top,
+        },
+      ]}>
+      <WithLocalSvg
+        width={67}
+        height={35}
+        color={pointColor}
+        asset={svgs.logoSimple}
+      />
+    </View>
+  );
+});
+
+type PollLayoutProps = PropsWithChildren<{
+  emotion: emotions;
+}>;
+
+export const PollLayout = (props: PollLayoutProps) => {
+  const backgroundColor = useMemo(() => {
+    return emotionBackgorundColor[props.emotion];
+  }, [props.emotion]);
+
+  return (
+    <View style={[styles.root, {backgroundColor}]}>
       <Figure emotion={props.emotion} />
       <View style={styles.container}>
-        <View
-          style={[
-            styles.header,
-            {
-              marginTop: insets.top,
-            },
-          ]}>
-          <WithLocalSvg
-            width={67}
-            height={35}
-            color={pointColor}
-            asset={svgs.logoSimple}
-          />
-        </View>
+        <Feanut emotion={props.emotion} />
         {props.children}
       </View>
     </View>

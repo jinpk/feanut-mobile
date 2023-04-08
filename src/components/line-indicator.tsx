@@ -48,7 +48,7 @@ export const LineIndicator = (props: PollIndicatorProps): JSX.Element => {
 
 const styles = StyleSheet.create({
   indicator: {
-    zIndex: 2,
+    zIndex: 50,
     left: 16,
     right: 16,
     backgroundColor: colors.lightGrey + '59',
