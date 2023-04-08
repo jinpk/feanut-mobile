@@ -1,5 +1,5 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
@@ -25,6 +25,7 @@ function Friend() {
   const query = ueeStore(s => s.query);
   const setQuery = ueeStore(s => s.actions.setQuery);
   const update = ueeStore(s => s.actions.update);
+  const removedCount = ueeStore(s => s.removedCount);
   const updateHidden = ueeStore(s => s.actions.updateHidden);
   const userId = useUserStore(s => s.user?.id);
   const add = ueeStore(s => s.actions.add);
@@ -124,7 +125,7 @@ function Friend() {
       return;
     }
     contact.syncContacts(() => {
-      setQuery(1);
+      setQuery({page: 1, limit: 20});
       setLoading(true);
     });
   }, [contact]);
@@ -134,11 +135,15 @@ function Friend() {
       return;
     }
 
+    // 아이템 없어지면 리스트 최신화 필요
     if (friends.length < friendsTotalCount) {
-      setQuery({page: query.page + 1, limit: 20});
+      setQuery({
+        page: query.page + 1 - Math.ceil(removedCount / 20),
+        limit: 20,
+      });
       setLoading(true);
     }
-  }, [loading, query, friends.length, friendsTotalCount]);
+  }, [loading, query, friends.length, friendsTotalCount, removedCount]);
 
   const handleHiddenFriend = useCallback(() => {
     navigation.navigate(routes.friendHidden);
@@ -169,6 +174,7 @@ function Friend() {
       onRefresh={handleRefresh}
       onKeyword={handleKeyword}
       keyword={query.keyword || ''}
+      synchronizing={contact.loading}
     />
   );
 }

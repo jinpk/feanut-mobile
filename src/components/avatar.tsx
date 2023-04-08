@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import FastImage, {Source} from 'react-native-fast-image';
-import {WithLocalSvg} from 'react-native-svg';
-import {colors, svgs} from '../libs/common';
+import {colors, pngs} from '../libs/common';
 import {FeanutImageGender} from '../libs/interfaces';
 
 type AvatarProps = {
@@ -24,18 +23,15 @@ export function Avatar(props: AvatarProps): JSX.Element {
       const width = (props.size || 55) * 0.55;
       const height = width / 2;
       return (
-        <WithLocalSvg
-          width={width}
-          height={height}
-          {...(!props.defaultLogo && {
-            color: colors.darkGrey,
-          })}
-          asset={
-            !props.defaultLogo
-              ? svgs.feanutDefault
-              : props.defaultLogo === 'm'
-              ? svgs.feanutBlue
-              : svgs.feanutYellow
+        <Image
+          style={{width, height}}
+          resizeMode="contain"
+          source={
+            props.defaultLogo === 'm'
+              ? pngs.feanutBlue
+              : props.defaultLogo === 'w'
+              ? pngs.feanutYellow
+              : pngs.feanutDarkGrey
           }
         />
       );

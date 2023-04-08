@@ -9,12 +9,12 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {Divider, FriendItem} from '../../components';
-import {Gif} from '../../components/image';
 import {SearchInput} from '../../components/input';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, gifs, svgs} from '../../libs/common';
+import {colors, svgs} from '../../libs/common';
 import {Friend} from '../../libs/interfaces';
+import {ActivityIndicator} from 'react-native';
 
 type FreidnsListTemplateProps = {
   onBack: () => void;
@@ -30,6 +30,8 @@ type FreidnsListTemplateProps = {
   loading: boolean;
   onKeyword: (text: string) => void;
   keyword: string;
+
+  synchronizing: boolean;
 };
 
 export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
@@ -73,6 +75,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
               name="연락처 동기화"
               button="동기화"
               buttonColor={colors.blue}
+              buttonLoading={props.synchronizing}
               onButtonPress={props.onSyncContact}
               icon={
                 <View style={styles.sync}>
@@ -88,7 +91,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         )}
       </View>
     );
-  }, [props.hiddenFriend]);
+  }, [props.hiddenFriend, props.synchronizing]);
 
   const handleKeyExtractor = useCallback((item: Friend, index: number) => {
     return index.toString();
@@ -168,19 +171,11 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         getItemLayout={handleGetItemLayout}
         ListFooterComponent={
           props.data.length && props.loading ? (
-            <Gif
-              size={24}
-              source={gifs.dolphin}
-              style={[styles.loading, {bottom: insets.bottom + 5}]}
-            />
+            <ActivityIndicator color={colors.primary} />
           ) : undefined
         }
         refreshControl={
-          <RefreshControl
-            tintColor={colors.primary}
-            refreshing={false}
-            onRefresh={handleRefresh}
-          />
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
         }
       />
     </View>

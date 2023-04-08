@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
 import {
+  ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -17,6 +18,7 @@ type FriendItemProps = {
   profileImageKey?: string;
   button?: string;
   buttonColor?: string;
+  buttonLoading?: boolean;
   icon?: JSX.Element;
 
   onButtonPress?: () => void;
@@ -26,7 +28,7 @@ type FriendItemProps = {
 export const FriendItem = memo((props: FriendItemProps) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity onPress={props.onPress}>
+      <TouchableOpacity onPress={props.onPress} disabled={!props.onPress}>
         {props.icon || (
           <Avatar
             size={42}
@@ -45,20 +47,27 @@ export const FriendItem = memo((props: FriendItemProps) => {
         )}
       </TouchableOpacity>
 
-      <TouchableWithoutFeedback onPress={props.onPress}>
+      <TouchableWithoutFeedback
+        onPress={props.onPress}
+        disabled={!props.onPress}>
         <View style={styles.body}>
           <Text>{props.name}</Text>
         </View>
       </TouchableWithoutFeedback>
 
-      {Boolean(props.button) && (
-        <BadgeButton
-          alignSelf="center"
-          fontColor={props.buttonColor}
-          title={props.button!}
-          onPress={props.onButtonPress}
-        />
-      )}
+      {Boolean(props.button) &&
+        (props.buttonLoading ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator color={props.buttonColor} />
+          </View>
+        ) : (
+          <BadgeButton
+            alignSelf="center"
+            fontColor={props.buttonColor}
+            title={props.button!}
+            onPress={props.onButtonPress}
+          />
+        ))}
     </View>
   );
 });
@@ -76,5 +85,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 15,
     alignItems: 'flex-start',
+  },
+  loadingWrap: {
+    width: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

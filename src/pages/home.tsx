@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
-  Alert,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -13,7 +12,7 @@ import {colors, constants, gifs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
-import {usePolling, useSyncContacts} from '../hooks';
+import {usePolling} from '../hooks';
 import {LineIndicator} from '../components';
 import PollingsTemplate from '../templates/polling/pollings';
 import EventModalTemplate from '../templates/polling/event-modal';
@@ -26,7 +25,6 @@ function Home(): JSX.Element {
   const focused = useIsFocused();
 
   const polling = usePolling();
-  const syncContacts = useSyncContacts();
 
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -67,7 +65,6 @@ function Home(): JSX.Element {
     }
   }, [focused, welcomModalOpened, polling.event, polling.state]);
 
-
   useEffect(() => {
     switch (polling.state) {
       case 'loading':
@@ -84,11 +81,12 @@ function Home(): JSX.Element {
     }
   }, [polling.state]);
 
+  /** 친구 화면에서 동기화하여 친구 4명 이상되면 라운드 조회 */
   useEffect(() => {
-    if (focused && polling.state === 'reject' && friendsTotalCount >= 4) {
+    if (polling.state === 'reject' && friendsTotalCount >= 4) {
       polling.reInit();
     }
-  }, [focused, polling.state, friendsTotalCount]);
+  }, [polling.state, friendsTotalCount]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -98,16 +96,8 @@ function Home(): JSX.Element {
   }, [tabIndex]);
 
   const handleSyncContacts = useCallback(() => {
-    if (syncContacts.loading) {
-      return Alert.alert(
-        '연락처 동기화중 ...',
-        'feanut이 회원님의 연락처를 읽어와 친구로 추가하고 있으니 잠시만 기다려주세요.',
-      );
-    }
-    syncContacts.syncContacts(() => {
-      polling.reInit();
-    });
-  }, [syncContacts, polling.reInit]);
+    navigation.navigate(routes.friend);
+  }, []);
 
   const renderTopBar = useCallback(() => {
     const handleInboxPress = () => {
@@ -145,8 +135,10 @@ function Home(): JSX.Element {
             <FriendSyncTemplate
               onSyncContacts={handleSyncContacts}
               icon={gifs.teddyBear}
-              title={'4명 이상의 친구가 있어야 참여할 수 있어요!'}
-              message={'연락처를 동기화하여 친구를 추가할 수 있습니다.'}
+              title={'연락처를 동기화하여 친구를 추가할 수 있어요!'}
+              message={
+                '투표에 참여하려면 4명 이상의 친구가 등록되어 있어야 합니다.'
+              }
             />
           )}
           {polling.state === 'polling' && (

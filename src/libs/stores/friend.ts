@@ -5,6 +5,7 @@ export interface FriendStore {
   friends: Friend[];
   friendsTotalCount: number;
   query: GetFriendsRequest;
+  removedCount: number;
   loading: boolean;
   actions: {
     update: (friends: Friend[], friendsTotalCount: number) => void;
@@ -21,6 +22,7 @@ const initialState = {
   friendsTotalCount: 0,
   query: {page: 1, limit: 20},
   loading: false,
+  removedCount: 0,
 };
 
 const getFriendStore = () => {
@@ -43,18 +45,20 @@ const getFriendStore = () => {
         set({...initialState});
       },
       update: (friends: Friend[], friendsTotalCount: number) => {
-        set({friends, friendsTotalCount});
+        set({friends, friendsTotalCount, removedCount: 0});
       },
       updateHidden: (profileId: string, hidden: boolean) => {
         const friends = get().friends;
         const friendsTotalCount = get().friendsTotalCount;
+        const removedCount = get().removedCount;
         set({
           friends: [...friends.filter(x => x.profileId !== profileId)],
           friendsTotalCount: friendsTotalCount - 1,
+          removedCount: removedCount + 1,
         });
       },
       add: (friends: Friend[]) => {
-        set({friends: [...get().friends, ...friends]});
+        set({friends: [...get().friends, ...friends], removedCount: 0});
       },
     },
   }));

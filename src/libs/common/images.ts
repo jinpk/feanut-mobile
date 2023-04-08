@@ -53,6 +53,10 @@ import deviceLayer from '../../assets/pngs/device-layer.png';
 import guide1 from '../../assets/pngs/guide-1.png';
 import guide2 from '../../assets/pngs/guide-2.png';
 
+import feanutYellowPNG from '../../assets/pngs/feanut-yellow.png';
+import feanutBluePNG from '../../assets/pngs/feanut-blue.png';
+import feanutDarkGreyPNG from '../../assets/pngs/feanut-dark-grey.png';
+
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
 
@@ -160,6 +164,9 @@ export const pngs = {
   guide2,
   coin5,
   coin30,
+  feanutYellow: feanutYellowPNG,
+  feanutBlue: feanutBluePNG,
+  feanutDarkGrey: feanutDarkGreyPNG,
   coin50,
   magnifyingglass,
   coin100,

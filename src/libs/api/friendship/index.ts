@@ -6,6 +6,8 @@ import {
   Friend,
   PagenatedResponse,
   PatchFriendHiddenRequest,
+  AddFriendManyRequest,
+  AddFriendManyResponse,
 } from '../../interfaces';
 
 export const patchFriendHidden = async (
@@ -62,5 +64,16 @@ export const postFriend = async (
   data: AddFriendRequest,
 ): Promise<boolean> => {
   const res = await feanutAPI.post(`/friendships/${userId}/friends`, data);
+  return res.data;
+};
+
+export const postFriendsMany = async (
+  userId: string,
+  data: AddFriendManyRequest,
+): Promise<AddFriendManyResponse> => {
+  const res = await feanutAPI.post<AddFriendManyResponse>(
+    `/friendships/${userId}/friends/many`,
+    data,
+  );
   return res.data;
 };

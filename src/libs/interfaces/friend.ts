@@ -30,3 +30,18 @@ export interface FriendshipStatus {
 }
 
 export interface AddFriendRequest extends AddFriend {}
+
+interface InvalidContact {
+  displayName: string;
+  givenName: string;
+  familyName: string;
+  middleName: string;
+  phoneNumbers: string[];
+}
+
+export interface AddFriendManyRequest {
+  contacts: AddFriend[];
+  invalidContacts: InvalidContact[];
+}
+
+export interface AddFriendManyResponse {}
