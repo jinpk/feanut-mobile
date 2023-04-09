@@ -16,6 +16,7 @@ import {PollingReceiveItem} from '../../libs/interfaces/polling';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {configs} from '../../libs/common/configs';
+import {getObjectURLByKey} from '../../libs/common/file';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,7 +61,7 @@ function InboxTemplate(props: InboxTemplateProps) {
         <PullItem
           source={
             item.imageFileKey
-              ? {uri: configs.cdnBaseUrl + '/' + item.imageFileKey}
+              ? {uri: getObjectURLByKey(item.imageFileKey, '70')}
               : undefined
           }
           onPress={() => {

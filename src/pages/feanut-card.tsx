@@ -21,6 +21,7 @@ import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 import {View} from 'react-native';
 import {colors} from '../libs/common';
+import {getObjectURLByKey} from '../libs/common/file';
 
 function FeanutCard() {
   const navigation = useNavigation();
@@ -155,11 +156,7 @@ function FeanutCard() {
       name={profile.name || name || ''}
       statusMessage={profile.statusMessage}
       instagram={profile.instagram}
-      uri={
-        profile.profileImageKey
-          ? configs.cdnBaseUrl + '/' + profile.profileImageKey
-          : ''
-      }
+      uri={getObjectURLByKey(profile.profileImageKey, '150')}
       me={profileId === myProfileId}
       friendsCount={friendsCount}
       {...pollingStats}

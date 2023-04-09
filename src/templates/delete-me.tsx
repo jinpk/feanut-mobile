@@ -8,6 +8,7 @@ import {BackTopBar} from '../components/top-bar';
 import {colors} from '../libs/common';
 import {configs} from '../libs/common/configs';
 import {useProfileStore} from '../libs/stores';
+import {getObjectURLByKey} from '../libs/common/file';
 
 type DeleteMeTemplateProps = {
   reason: string;
@@ -28,7 +29,7 @@ function DeleteMeTemplate(props: DeleteMeTemplateProps) {
         <Avatar
           size={100}
           defaultLogo={gender === 'male' ? 'm' : 'w'}
-          uri={profileImageKey && configs.cdnBaseUrl + '/' + profileImageKey}
+          uri={getObjectURLByKey(profileImageKey, '150')}
         />
         <Text mt={24} weight="bold" size={18} align="center">
           강호님, feanut 계정을 정말{'\n'}

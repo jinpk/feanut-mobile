@@ -12,6 +12,7 @@ import {colors, svgs} from '../../libs/common';
 import {Profile} from '../../libs/interfaces';
 import DeviceInfo from 'react-native-device-info';
 import {configs} from '../../libs/common/configs';
+import {getObjectURLByKey} from '../../libs/common/file';
 
 type ProfileTemplateProps = {
   profile: Profile;
@@ -46,10 +47,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         <Avatar
           size={100}
           defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
-          uri={
-            props.profile.profileImageKey &&
-            configs.cdnBaseUrl + '/' + props.profile.profileImageKey
-          }
+          uri={getObjectURLByKey(props.profile.profileImageKey, '150')}
         />
 
         <View style={styles.profileContent}>

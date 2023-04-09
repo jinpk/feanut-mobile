@@ -25,6 +25,7 @@ import {
 } from '../libs/interfaces/polling';
 import {useEmojiStore, useUserStore} from '../libs/stores';
 import FastImage from 'react-native-fast-image';
+import {getObjectURLByKey} from '../libs/common/file';
 
 type PollingState =
   | 'loading' // 투표 조회중
@@ -39,7 +40,7 @@ const makeFriendItems = (friend: PollingFriend[]): PollingFriendItem[] => {
       gender: i % 2 === 0 ? 'male' : 'female',
       value: x.profileId,
       source: x.imageFileKey
-        ? {uri: configs.cdnBaseUrl + '/' + x.imageFileKey}
+        ? {uri: getObjectURLByKey(x.imageFileKey, '70')}
         : undefined,
       label: x.name,
     };
@@ -191,7 +192,7 @@ export function usePolling() {
         if (emojiURI) {
           FastImage.preload([
             {
-              uri: configs.cdnBaseUrl + '/',
+              uri: emojiURI,
             },
           ]);
         }

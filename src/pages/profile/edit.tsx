@@ -5,10 +5,10 @@ import {Alert} from 'react-native';
 import {useProfileImage} from '../../hooks';
 import {localImageURIToBlob, postFile, putObject} from '../../libs/api/common';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
-import {configs} from '../../libs/common/configs';
 import {PatchProfileRequest, ProfileForm} from '../../libs/interfaces';
 import {useProfileStore} from '../../libs/stores';
 import ProfileEditTemplate from '../../templates/profile/edit';
+import {getObjectURLByKey} from '../../libs/common/file';
 
 const initialFormValues: ProfileForm = {
   name: '',
@@ -39,7 +39,7 @@ function ProfileEdit(): JSX.Element {
     form.setValue('statusMessage', profile.statusMessage);
     if (profile.profileImageKey) {
       form.setValue('profileImage', {
-        uri: configs.cdnBaseUrl + '/' + profile.profileImageKey,
+        uri: getObjectURLByKey(profile.profileImageKey, '150'),
       });
     } else {
       form.setValue('profileImage', null);

@@ -8,6 +8,7 @@ import {Avatar} from '../avatar';
 import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
 import {PollLayout} from './layout';
+import {getObjectURLByKey} from '../../libs/common/file';
 
 type PullProps = PollingReceiveDetail & {
   onShare: () => void;
@@ -26,11 +27,7 @@ export const Pull = (props: PullProps) => {
       <View style={styles.body}>
         <View style={{alignItems: 'center'}}>
           <Avatar
-            uri={
-              props.voter.imageFileKey
-                ? configs.cdnBaseUrl + '/' + props.voter.imageFileKey
-                : ''
-            }
+            uri={getObjectURLByKey(props.voter.imageFileKey, '70')}
             size={55 * ratio}
             defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
           />
@@ -68,7 +65,7 @@ export const Pull = (props: PullProps) => {
                 key={x.profileId}
                 source={
                   x.imageFileKey
-                    ? {uri: configs.cdnBaseUrl + '/' + x.imageFileKey}
+                    ? {uri: getObjectURLByKey(x.imageFileKey, '70')}
                     : undefined
                 }
                 selected={props.selectedProfileId === x.profileId}

@@ -15,6 +15,7 @@ import DrawedShareTemplate from '../../templates/inbox/drawed-share';
 import {useProfileStore} from '../../libs/stores';
 import {getMyProfile} from '../../libs/api/profile';
 import {configs} from '../../libs/common/configs';
+import {getObjectURLByKey} from '../../libs/common/file';
 
 function InboxDetail() {
   const {
@@ -107,11 +108,7 @@ function InboxDetail() {
       {shareMode && pull && (
         <DrawedShareTemplate
           name={name}
-          profileImage={
-            profileImageKey
-              ? configs.cdnBaseUrl + '/' + profileImageKey
-              : undefined
-          }
+          profileImage={getObjectURLByKey(profileImageKey, '150')}
           icon={pullEmojiURI}
           emotion={pull.pollId.emotion}
           title={pull.pollId.contentText}

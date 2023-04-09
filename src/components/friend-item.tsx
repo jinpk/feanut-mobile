@@ -11,6 +11,7 @@ import {Gender} from '../libs/interfaces';
 import {Avatar} from './avatar';
 import {BadgeButton} from './button';
 import {Text} from './text';
+import {getObjectURLByKey} from '../libs/common/file';
 
 type FriendItemProps = {
   gender?: Gender;
@@ -32,10 +33,7 @@ export const FriendItem = memo((props: FriendItemProps) => {
         {props.icon || (
           <Avatar
             size={42}
-            uri={
-              props.profileImageKey &&
-              configs.cdnBaseUrl + '/' + props.profileImageKey
-            }
+            uri={getObjectURLByKey(props.profileImageKey, '70')}
             defaultLogo={
               props.gender === 'male'
                 ? 'm'
