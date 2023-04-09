@@ -52,7 +52,9 @@ export function useCoin() {
       const data = await getMyCoin();
       updateAmount(data.total);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (__DEV__) {
+        console.error(error);
+      }
     }
   };
 
@@ -93,6 +95,7 @@ export function useCoin() {
     data,
     openPurchaseModal: openCoinModal,
     purchase: handlePurchase,
-    fetchAmount: fetchCoinAmount,pending
+    fetchAmount: fetchCoinAmount,
+    pending,
   };
 }

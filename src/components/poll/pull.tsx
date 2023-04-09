@@ -14,6 +14,8 @@ type PullProps = PollingReceiveDetail & {
   onOpen: () => void;
 };
 
+const ratio = constants.screenWidth / 393;
+
 export const Pull = (props: PullProps) => {
   const pointColor = useMemo(() => {
     return emotionPointColor[props.pollId.emotion];
@@ -22,39 +24,40 @@ export const Pull = (props: PullProps) => {
   return (
     <PollLayout emotion={props.pollId.emotion}>
       <View style={styles.body}>
-        <View style={styles.titleArea}>
+        <View style={{alignItems: 'center'}}>
           <Avatar
             uri={
               props.voter.imageFileKey
                 ? configs.cdnBaseUrl + '/' + props.voter.imageFileKey
                 : ''
             }
+            size={55 * ratio}
             defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
           />
           {props.isOpened && (
-            <Text color={colors.white} mt={14}>
+            <Text color={colors.white} mt={15 * ratio}>
               <Text weight="bold" color={colors.white}>
                 {props.voter.name}
-              </Text>
+              </Text>{' '}
               님이 나를 투표했어요!
             </Text>
           )}
           {!props.isOpened && (
-            <Text color={colors.white} mt={14}>
+            <Text color={colors.white} mt={15 * ratio}>
               친구가 나를 투표했어요!
             </Text>
           )}
-
-          <Text
-            color={colors.white}
-            mt={30}
-            weight="bold"
-            size={27}
-            mx={30}
-            align="center">
-            {props.pollId.contentText}
-          </Text>
         </View>
+
+        <Text
+          color={colors.white}
+          weight="bold"
+          size={27}
+          mx={30}
+          align="center">
+          {props.pollId.contentText}
+        </Text>
+
         <View>
           {props.friendIds.map((x, i) => {
             return (
@@ -111,12 +114,12 @@ export const Pull = (props: PullProps) => {
 };
 
 const styles = StyleSheet.create({
-  titleArea: {alignItems: 'center', marginTop: constants.screenWidth * 0.05},
+  titleArea: {alignItems: 'center', justifyContent: 'flex-end'},
   body: {
     zIndex: 3,
-    paddingVertical: 30,
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    paddingVertical: 16,
     alignItems: 'center',
   },
   footer: {

@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {Alert} from 'react-native';
 import {getPollingReceive} from '../libs/api/poll';
 import {PagenatedRequest, PagenatedResponse} from '../libs/interfaces';
 import {PollingReceiveItem} from '../libs/interfaces/polling';
@@ -25,7 +24,9 @@ export function useInbox() {
       }));
       setQuery(prev => ({...prev, loading: false}));
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (__DEV__) {
+        console.error(error);
+      }
     }
   };
 

@@ -137,7 +137,7 @@ function Verification(): JSX.Element {
       const apiError = error as APIError;
       if (apiError.code === AUTH_ERROR_COOL_TIME) {
         form.setError('phoneNumber', {
-          message: '3분 후에 다시 시도해 주세요.',
+          message: '잠시 후에 다시 시도해 주세요.',
         });
       } else if (apiError.code === AUTH_ERROR_EXIST_PHONE_NUMBER) {
         form.setError('phoneNumber', {
@@ -173,7 +173,7 @@ function Verification(): JSX.Element {
         /** 로그인 완료시 자동 화면 이동됨. app.tsx */
         useUserStore.getState().actions.login(await getMe());
         // 애니메이션 적용후 오픈
-        //openGuideModal();
+        openGuideModal();
       } else if (params.type === 'signin') {
         const token = await postSignIn(data);
         setCredentials(token);

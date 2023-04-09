@@ -1,6 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Button} from '../../components/button';
 import {Errors} from '../../components/errors';
 import {LargeInput} from '../../components/input/large-input';
@@ -26,17 +26,6 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
 
   const sendingCode = props.form.watch().sendingCode;
 
-  const phoneRef = useRef<TextInput>(null);
-
-  useEffect(() => {
-    let tm = setTimeout(() => {
-      phoneRef.current?.focus();
-    }, 1000);
-    return () => {
-      clearTimeout(tm);
-    };
-  }, [props.focused]);
-
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} />
@@ -57,7 +46,6 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
             autoFocus
             value={value}
             disabled={sendingCode}
-            inputRef={phoneRef}
             onChange={t => {
               onChange(t);
               props.form.clearErrors('phoneNumber');

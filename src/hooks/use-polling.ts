@@ -91,7 +91,6 @@ export function usePolling() {
           const pollingRound = await postPollingRound();
           setMaxDailyCount(pollingRound.maxDailyCount);
           setTodayCount(pollingRound.todayCount);
-
           if (!pollingRound.data?.complete) {
             // 투표진행중
             if (!pollingRound.data) {

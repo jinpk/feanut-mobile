@@ -17,7 +17,7 @@ type PollIndicatorProps = {
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export const LineIndicator = (props: PollIndicatorProps): JSX.Element => {
+export const LineIndicator = (props: PollIndicatorProps) => {
   const insets = useSafeAreaInsets();
   const indicatorWidth = useAnimatedValue(0);
 

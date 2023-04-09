@@ -49,7 +49,6 @@ import coin50 from '../../assets/pngs/coin50.png';
 import coin100 from '../../assets/pngs/coin100.png';
 import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
-import deviceLayer from '../../assets/pngs/device-layer.png';
 import guide1 from '../../assets/pngs/guide-1.png';
 import guide2 from '../../assets/pngs/guide-2.png';
 
@@ -159,7 +158,6 @@ export const gifs = {
 
 export const pngs = {
   coin10,
-  deviceLayer,
   guide1,
   guide2,
   coin5,

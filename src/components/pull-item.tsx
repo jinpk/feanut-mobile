@@ -26,7 +26,7 @@ export const PullItem = memo(function (props: PollingItemProps): JSX.Element {
       <View style={styles.content}>
         <View style={styles.contentName}>
           <Text>
-            {props.isOpened ? '친구' : '누군가'}가 나를 투표에서 선택했어요!
+            {props.isOpened ? '친구가' : '누군가'} 나를 투표했어요!
           </Text>
           <Text color={colors.darkGrey} size={10}>
             {props.time}

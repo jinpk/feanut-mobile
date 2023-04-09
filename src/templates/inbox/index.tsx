@@ -27,6 +27,7 @@ type InboxTemplateProps = {
   onLoadMore: () => void;
   onRefresh: () => void;
   loading: boolean;
+  name: stirng;
 };
 
 function InboxTemplate(props: InboxTemplateProps) {
@@ -103,7 +104,10 @@ function InboxTemplate(props: InboxTemplateProps) {
         getItemLayout={handleGetItemLayout}
         ListFooterComponent={
           props.data.length && props.loading ? (
-            <ActivityIndicator color={colors.primary} />
+            <ActivityIndicator
+              style={{marginVertical: 16}}
+              color={colors.primary}
+            />
           ) : undefined
         }
         refreshControl={
@@ -114,10 +118,8 @@ function InboxTemplate(props: InboxTemplateProps) {
             <View style={[styles.empty, {paddingTop: insets.top}]}>
               <Information
                 icon={gifs.hatchingChick}
-                message="회원님의 친구들이 투표하고 있어요!"
-                subMessage={
-                  '회원님이 투표에서 선택되면\n알림으로 알려드릴게요!'
-                }
+                message={`친구들이 투표하는 중이에요:)`}
+                subMessage={`${props.name} 님이 선택되면\n알림으로 알려드릴게요!`}
                 markingText="알림"
               />
             </View>

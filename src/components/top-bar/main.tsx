@@ -8,31 +8,31 @@ import {Text} from '../text';
 type MainTopBar = {
   onInboxPress: () => void;
   onProfilePress: () => void;
-  polling?: boolean;
+
+  white?: boolean;
+  hideLogo?: boolean;
+
+  zIndex?: number;
 };
 
 export const MainTopBar = (props: MainTopBar): JSX.Element => {
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.root, {top: insets.top}]}>
+    <View style={[styles.root, {top: insets.top, zIndex: props.zIndex || 50}]}>
       <TouchableOpacity onPress={props.onInboxPress} style={styles.optionItem}>
-        <Text
-          weight="medium"
-          color={props.polling ? colors.white : colors.dark}>
+        <Text weight="medium" color={props.white ? colors.white : colors.dark}>
           수신함
         </Text>
       </TouchableOpacity>
       <View>
-        {!props.polling && (
+        {!props.hideLogo && (
           <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
         )}
       </View>
       <TouchableOpacity
         onPress={props.onProfilePress}
         style={styles.optionItem}>
-        <Text
-          weight="medium"
-          color={props.polling ? colors.white : colors.dark}>
+        <Text weight="medium" color={props.white ? colors.white : colors.dark}>
           프로필
         </Text>
       </TouchableOpacity>

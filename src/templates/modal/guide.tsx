@@ -1,7 +1,14 @@
-import React from 'react';
-import {Animated, Image, Modal, StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Animated,
+  Image,
+  Modal,
+  StyleSheet,
+  View,
+  useAnimatedValue,
+} from 'react-native';
 import {Information} from '../../components';
-import {constants, pngs, svgs} from '../../libs/common';
+import {constants, gifs, pngs, svgs} from '../../libs/common';
 import {Button} from '../../components/button';
 
 type GuideModalTemplateProps = {
@@ -12,9 +19,28 @@ type GuideModalTemplateProps = {
 export const GuideModalTemplate = (
   props: GuideModalTemplateProps,
 ): JSX.Element => {
-  const handleClose = () => {
-    props.onClose();
-  };
+  const translate = useAnimatedValue(0);
+
+  useEffect(() => {
+    if (props.visible) {
+      const to = (constants.screenWidth * 0.46) / 3;
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(translate, {
+            toValue: -to,
+            useNativeDriver: true,
+            duration: 1500,
+          }),
+          Animated.delay(1000),
+        ]),
+        {resetBeforeIteration: true},
+      ).start();
+    } else {
+      translate.setValue(0);
+    }
+  }, [props.visible]);
+
+  useEffect(() => {}, []);
 
   return (
     <Modal animationType="slide" visible={props.visible}>
@@ -25,10 +51,15 @@ export const GuideModalTemplate = (
         subMessage="친구를 선택 후 간단한 제스쳐로 투표를 완료할 수 있어요"
         markingText="간단한 제스쳐">
         <View style={styles.deviceLayer}>
-          <Image source={pngs.deviceLayer} style={styles.deviceLayerImage} />
-
           <Image source={pngs.guide1} style={styles.guide1} />
-          <Animated.Image source={pngs.guide2} style={styles.guide2} />
+          <Animated.Image
+            source={pngs.guide2}
+            style={[styles.guide2, {transform: [{translateX: translate}]}]}
+          />
+          <Animated.Image
+            source={gifs.backhand}
+            style={[styles.backhand, {transform: [{translateX: translate}]}]}
+          />
         </View>
 
         <Button
@@ -56,7 +87,7 @@ const styles = StyleSheet.create({
   deviceLayer: {
     marginTop: 30,
     width: constants.screenWidth * 0.46,
-    height: constants.screenHeight * 0.4,
+    height: constants.screenHeight * 0.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -66,15 +97,23 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   guide1: {
-    width: '96%',
-    height: '96%',
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
     position: 'absolute',
   },
   guide2: {
-    width: '96%',
+    width: '90%',
     height: '96%',
     resizeMode: 'contain',
     position: 'absolute',
+  },
+  backhand: {
+    resizeMode: 'contain',
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    right: 0,
+    bottom: '20%',
   },
 });

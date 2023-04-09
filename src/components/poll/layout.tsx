@@ -14,51 +14,62 @@ type SVGProps = {
   asset: number;
   style: object;
   width: number;
+  height: number;
 };
 
 type FigureProps = {
   emotion: emotions;
 };
 
+const ratio = constants.screenWidth / 393;
 export const Figure = memo((props: FigureProps) => {
   const svgProps: SVGProps = {
     asset: 0,
     style: {},
-    width: constants.screenWidth * 0.7,
+    width: 0,
+    height: constants.screenHeight * 0.42,
   };
 
   if (props.emotion === emotions.joy) {
     svgProps.asset = svgs.figureHappiness;
     svgProps.style = styles.figureRightBottom;
+    svgProps.width = ratio * 303;
   } else if (props.emotion === emotions.gratitude) {
     svgProps.asset = svgs.figureGratitude;
     svgProps.style = styles.figureLeftBottom;
+    svgProps.width = ratio * 327;
   } else if (props.emotion === emotions.serenity) {
     svgProps.asset = svgs.figureSerenity;
     svgProps.style = styles.figureRightBottom;
+    svgProps.width = ratio * 318;
   } else if (props.emotion === emotions.interest) {
     svgProps.asset = svgs.figureInterest;
     svgProps.style = styles.figureLeftBottom;
+    svgProps.width = ratio * 362;
   } else if (props.emotion === emotions.hope) {
     svgProps.asset = svgs.figureHope;
     svgProps.style = styles.figureRightBottom;
+    svgProps.width = ratio * 373;
   } else if (props.emotion === emotions.pride) {
     svgProps.asset = svgs.figurePride;
     svgProps.style = styles.figureRightBottom;
-    svgProps.width = constants.screenWidth * 0.8;
+    svgProps.width = ratio * 213;
   } else if (props.emotion === emotions.amusement) {
     svgProps.asset = svgs.figureAmusement;
     svgProps.style = styles.figureLeftBottom;
+    svgProps.width = ratio * 343;
   } else if (props.emotion === emotions.inspiration) {
     svgProps.asset = svgs.figureInspiration;
     svgProps.style = styles.figureRightBottom;
+    svgProps.width = ratio * 293;
   } else if (props.emotion === emotions.awe) {
     svgProps.asset = svgs.figureAwe;
     svgProps.style = styles.figureLeftBottom;
+    svgProps.width = ratio * 357;
   } else if (props.emotion === emotions.love) {
     svgProps.asset = svgs.figureLove;
     svgProps.style = styles.figureLeftBottom;
-    svgProps.width = constants.screenWidth * 0.9;
+    svgProps.width = ratio * 378;
   }
 
   return (

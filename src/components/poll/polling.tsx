@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  GestureResponderEvent,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
@@ -22,8 +21,9 @@ import {
 import {PollingFriendItem} from '../../libs/interfaces/polling';
 import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
-import {Feanut, Figure, PollLayout} from './layout';
+import {Feanut, Figure} from './layout';
 import {Animated} from 'react-native';
+import {MainTopBar} from '../top-bar/main';
 
 type PollingProps = {
   style?: ViewStyle;
@@ -37,34 +37,43 @@ type PollingProps = {
   onSkip: () => void;
   onSelected: (value: string) => void;
 
+  // 다음 순서
   readyToFocus: boolean;
+  // 현재 순서
   focused: boolean;
 
   onNext: () => Promise<boolean>;
+
+  index: number;
+  initialIndex: number;
+  latest?: boolean;
+  firstInited: boolean;
+  onFirstInited: () => void;
 };
 
 export const Polling = (props: PollingProps) => {
   const insets = useSafeAreaInsets();
-  const handleFriendSelect =
-    (friend: PollingFriendItem) => (e: GestureResponderEvent) => {
-      props.onSelected(friend.value);
-    };
-  const pointColor = useMemo(() => {
-    return emotionPointColor[props.emotion];
-  }, [props.emotion]);
 
-  const translateX = useRef(new Animated.Value(0)).current;
+  /** 애니메이션 */
+  const translateX = useRef(
+    new Animated.Value(
+      props.initialIndex === props.index ? constants.screenWidth : 0,
+    ),
+  ).current;
   const translateXValue = useRef(0);
-
-  const isSelectedStore = useRef(false);
   useEffect(() => {
-    isSelectedStore.current = props.selectedFriend ? true : false;
-  }, [props.selectedFriend]);
+    const id = translateX.addListener(result => {
+      translateXValue.current = result.value;
+    });
+    return () => {
+      translateX.removeListener(id);
+    };
+  }, []);
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
         const {dx, dy} = gestureState;
-        // 10 이하 무조건 터치
+        // x:3, y:10 이하 무조건 터치
         if (Math.abs(dx) < 3 && Math.abs(dy) < 10) {
           e.stopPropagation();
           return false;
@@ -73,9 +82,22 @@ export const Polling = (props: PollingProps) => {
         return true;
       },
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, {dx: translateX}], {
-        useNativeDriver: false,
-      }),
+      onPanResponderMove: (event, gestureState) => {
+        if (gestureState.dx < 50) {
+          Animated.timing(translateX, {
+            duration: 1,
+            toValue: gestureState.dx,
+            useNativeDriver: true,
+          }).start();
+        } else {
+          Animated.timing(translateX, {
+            duration: 1,
+            toValue: 50 + (gestureState.dx - 50) / 10,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+
       onPanResponderRelease: () => {
         if (translateXValue.current < -(constants.screenWidth / 5)) {
           Animated.spring(translateX, {
@@ -85,7 +107,6 @@ export const Polling = (props: PollingProps) => {
 
           props.onNext().then(result => {
             if (!result) {
-              console.log('false');
               Animated.spring(translateX, {
                 toValue: 0,
                 useNativeDriver: true,
@@ -102,29 +123,61 @@ export const Polling = (props: PollingProps) => {
     }),
   ).current;
 
-  /*const scale = translateX.interpolate({
-    inputRange: [0, constants.screenWidth / 5],
-    outputRange: [1, 1.1],
-  });
-
-  const rotate = translateX.interpolate({
-    inputRange: [0, constants.screenWidth / 5],
-    outputRange: ['0deg', '-10deg'],
-  });*/
-
+  /**  첫 투표 슬라이드 애니메이션 */
+  const [inited, setInited] = useState(props.initialIndex !== props.index);
   useEffect(() => {
-    const id = translateX.addListener(result => {
-      translateXValue.current = result.value;
-    });
-    return () => {
-      translateX.removeListener(id);
-    };
-  }, []);
+    if (!inited) {
+      Animated.spring(translateX, {
+        velocity: 10,
+        useNativeDriver: true,
+        toValue: 0,
+        bounciness: 1,
+        speed: 5,
+      }).start(r => {
+        if (!r.finished) {
+          translateX.setValue(0);
+        }
+        setInited(true);
+      });
+      let checked = false;
+      let id = translateX.addListener(result => {
+        if (result.value < 20 && !checked) {
+          checked = true;
+          props.onFirstInited();
+        }
+      });
+      return () => {
+        translateX.removeListener(id);
+      };
+    }
+  }, [inited]);
 
+  /**  첫 투표 슬라이드시 바로 다음 투표 대기 후처리 */
+  useEffect(() => {
+    if (props.readyToFocus) {
+      if (props.firstInited) {
+        translateX.setValue(0);
+      } else {
+        translateX.setValue(constants.screenWidth);
+      }
+    }
+  }, [props.readyToFocus, props.firstInited]);
+
+  /** Polling state */
+  const isSelectedStore = useRef(false);
+  useEffect(() => {
+    isSelectedStore.current = props.selectedFriend ? true : false;
+  }, [props.selectedFriend]);
+
+  /** Emotion colors */
   const backgroundColor = useMemo(() => {
     return emotionBackgorundColor[props.emotion];
   }, [props.emotion]);
+  const pointColor = useMemo(() => {
+    return emotionPointColor[props.emotion];
+  }, [props.emotion]);
 
+  /** 현재순서 | 다음순서 아니면 return null */
   if (!props.focused && !props.readyToFocus) {
     return null;
   }
@@ -135,13 +188,18 @@ export const Polling = (props: PollingProps) => {
         props.style,
         {
           backgroundColor,
-          transform: [
-            {translateX},
-            // {scale}, {rotate}
-          ],
+          transform: [{translateX}],
         },
       ]}
-      {...panResponder.panHandlers}>
+      {...(inited && panResponder.panHandlers)}>
+      {props.latest && (
+        <MainTopBar
+          hideLogo
+          white
+          onInboxPress={() => {}}
+          onProfilePress={() => {}}
+        />
+      )}
       <Figure emotion={props.emotion} />
       <Feanut emotion={props.emotion} />
       <View style={styles.body}>
@@ -172,7 +230,9 @@ export const Polling = (props: PollingProps) => {
                   source={x.source}
                   selected={props.selectedFriend === x.value}
                   color={pointColor}
-                  onPress={handleFriendSelect(x)}
+                  onPress={() => {
+                    props.onSelected(x.value);
+                  }}
                   mb={15}
                 />
               );

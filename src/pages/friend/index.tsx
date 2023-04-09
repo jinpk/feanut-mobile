@@ -65,7 +65,9 @@ function Friend() {
             return;
           })
           .catch((error: any) => {
-            Alert.alert(error.message || error);
+            if (__DEV__) {
+              console.error(error);
+            }
             return;
           })
           .finally(() => {

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   Animated,
@@ -6,17 +6,9 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  View,
-  useAnimatedValue,
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
-import {
-  colors,
-  constants,
-  emotionBackgorundColor,
-  gifs,
-  routes,
-} from '../libs/common';
+import {colors, constants, gifs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
@@ -34,6 +26,8 @@ function Home(): JSX.Element {
   const focused = useIsFocused();
 
   const polling = usePolling();
+  // 첫번쨰 투표 초기화 완료
+  const [firstInited, setFirstInited] = useState(false);
 
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -57,6 +51,7 @@ function Home(): JSX.Element {
 
   useEffect(() => {
     if (
+      !firstInited ||
       welcomModalOpened ||
       !focused ||
       polling.event ||
@@ -75,9 +70,12 @@ function Home(): JSX.Element {
         changeNavigationBarColor(colors.dark, false, true);
       }
     }
-  }, [focused, welcomModalOpened, polling.event, polling.state]);
+  }, [focused, welcomModalOpened, firstInited, polling.event, polling.state]);
 
   useEffect(() => {
+    if (polling.state !== 'polling') {
+      setFirstInited(false);
+    }
     switch (polling.state) {
       case 'loading':
         setTabIndex(0);
@@ -116,24 +114,35 @@ function Home(): JSX.Element {
       navigation.navigate(routes.profile);
     };
 
+    const last = polling.currentPollingIndex === polling.pollings.length - 1;
     return (
       <MainTopBar
-        polling={polling.state === 'polling'}
+        zIndex={last ? 1 : 50}
+        white={last ? false : polling.state === 'polling' && firstInited}
+        hideLogo={last ? false : polling.state === 'polling'}
         onInboxPress={handleInboxPress}
         onProfilePress={handleProfilePress}
       />
     );
-  }, [navigation, polling.state]);
+  }, [navigation, firstInited, polling]);
 
   return (
     <Animated.View style={[styles.root]}>
       {renderTopBar()}
+
       {polling.state === 'polling' && (
         <>
+          <LineIndicator
+            length={polling.pollings.length}
+            index={polling.currentPollingIndex}
+          />
           {polling.pollings.map((item, index) => {
             const zIndex = polling.pollings.length - index;
             return (
               <Polling
+                index={index}
+                initialIndex={polling.initialIndex}
+                latest={index === polling.pollings.length - 1}
                 key={index.toString()}
                 style={{
                   position: 'absolute',
@@ -144,9 +153,13 @@ function Home(): JSX.Element {
                   elevation: zIndex,
                   zIndex,
                 }}
+                onFirstInited={() => {
+                  setFirstInited(true);
+                }}
                 emotion={item.emotion!}
                 title={item.title!}
                 iconURI={item.emojiURI!}
+                firstInited={firstInited}
                 friends={item.friends}
                 selectedFriend={item.selectedProfileId}
                 onNext={polling.vote}
@@ -164,10 +177,6 @@ function Home(): JSX.Element {
               />
             );
           })}
-          <LineIndicator
-            length={polling.pollings.length}
-            index={polling.currentPollingIndex}
-          />
         </>
       )}
 
@@ -183,10 +192,8 @@ function Home(): JSX.Element {
             });
           }}
           icon={gifs.teddyBear}
-          title={'연락처를 동기화하여 친구를 추가할 수 있어요!'}
-          message={
-            '투표에 참여하려면 4명 이상의 친구가 등록되어 있어야 합니다.'
-          }
+          title={'친구를 추가하고\n다양한 주제의 투표를 경험해 보세요!'}
+          message={'4명 이상의 친구가 있어야 시작할 수 있어요'}
         />
       )}
 

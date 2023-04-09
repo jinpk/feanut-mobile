@@ -20,12 +20,14 @@ function PhoneNumberCodeTemplate(props: PhoneNumberCodeTemplateProps) {
   const codeRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    let tm = setTimeout(() => {
-      codeRef.current?.focus();
-    }, 1000);
-    return () => {
-      clearTimeout(tm);
-    };
+    if (props.focused) {
+      let tm = setTimeout(() => {
+        codeRef.current?.focus();
+      }, 500);
+      return () => {
+        clearTimeout(tm);
+      };
+    }
   }, [props.focused]);
 
   return (
@@ -42,7 +44,6 @@ function PhoneNumberCodeTemplate(props: PhoneNumberCodeTemplateProps) {
         control={props.form.control}
         render={({field: {onChange, onBlur, value}}) => (
           <LargeInput
-            autoFocus
             inputRef={codeRef}
             value={value}
             keyboardType="decimal-pad"

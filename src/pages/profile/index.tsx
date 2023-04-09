@@ -42,7 +42,9 @@ function Profile(): JSX.Element {
       const profile = await fetchMyProfile();
       update(profile);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (__DEV__) {
+        console.error(error);
+      }
     }
   }, []);
 
@@ -65,7 +67,9 @@ function Profile(): JSX.Element {
         setFriendsCount(result.friendsCount);
       })
       .catch((error: any) => {
-        Alert.alert(error.message || error);
+        if (__DEV__) {
+          console.error(error);
+        }
       });
   }, [focused, userId]);
 

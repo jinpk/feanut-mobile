@@ -42,7 +42,9 @@ function InboxDetail() {
       const data = await getPollingReceiveDetail(pollingId);
       setPull(data);
     } catch (error: any) {
-      Alert.alert(error.message || error);
+      if (__DEV__) {
+        console.error(error);
+      }
     }
   };
   useEffect(() => {

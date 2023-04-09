@@ -60,7 +60,9 @@ function FeanutCard() {
         setProfile({...profile});
       })
       .catch((error: any) => {
-        Alert.alert(error.message || error);
+        if (__DEV__) {
+          console.error(error);
+        }
       });
 
     // 친구수 조회
@@ -73,7 +75,9 @@ function FeanutCard() {
         if (apiError.code === PROFILES_ERROR_OWNER_LESS) {
           // 아직 가입하지 않은 프로필
         } else {
-          Alert.alert(error.message || error);
+          if (__DEV__) {
+            console.error(apiError);
+          }
         }
       });
 
@@ -87,7 +91,9 @@ function FeanutCard() {
         if (apiError.code === PROFILES_ERROR_OWNER_LESS) {
           // 아직 가입하지 않은 프로필
         } else {
-          Alert.alert(error.message || error);
+          if (__DEV__) {
+            console.error(apiError);
+          }
         }
       });
 
@@ -98,7 +104,9 @@ function FeanutCard() {
       })
       .catch((error: any) => {
         const apiError = error as APIError;
-        Alert.alert(error.message || error);
+        if (__DEV__) {
+          console.error(apiError);
+        }
       });
   }, [profileId]);
 

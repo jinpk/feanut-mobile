@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {clearUser, constants, routes, setUser} from './libs/common';
+import {constants, routes, setUser} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {CoinModal, WelcomeModal} from './modals';

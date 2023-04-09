@@ -78,7 +78,7 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
     let tm = setTimeout(() => {
       if (viewShotRef.current?.capture) {
         viewShotRef.current.capture().then(uri => {
-          const title = `누군가 투표에서 나를 선택했어요!`;
+          const title = `누군가 나를 투표했어요!`;
           Share.open({
             title: title,
             filename: title,
@@ -101,15 +101,15 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
 
   return (
     <Modal visible transparent animationType="fade">
-      <View style={styles.root}>
-        <Animated.View>
-          <ViewShot
-            ref={viewShotRef}
+      <View style={styles.root} collapsable={false}>
+        <ViewShot ref={viewShotRef}>
+          <View
             style={{
               width,
               height,
               padding: 75 * ratio,
               backgroundColor: emotionBackgorundColor[props.emotion],
+              overflow: 'hidden',
             }}>
             <WithLocalSvg
               style={styles.figure}
@@ -139,7 +139,7 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
               color={colors.white}
               mt={45 * ratio}
               size={35 * ratio}>
-              누군가 투표에서 나를 선택했어요!
+              누군가 나를 투표했어요!
             </Text>
 
             <Text
@@ -227,8 +227,8 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
                 height={21 * ratio}
               />
             </View>
-          </ViewShot>
-        </Animated.View>
+          </View>
+        </ViewShot>
       </View>
     </Modal>
   );
