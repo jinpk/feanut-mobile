@@ -133,6 +133,7 @@ function Home(): JSX.Element {
     };
 
     const last = polling.currentPollingIndex === polling.pollings.length - 1;
+
     return (
       <MainTopBar
         zIndex={last ? 1 : 50}
@@ -198,7 +199,8 @@ function Home(): JSX.Element {
         </>
       )}
 
-      {polling.state === 'loading' && (
+      {/** event 준비중일떄 loading bar hide */}
+      {polling.state === 'loading' && !polling.event && (
         <LoadingTemplate label="투표 불러오는 중" />
       )}
 

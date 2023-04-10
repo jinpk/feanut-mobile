@@ -1,9 +1,15 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useAnimatedValue,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, svgs} from '../../libs/common';
 import {Text} from '../text';
+import {Animated} from 'react-native';
 
 type MainTopBar = {
   onInboxPress: () => void;
@@ -11,12 +17,33 @@ type MainTopBar = {
 
   white?: boolean;
   hideLogo?: boolean;
-
   zIndex?: number;
 };
 
 export const MainTopBar = (props: MainTopBar): JSX.Element => {
   const insets = useSafeAreaInsets();
+  const opacity = useAnimatedValue(1);
+
+  useEffect(() => {
+    if (props.hideLogo) {
+      Animated.timing(opacity, {useNativeDriver: false, toValue: 0}).start(
+        r => {
+          if (!r.finished) {
+            opacity.setValue(0);
+          }
+        },
+      );
+    } else {
+      Animated.timing(opacity, {useNativeDriver: false, toValue: 1}).start(
+        r => {
+          if (!r.finished) {
+            opacity.setValue(1);
+          }
+        },
+      );
+    }
+  }, [props.hideLogo]);
+
   return (
     <View style={[styles.root, {top: insets.top, zIndex: props.zIndex || 50}]}>
       <TouchableOpacity onPress={props.onInboxPress} style={styles.optionItem}>
@@ -25,9 +52,9 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
         </Text>
       </TouchableOpacity>
       <View>
-        {!props.hideLogo && (
+        <Animated.View style={{opacity}}>
           <WithLocalSvg width={67} height={35} asset={svgs.logoWithLetter} />
-        )}
+        </Animated.View>
       </View>
       <TouchableOpacity
         onPress={props.onProfilePress}

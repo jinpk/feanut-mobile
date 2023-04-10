@@ -193,15 +193,22 @@ export const Polling = (props: PollingProps) => {
       ]}
       {...(inited && panResponder.panHandlers)}>
       {props.latest && (
-        <MainTopBar
-          hideLogo
-          white
-          onInboxPress={() => {}}
-          onProfilePress={() => {}}
-        />
+        <>
+          <MainTopBar
+            hideLogo
+            white
+            onInboxPress={() => {}}
+            onProfilePress={() => {}}
+          />
+        </>
       )}
-      <Figure emotion={props.emotion} />
-      <Feanut emotion={props.emotion} />
+      {props.emotion?.length > 0 && (
+        <>
+          <Figure emotion={props.emotion} />
+          <Feanut emotion={props.emotion} />
+        </>
+      )}
+
       <View style={styles.body}>
         <View style={styles.titleArea}>
           <FastImage

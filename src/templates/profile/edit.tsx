@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import React from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -52,7 +51,7 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
         </TouchableOpacity>
 
         <View style={styles.profileContent}>
-          <Text color={colors.darkGrey} size={12} mt={7} mb={6}>
+          <Text color={colors.darkGrey} size={12} mt={7} ml={7} mb={6}>
             이름
           </Text>
 
@@ -81,7 +80,7 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
       </View>
 
       <View style={styles.form}>
-        <Text color={colors.darkGrey} size={12} mb={6}>
+        <Text color={colors.darkGrey} ml={7} size={12} mb={6}>
           상태 메시지
         </Text>
 
