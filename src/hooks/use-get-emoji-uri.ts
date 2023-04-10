@@ -9,7 +9,7 @@ export function useGetEmojiURI(emojiId?: string): string {
     if (emojiId) {
       const emoji = emojis.find(x => x.id === emojiId);
       if (emoji) {
-        setEmojiURL(configs.cdnBaseUrl + '/' + emoji.key);
+        setEmojiURL(configs.assetBaseUrl + '/' + emoji.key);
       }
     }
   }, [emojis, emojiId]);

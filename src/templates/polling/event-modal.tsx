@@ -22,7 +22,7 @@ function EventModalTemplate(props: EventModalTemplateProps) {
   const emojiURI = useMemo(() => {
     const key = emojis.find(x => x.id === props.emojiId)?.key;
     if (key) {
-      return configs.cdnBaseUrl + '/' + key;
+      return configs.assetBaseUrl + '/' + key;
     } else {
       return '';
     }

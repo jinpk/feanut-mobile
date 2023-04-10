@@ -189,7 +189,7 @@ export function usePolling() {
         }
 
         const emojiURI =
-          configs.cdnBaseUrl +
+          configs.assetBaseUrl +
           '/' +
           emojiIdMapper.current[polling.pollId.emojiId];
 

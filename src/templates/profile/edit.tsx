@@ -46,7 +46,7 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
             defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
           />
           <Text color={colors.blue} size={12} mt={7}>
-            사진 수정
+            사진 변경
           </Text>
         </TouchableOpacity>
 

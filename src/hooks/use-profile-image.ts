@@ -1,4 +1,4 @@
-import {ActionSheetIOS, Alert, PermissionsAndroid} from 'react-native';
+import {ActionSheetIOS, Alert} from 'react-native';
 import {constants} from '../libs/common';
 import {Asset, launchImageLibrary} from 'react-native-image-picker';
 
@@ -39,24 +39,43 @@ export function useProfileImage() {
         },
       );
     } else {
-      launchImageLibrary({
-        mediaType: 'photo',
-        quality: 0.5,
-      }).then(response => {
-        if (response.didCancel) {
-          return;
-        }
-        if (response.errorMessage) {
-          Alert.alert(response.errorMessage);
-          return;
-        }
-        if (!response.assets) {
-          return;
-        }
+      Alert.alert('프로필 사진 변경', '', [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+        {
+          text: '기본 이미지로 변경',
+          isPreferred: true,
+          onPress: () => {
+            cb(null);
+          },
+        },
+        {
+          text: '앨범에서 사진 선택',
+          isPreferred: true,
+          onPress: () => {
+            launchImageLibrary({
+              mediaType: 'photo',
+              quality: 0.5,
+            }).then(response => {
+              if (response.didCancel) {
+                return;
+              }
+              if (response.errorMessage) {
+                Alert.alert(response.errorMessage);
+                return;
+              }
+              if (!response.assets) {
+                return;
+              }
 
-        const file = response.assets[0];
-        cb(file);
-      });
+              const file = response.assets[0];
+              cb(file);
+            });
+          },
+        },
+      ]);
     }
   };
 
