@@ -247,17 +247,17 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
             </View>
           </View>
         </ViewShot>
-
-        <TouchableOpacity onPress={props.onShare} style={styles.share}>
-          <WithLocalSvg
-            width={12}
-            height={15}
-            asset={props.me ? svgs.share : svgs.visitSNS}
-            style={styles.shareIcon}
-          />
-          <Text size={12}>{props.me ? '자랑하기' : 'Instagram 방문'}</Text>
-        </TouchableOpacity>
       </View>
+
+      <TouchableOpacity onPress={props.onShare} style={styles.share}>
+        <WithLocalSvg
+          width={12}
+          height={15}
+          asset={props.me ? svgs.share : svgs.visitSNS}
+          style={styles.shareIcon}
+        />
+        <Text size={12}>{props.me ? '자랑하기' : 'Instagram 방문'}</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -265,7 +265,6 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
 const styles = StyleSheet.create({
   content: {
     justifyContent: 'center',
-    paddingVertical: 40,
     borderRadius: 20,
   },
   root: {
@@ -274,7 +273,6 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    alignItems: 'stretch',
     justifyContent: 'center',
   },
   stats: {
@@ -305,13 +303,13 @@ const styles = StyleSheet.create({
   share: {
     backgroundColor: colors.lightGrey,
     alignItems: 'center',
+    marginBottom: 30,
     flexDirection: 'row',
     borderRadius: 21,
     paddingVertical: 14,
     alignSelf: 'center',
     paddingLeft: 55,
     paddingHorizontal: 43,
-    marginTop: 30,
   },
   shareIcon: {
     position: 'absolute',

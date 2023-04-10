@@ -1,5 +1,10 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
@@ -36,6 +41,9 @@ function Friend() {
   const setLoading = ueeStore(s => s.actions.setLoading);
   const contact = useSyncContacts();
 
+  const focused = useIsFocused();
+
+  // 자동 동기화 params
   useEffect(() => {
     if (params.autoSync) {
       contact.syncContacts(() => {
@@ -48,13 +56,6 @@ function Friend() {
   useEffect(() => {
     if (userId && loading) {
       let tm = setTimeout(() => {
-        if (__DEV__) {
-          console.log(
-            hiddeFriend ? 'hidden' : 'active',
-            'friends fetch :',
-            query,
-          );
-        }
         getFriends(userId, {...query, hidden: hiddeFriend ? '1' : '0'})
           .then(result => {
             if (query.page === 1) {
@@ -81,18 +82,27 @@ function Friend() {
   }, [loading, query.page]);
 
   useEffect(() => {
-    setLoading(true);
+    if (focused) {
+      setQuery({page: 1, limit: 20});
+      setLoading(true);
+    }
+  }, [focused]);
+
+  useEffect(() => {
     return () => {
       clear();
     };
   }, []);
 
+  // 연속클릭 중복 API 호출 방지
+  const patchState = useRef(false);
   const handleHide = useCallback(
     async (friend: FriendI) => {
-      if (!userId) {
+      if (!userId || patchState.current) {
         return;
       }
 
+      patchState.current = true;
       try {
         await patchFriendHidden(userId, {
           friendProfileIdId: friend.profileId,
@@ -102,16 +112,18 @@ function Friend() {
       } catch (error: any) {
         Alert.alert(error.message || error);
       }
+      patchState.current = false;
     },
     [userId],
   );
 
   const handleUnHide = useCallback(
     async (friend: FriendI) => {
-      if (!userId) {
+      if (!userId || patchState.current) {
         return;
       }
 
+      patchState.current = true;
       try {
         await patchFriendHidden(userId, {
           friendProfileIdId: friend.profileId,
@@ -121,6 +133,7 @@ function Friend() {
       } catch (error: any) {
         Alert.alert(error.message || error);
       }
+      patchState.current = false;
     },
     [userId],
   );
@@ -177,6 +190,7 @@ function Friend() {
     <FreidnsListTemplate
       hiddenFriend={hiddeFriend}
       data={friends}
+      totalCount={friendsTotalCount}
       onBack={navigation.goBack}
       onHide={handleHide}
       onUnHide={handleUnHide}

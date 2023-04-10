@@ -526,6 +526,8 @@ PODS:
     - FirebaseCoreExtension (= 10.7.0)
     - React-Core
     - RNFBApp
+  - RNFS (2.20.0):
+    - React-Core
   - RNIap (11.0.0-rc.7):
     - React-Core
   - RNScreens (3.20.0):
@@ -619,6 +621,7 @@ DEPENDENCIES:
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
@@ -747,6 +750,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNIap:
     :path: "../node_modules/react-native-iap"
   RNScreens:
@@ -828,6 +833,7 @@ SPEC CHECKSUMS:
   RNFastImage: 979bf849b71618c0d371ee8cd11c6ef32acae6a4
   RNFBApp: 525cc4317f7955eda6bac09fac3acf7ee06afa0b
   RNFBMessaging: 7a3e2fa01d4b2a93b6d79fc250d50ecef3ced110
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNIap: cc309cf426a6df5240e38108ffa6c270a52c03ac
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405

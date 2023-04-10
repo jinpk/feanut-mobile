@@ -8,6 +8,8 @@ import {
   PostFileRequest,
   PostFileResponse,
 } from '../interfaces';
+import {readFile, stat} from 'react-native-fs';
+import {decode} from 'base64-arraybuffer';
 
 export const getEmojis = async (
   params: OptionalPagingReqDto,
@@ -43,24 +45,10 @@ export const putObject = async (
   }
 };
 
-export const localImageURIToBlob = async (
+export const localImageURIToArrayBuffer = async (
   uri: string,
-): Promise<LocalImageResponse> => {
-  const data = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      resolve({
-        buffer: xhr.response as ArrayBuffer,
-        type: xhr.getResponseHeader('content-type'),
-      } as LocalImageResponse);
-    };
-    xhr.onerror = function () {
-      reject(new TypeError('이미지 다운로드 실패 하였습니다.')); // error occurred, rejecting
-    };
-    xhr.responseType = 'arraybuffer'; // use BlobModule's UriHandler
-    xhr.open('GET', uri, true); // fetch the blob from uri in async mode
-    xhr.send(null); // no initial data
-  });
+): Promise<ArrayBuffer> => {
+  const base64 = await readFile(uri, 'base64');
 
-  return data as LocalImageResponse;
+  return decode(base64);
 };

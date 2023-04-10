@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {Divider, FriendItem} from '../../components';
 import {SearchInput} from '../../components/input';
@@ -31,11 +30,12 @@ type FreidnsListTemplateProps = {
   onKeyword: (text: string) => void;
   keyword: string;
 
+  totalCount: number;
+
   synchronizing: boolean;
 };
 
 export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
-  const insets = useSafeAreaInsets();
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -43,12 +43,9 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
   }, [props.keyword]);
 
   useEffect(() => {
-    if (keyword && keyword.length < 2) {
-      return;
-    }
     let tm = setTimeout(() => {
       props.onKeyword(keyword);
-    }, 1000);
+    }, 500);
     return () => {
       clearTimeout(tm);
     };
@@ -58,40 +55,62 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     return (
       <View>
         {props.hiddenFriend && (
-          <View>
-            <Text color={colors.darkGrey} size={12} mx={16}>
-              숨김친구
+          <View style={styles.labelWrap}>
+            <Text color={colors.darkGrey} size={12} ml={16}>
+              {props.keyword ? '검색 결과' : '숨김친구'}
             </Text>
-            <Divider mt={8} mb={7.5} mx={16} />
+            <Text color={colors.darkGrey} weight="medium" ml={2} size={12}>
+              {props.totalCount}
+            </Text>
           </View>
         )}
         {!props.hiddenFriend && (
           <View>
-            <Text color={colors.darkGrey} size={12} mx={16}>
-              동기화
-            </Text>
-            <Divider mt={8} mb={7.5} mx={16} />
-            <FriendItem
-              name="연락처 동기화"
-              button="동기화"
-              buttonColor={colors.blue}
-              buttonLoading={props.synchronizing}
-              onButtonPress={props.onSyncContact}
-              icon={
-                <View style={styles.sync}>
-                  <WithLocalSvg width={16} height={16} asset={svgs.sync} />
-                </View>
-              }
-            />
-            <Text color={colors.darkGrey} size={12} mx={16} mt={22.5}>
-              친구
-            </Text>
+            {props.keyword?.length === 0 && (
+              <>
+                <Text color={colors.darkGrey} size={12} mx={16}>
+                  동기화
+                </Text>
+                <Divider mt={8} mb={7.5} mx={16} />
+                <FriendItem
+                  name="연락처 동기화"
+                  button="동기화"
+                  buttonColor={colors.blue}
+                  buttonLoading={props.synchronizing}
+                  onButtonPress={props.onSyncContact}
+                  icon={
+                    <View style={styles.sync}>
+                      <WithLocalSvg width={16} height={16} asset={svgs.sync} />
+                    </View>
+                  }
+                />
+              </>
+            )}
+
+            <View
+              style={[
+                styles.labelWrap,
+                {marginTop: props.keyword?.length > 0 ? 0 : 22.5},
+              ]}>
+              <Text color={colors.darkGrey} size={12} ml={16}>
+                {props.keyword ? '검색 결과' : '친구'}
+              </Text>
+              <Text color={colors.darkGrey} weight="medium" ml={2} size={12}>
+                {props.totalCount}
+              </Text>
+            </View>
             <Divider mt={8} mb={7.5} mx={16} />
           </View>
         )}
       </View>
     );
-  }, [props.hiddenFriend, props.synchronizing]);
+  }, [
+    props.hiddenFriend,
+    props.synchronizing,
+    props.keyword,
+    props.loading,
+    props.totalCount,
+  ]);
 
   const handleKeyExtractor = useCallback((item: Friend, index: number) => {
     return index.toString();
@@ -175,7 +194,11 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
           ) : undefined
         }
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+          <RefreshControl
+            tintColor={colors.primary}
+            refreshing={false}
+            onRefresh={handleRefresh}
+          />
         }
       />
     </View>
@@ -198,4 +221,8 @@ const styles = StyleSheet.create({
   },
   hiddenFriend: {paddingHorizontal: 16, paddingVertical: 15},
   loading: {position: 'absolute', alignSelf: 'center'},
+  labelWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });

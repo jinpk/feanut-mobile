@@ -17,6 +17,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {configs} from '../../libs/common/configs';
 import {getObjectURLByKey} from '../../libs/common/file';
+import {useIsFocused} from '@react-navigation/native';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,6 +34,7 @@ type InboxTemplateProps = {
 
 function InboxTemplate(props: InboxTemplateProps) {
   const insets = useSafeAreaInsets();
+  const focused = useIsFocused();
 
   const handleKeyExtractor = useCallback(
     (item: PollingReceiveItem, index: number) => {
@@ -74,7 +76,7 @@ function InboxTemplate(props: InboxTemplateProps) {
         />
       );
     },
-    [],
+    [focused],
   );
 
   const handleRefresh = useCallback(() => {
@@ -112,7 +114,11 @@ function InboxTemplate(props: InboxTemplateProps) {
           ) : undefined
         }
         refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+          <RefreshControl
+            tintColor={colors.primary}
+            refreshing={false}
+            onRefresh={handleRefresh}
+          />
         }
         ListEmptyComponent={
           !props.loading ? (
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   empty: {
-    marginTop: constants.screenHeight / 5,
+    marginTop: '40%',
   },
   list: {paddingBottom: 7.5},
   sync: {

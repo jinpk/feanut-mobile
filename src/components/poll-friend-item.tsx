@@ -56,8 +56,9 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
     } else {
       const percent = props.isPull ? 100 : 85;
       percentWidth.setValue(ITEM_HEIGHT);
-      const toValue =
-        ((ITEM_WIDTH - ITEM_HEIGHT) / 100) * percent + ITEM_HEIGHT;
+      const toValue = Math.floor(
+        ((ITEM_WIDTH - ITEM_HEIGHT) / 100) * percent + ITEM_HEIGHT,
+      );
       Animated.timing(percentWidth, {
         useNativeDriver: false,
         duration: 500,
@@ -79,7 +80,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
           styles.root,
           {marginBottom: props.mb},
           {transform: [{scale}, {translateY}]},
-          props.selected && {borderColor: props.color},
+          props.selected && {borderColor: props.color, borderWidth: 1},
         ]}>
         {props.selected && (
           <Animated.View
@@ -131,8 +132,6 @@ const styles = StyleSheet.create({
     height: ITEM_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.white,
   },
   content: {
     marginLeft: 15,

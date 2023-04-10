@@ -12,8 +12,13 @@ function DeleteMe() {
   const name = useProfileStore(s => s.profile.name);
 
   const handleDelete = useCallback(async () => {
+    const reasonTrim = reason.trim();
+    setReason(reasonTrim);
     try {
-      await deleteMe(reason.trim());
+      if (reasonTrim.length < 10) {
+        throw '이유를 10자 이상으로 입력해 주세요';
+      }
+      await deleteMe(reasonTrim);
       logout();
     } catch (error: any) {
       Alert.alert(error.message || error);

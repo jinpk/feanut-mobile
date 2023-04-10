@@ -3,7 +3,11 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert} from 'react-native';
 import {useProfileImage} from '../../hooks';
-import {localImageURIToBlob, postFile, putObject} from '../../libs/api/common';
+import {
+  localImageURIToArrayBuffer,
+  postFile,
+  putObject,
+} from '../../libs/api/common';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
 import {PatchProfileRequest, ProfileForm} from '../../libs/interfaces';
 import {useProfileStore} from '../../libs/stores';
@@ -60,13 +64,17 @@ function ProfileEdit(): JSX.Element {
       };
 
       if (data.profileImage?.fileName) {
-        const imageData = await localImageURIToBlob(data.profileImage.uri);
+        const contentType = data.profileImage.type;
+        const buffer = await localImageURIToArrayBuffer(data.profileImage.uri);
         const fileResponse = await postFile({
           purpose: 'profileimage',
-          contentType: imageData.type,
+          contentType: contentType,
         });
         params.imageFileId = fileResponse.fileId;
-        await putObject(fileResponse.signedUrl, imageData);
+        await putObject(fileResponse.signedUrl, {
+          buffer,
+          type: contentType,
+        });
       } else if (!data.profileImage) {
         params.imageFileId = null;
       }
