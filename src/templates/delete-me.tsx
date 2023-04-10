@@ -15,6 +15,7 @@ type DeleteMeTemplateProps = {
   onReasonChange: (value: string) => void;
   onBack: () => void;
   onDelete: () => void;
+  name: string;
 };
 
 function DeleteMeTemplate(props: DeleteMeTemplateProps) {
@@ -32,7 +33,7 @@ function DeleteMeTemplate(props: DeleteMeTemplateProps) {
           uri={getObjectURLByKey(profileImageKey, '150')}
         />
         <Text mt={24} weight="bold" size={18} align="center">
-          강호님, feanut 계정을 정말{'\n'}
+          {props.name}님, feanut 계정을 정말{'\n'}
           <Text weight="bold" size={18} color={colors.red}>
             탈퇴{' '}
           </Text>
@@ -53,12 +54,6 @@ function DeleteMeTemplate(props: DeleteMeTemplateProps) {
           <View style={styles.ol}>
             <View style={styles.li} />
             <Text weight="medium">보유중인 코인은 전부 소멸됩니다.</Text>
-          </View>
-          <View style={styles.ol}>
-            <View style={styles.li} />
-            <Text weight="medium">
-              사용중인 feanut ID로 재가입 불가능합니다.
-            </Text>
           </View>
 
           <Text size={12} mt={45} mb={5} color={colors.darkGrey}>

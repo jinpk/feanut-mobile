@@ -26,6 +26,7 @@ export const Information = (props: InformationProps) => {
           style={styles.icon}
         />
       )}
+
       <Text weight="bold" size={18} mt={15} align="center">
         {props.message}
       </Text>

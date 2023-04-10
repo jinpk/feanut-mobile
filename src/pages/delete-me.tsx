@@ -22,8 +22,8 @@ function DeleteMe() {
 
   const handleDeleteWithAlert = useCallback(() => {
     Alert.alert(
-      '정말 feanut을 탈퇴 하시곘습니까?',
-      `친구들이 ${name}님을 투표할 수 있어요!`,
+      '정말 feanut을 탈퇴 하시겠습니까?',
+      `탈퇴하면 친구들이\n${name}님을 투표할 수 없어요`,
       [
         {text: '탈퇴', onPress: handleDelete},
         {text: '취소', style: 'cancel'},
@@ -33,6 +33,7 @@ function DeleteMe() {
 
   return (
     <DeleteMeTemplate
+      name={name}
       reason={reason}
       onReasonChange={setReason}
       onBack={navigation.goBack}

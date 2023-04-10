@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert} from 'react-native';
 import {
+  getPoll,
   getPolling,
   postPolling,
   postPollingRefresh,
@@ -48,8 +49,6 @@ const makeFriendItems = (friend: PollingFriend[]): PollingFriendItem[] => {
 };
 
 export function usePolling() {
-  const userId = useUserStore(s => s.user?.id);
-
   const [state, setState] = useState<PollingState | undefined>();
 
   const [maxDailyCount, setMaxDailyCount] = useState(3);
@@ -159,13 +158,6 @@ export function usePolling() {
     }
   }, [state, emojiInitialized]);
 
-  /** Init */
-  useEffect(() => {
-    if (userId) {
-      setState('loading');
-    }
-  }, []);
-
   /** poll & polling 조회 hooks */
   useEffect(() => {
     const handlePolling = async (curPollingIndex: number, preLoad: boolean) => {
@@ -176,11 +168,24 @@ export function usePolling() {
           // 폴링 있다면 조회
           polling = await getPolling(poll.pollingId);
         } else {
-          // 폴링 없으면 생성
-          polling = await postPolling({
-            pollId: poll.pollId,
-            userRoundId: userRoundId as string,
-          });
+          // 폴링 없으면
+          if (!preLoad) {
+            // 다음 투표는 폴 우선 조회
+            const resPoll = await getPoll(poll.pollId);
+            polling = {
+              id: '',
+              userRoundId: userRoundId as string,
+              pollId: resPoll,
+              friendIds: [],
+              isVoted: false,
+            };
+          } else {
+            // 현재 선택된 투표는 폴링 생성
+            polling = await postPolling({
+              pollId: poll.pollId,
+              userRoundId: userRoundId as string,
+            });
+          }
         }
 
         const emojiURI =
@@ -324,7 +329,7 @@ export function usePolling() {
   return {
     state,
     maxDailyCount,
-    reInit: () => {
+    fetchRound: () => {
       setState('loading');
     },
     pollings,

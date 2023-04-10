@@ -131,6 +131,13 @@ function Profile(): JSX.Element {
     navigation.navigate(routes.friend);
   }, []);
 
+  const handleLogout = useCallback(() => {
+    Alert.alert('로그아웃 하시겠습니까?', '', [
+      {text: '취소', style: 'cancel'},
+      {text: '확인', onPress: logout},
+    ]);
+  }, []);
+
   return (
     <View style={styles.root}>
       <BackTopBar logo onBack={navigation.goBack} />
@@ -139,7 +146,7 @@ function Profile(): JSX.Element {
           friendsCount={friendsCount}
           onEditProfile={handleEditProfile}
           profile={profile}
-          onLogout={logout}
+          onLogout={handleLogout}
           feanutAmount={coin.amount}
           onPurchaseFeanut={coin.openPurchaseModal}
           onInstagram={handleInstagram}

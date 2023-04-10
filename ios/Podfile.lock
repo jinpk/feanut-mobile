@@ -516,7 +516,7 @@ PODS:
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
-    - SDWebImage (~> 5.11.1)
+    - SDWebImage (~> 5.15.3)
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNFBApp (17.4.0):
     - Firebase/CoreOnly (= 10.7.0)
@@ -535,9 +535,9 @@ PODS:
     - React-Core
   - RNSVG (13.8.0):
     - React-Core
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
+  - SDWebImage (5.15.5):
+    - SDWebImage/Core (= 5.15.5)
+  - SDWebImage/Core (5.15.5)
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
@@ -825,19 +825,19 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDeviceInfo: 749f2e049dcd79e2e44f134f66b73a06951b5066
-  RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
+  RNFastImage: 979bf849b71618c0d371ee8cd11c6ef32acae6a4
   RNFBApp: 525cc4317f7955eda6bac09fac3acf7ee06afa0b
   RNFBMessaging: 7a3e2fa01d4b2a93b6d79fc250d50ecef3ced110
   RNIap: cc309cf426a6df5240e38108ffa6c270a52c03ac
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNShare: eaee3dd5a06dad397c7d3b14762007035c5de405
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 79dd7410de6f8ad73a77c868d3d368843f0c93e0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: dd5977e6dc2308a226752822e311c77c974e62b7
+PODFILE CHECKSUM: 38cdcef05718198c41b5f9730b7bab0631f9cb65
 
 COCOAPODS: 1.12.0

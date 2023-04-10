@@ -219,14 +219,14 @@ export const Polling = (props: PollingProps) => {
             {props.title}
           </Text>
         </View>
-        <View>
-          {props.focused || props.selectedFriend ? (
+        <View style={styles.friends}>
+          {props.friends?.length >= 1 ? (
             props.friends.map((x, i) => {
               return (
                 <PollFriendItem
                   gender={x.gender}
                   label={x.label}
-                  key={x.value}
+                  key={i.toString()}
                   source={x.source}
                   selected={props.selectedFriend === x.value}
                   color={pointColor}
@@ -241,31 +241,24 @@ export const Polling = (props: PollingProps) => {
             <ActivityIndicator color={colors.white} />
           )}
         </View>
+      </View>
 
-        {props.focused && (
-          <View style={[styles.footer, {marginBottom: insets.bottom}]}>
-            <TouchableOpacity
-              onPress={props.onSkip}
-              style={styles.footerButton}>
-              <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
-              <Text ml={7} color={colors.white} size={12}>
-                투표 건너뛰기
-              </Text>
-            </TouchableOpacity>
+      <View style={[styles.footer, {marginBottom: 30 + insets.bottom}]}>
+        <TouchableOpacity onPress={props.onSkip} style={styles.footerButton}>
+          <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
+          <Text ml={7} color={colors.white} size={12}>
+            투표 건너뛰기
+          </Text>
+        </TouchableOpacity>
 
-            <View style={styles.footerDivider} />
+        <View style={styles.footerDivider} />
 
-            <TouchableOpacity
-              onPress={props.onShuffle}
-              style={styles.footerButton}>
-              <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
-              <Text ml={7} color={colors.white} size={12}>
-                친구 다시찾기
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {!props.focused && <View />}
+        <TouchableOpacity onPress={props.onShuffle} style={styles.footerButton}>
+          <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
+          <Text ml={7} color={colors.white} size={12}>
+            친구 다시찾기
+          </Text>
+        </TouchableOpacity>
       </View>
     </Animated.View>
   );
@@ -276,16 +269,20 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
   },
-  titleArea: {alignItems: 'center', marginTop: constants.screenWidth * 0.05},
+  friends: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleArea: {alignItems: 'center', marginTop: 60},
   body: {
     zIndex: 3,
-    paddingVertical: 30,
     flex: 1,
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   footer: {
     flexDirection: 'row',
+    zIndex: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },

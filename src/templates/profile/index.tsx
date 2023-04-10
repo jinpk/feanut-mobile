@@ -75,7 +75,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             <Text color={colors.darkGrey} size={12}>
               친구
             </Text>
-            <Text my={7}>{props.friendsCount}</Text>
+            <Text my={7}>{props.friendsCount || 0}</Text>
             <TextButton
               onPress={props.onFriend}
               hiddenBorder

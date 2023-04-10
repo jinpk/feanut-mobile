@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {configs} from '../libs/common/configs';
 import {Gender} from '../libs/interfaces';
 import {Avatar} from './avatar';
 import {BadgeButton} from './button';

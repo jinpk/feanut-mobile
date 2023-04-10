@@ -50,7 +50,7 @@ function EventModalTemplate(props: EventModalTemplateProps) {
           }
           props.onClose();
         });
-      }, 5000);
+      }, 4000);
     });
   }, []);
 

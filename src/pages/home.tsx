@@ -91,10 +91,28 @@ function Home(): JSX.Element {
     }
   }, [polling.state]);
 
-  /** 친구 화면에서 동기화하여 친구 4명 이상되면 라운드 조회 */
+  // 처음에 한번 호죄
+  useEffect(() => {
+    polling.fetchRound();
+  }, []);
+
+  // reject이고 화면 포커스된 경우 다시 조회
+  const isTried = useRef(false);
+  useEffect(() => {
+    const needToFetch = !polling.state || polling.state === 'reject';
+    if (focused && needToFetch && !isTried.current) {
+      polling.fetchRound();
+      isTried.current = true;
+    }
+
+    if (!focused) {
+      isTried.current = false;
+    }
+  }, [focused, polling.state]);
+
   useEffect(() => {
     if (polling.state === 'reject' && friendsTotalCount >= 4) {
-      polling.reInit();
+      polling.fetchRound();
     }
   }, [polling.state, friendsTotalCount]);
 
@@ -207,7 +225,7 @@ function Home(): JSX.Element {
             remainTime={polling.remainTime || undefined}
             isReached={polling.state === 'reach'}
             onTimeout={() => {
-              polling.reInit();
+              polling.fetchRound();
             }}
           />
         )}
