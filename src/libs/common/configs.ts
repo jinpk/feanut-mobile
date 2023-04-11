@@ -4,20 +4,25 @@ let apiBaseURL = 'https://api.feanut.com';
 if (__DEV__) {
   apiBaseURL = 'https://api.dev.feanut.com';
 } else {
-  apiBaseURL = 'https://api.dev.feanut.com';
+  // apiBaseURL = 'https://api.dev.feanut.com';
 }
 
 let cdnBaseUrl = 'https://cdn.feanut.com';
 if (__DEV__) {
   cdnBaseUrl = 'https://cdn.dev.feanut.com';
 } else {
-  cdnBaseUrl = 'https://cdn.dev.feanut.com';
+  // cdnBaseUrl = 'https://cdn.dev.feanut.com';
+}
+
+let verionUrl =
+  'https://asia-northeast3-feanut.cloudfunctions.net/feanut-apps-version';
+if (__DEV__) {
+  // verionUrl = 'https://cdn.dev.feanut.com';
+} else {
+  // verionUrl = 'https://cdn.dev.feanut.com';
 }
 
 const assetBaseUrl = 'https://storage.googleapis.com/assets.feanut.com';
-
-const verionUrl =
-  'https://asia-northeast3-feanut.cloudfunctions.net/feanut-apps-version';
 
 export const configs = {
   instagramClientId: '201156389218583',

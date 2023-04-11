@@ -1,10 +1,15 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
-import {Alert} from 'react-native';
+import {Alert, StatusBar} from 'react-native';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
-import {routes} from '../../libs/common';
+import {constants, routes} from '../../libs/common';
 import {APIError} from '../../libs/interfaces';
 import {
   POLLING_ERROR_ALREADY_DONE,
@@ -32,6 +37,18 @@ function InboxDetail() {
   const updateProfile = useProfileStore(s => s.actions.update);
 
   const [opened, setOpened] = useState(false);
+
+  /** iOS 상태바 색 변경 */
+  useEffect(() => {
+    if (constants.platform === 'ios') {
+      StatusBar.setBarStyle('light-content');
+    }
+    return () => {
+      if (constants.platform === 'ios') {
+        StatusBar.setBarStyle('dark-content');
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!name) {

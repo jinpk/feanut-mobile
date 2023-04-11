@@ -16,7 +16,6 @@ import {usePolling} from '../hooks';
 import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
-import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {Polling} from '../components/poll';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -57,17 +56,12 @@ function Home(): JSX.Element {
       polling.event ||
       polling.state !== 'polling'
     ) {
-      StatusBar.setBarStyle('dark-content');
-      if (constants.platform === 'android') {
-        StatusBar.setBackgroundColor('#fff');
-        // 안드로이드 기본 제공 navigation bar 컬러와 흰색 배경시 navigation font color 변경 안되고 있음.
-        changeNavigationBarColor(colors.white, true, true);
+      if (constants.platform === 'ios') {
+        StatusBar.setBarStyle('dark-content');
       }
     } else {
-      StatusBar.setBarStyle('light-content');
-      if (constants.platform === 'android') {
-        StatusBar.setBackgroundColor(colors.dark);
-        changeNavigationBarColor(colors.dark, false, true);
+      if (constants.platform === 'ios') {
+        StatusBar.setBarStyle('light-content');
       }
     }
   }, [focused, welcomModalOpened, firstInited, polling.event, polling.state]);
