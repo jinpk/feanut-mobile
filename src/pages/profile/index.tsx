@@ -93,7 +93,7 @@ function Profile(): JSX.Element {
       if (on) {
         setInstagramModal(true);
       } else {
-        Alert.alert('인스타그램 계정연동 해지 하시겠습니까?', '', [
+        Alert.alert('인스타그램 계정 연결 해지 하시겠습니까?', '', [
           {
             style: 'destructive',
             text: '취소',

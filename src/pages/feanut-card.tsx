@@ -8,7 +8,6 @@ import {
   getPollingStatsByProfile,
 } from '../libs/api/poll';
 import {getProfile} from '../libs/api/profile';
-import {configs} from '../libs/common/configs';
 import {PROFILES_ERROR_OWNER_LESS} from '../libs/common/errors';
 import {APIError, Profile} from '../libs/interfaces';
 import {
@@ -125,17 +124,19 @@ function FeanutCard() {
         });
       }
     } else {
-      if (!profile?.instagram) return;
-
-      const instagramURL = `instagram://user?username=${profile.instagram}`;
-      const instagramWebsiteURL = `https://www.instagram.com/${profile.instagram}`;
-      Linking.canOpenURL(instagramURL).then(can => {
-        if (can) {
-          Linking.openURL(instagramURL);
-        } else {
-          Linking.openURL(instagramWebsiteURL);
-        }
-      });
+      if (!profile?.instagram) {
+        Alert.alert('친구가 인스타그램 계정을 연결하지 않았어요');
+      } else {
+        const instagramURL = `instagram://user?username=${profile.instagram}`;
+        const instagramWebsiteURL = `https://www.instagram.com/${profile.instagram}`;
+        Linking.canOpenURL(instagramURL).then(can => {
+          if (can) {
+            Linking.openURL(instagramURL);
+          } else {
+            Linking.openURL(instagramWebsiteURL);
+          }
+        });
+      }
     }
   }, [profileId, myProfileId, profile?.instagram, profile?.name]);
 
