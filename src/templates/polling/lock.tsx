@@ -96,7 +96,7 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
 
   const title = useMemo(() => {
     if (props.isReached) {
-      return '오늘의 칭찬 투표를 전부 하셨군요!';
+      return '오늘의 칭찬 투표를 다 하셨군요!';
     }
     switch (props.todayCount) {
       case 1:
@@ -112,8 +112,8 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
         <Information
           icon={gifs.hourglassNotDone}
           message={title}
-          subMessage={`하루에 ${props.maxDailyCount}번만 참여할 수 있어요.`}
-          markingText="투표가 준비">
+          subMessage={`수신함을 확인해 보세요.\n친구들이 나를 투표했을 수도 있어요!`}
+          markingText="수신함을 확인">
           {renderChildren()}
         </Information>
       )}
@@ -122,18 +122,18 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
         <Information
           icon={gifs.hourglassNotDone}
           message={title}
-          subMessage={`마지막 투표도 곧 참여할 수 있어요.`}
-          markingText="마지막 투표">
+          subMessage={`친구에게 마음을 표현하고 더 가까워져 볼까요?`}
+          markingText="마음을 표현">
           {renderChildren()}
         </Information>
       )}
 
       {props.isReached && (
         <Information
-          icon={gifs.hourglassNotDone}
+          icon={gifs.highVoltage}
           message={title}
-          subMessage={`투표는 하루에 ${props.maxDailyCount}번 참여할 수 있어요.\n내일 더 특별한 투표로 찾아뵐게요!`}
-          markingText={`${props.maxDailyCount}번`}>
+          subMessage={`내일 더 다양한 주제의 투표에 참여할 수 있어요!`}
+          markingText="다양한 주제">
           {renderChildren()}
         </Information>
       )}

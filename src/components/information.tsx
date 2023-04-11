@@ -44,7 +44,7 @@ export const Information = (props: InformationProps) => {
               {markingStartIndex >= 0 && (
                 <View style={styles.textLines}>
                   <Text>{sentence.substring(0, markingStartIndex)}</Text>
-                  <View style={{paddingHorizontal: 2}}>
+                  <View style={{paddingHorizontal: 1}}>
                     <View style={styles.marker} />
                     <Text style={{zIndex: 2}} weight="bold">
                       {sentence.substring(markingStartIndex, markingEndIndex)}

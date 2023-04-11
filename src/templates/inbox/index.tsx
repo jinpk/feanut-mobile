@@ -125,7 +125,7 @@ function InboxTemplate(props: InboxTemplateProps) {
             <View style={[styles.empty, {paddingTop: insets.top}]}>
               <Information
                 icon={gifs.hatchingChick}
-                message={`친구들이 투표하는 중이에요:)`}
+                message={`친구들이 투표하고 있어요.`}
                 subMessage={`${props.name} 님이 선택되면\n알림으로 알려드릴게요!`}
                 markingText="알림"
               />
