@@ -11,7 +11,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {colors, svgs} from '../../libs/common';
 import {Profile} from '../../libs/interfaces';
 import DeviceInfo from 'react-native-device-info';
-import {configs} from '../../libs/common/configs';
 import {getObjectURLByKey} from '../../libs/common/file';
 
 type ProfileTemplateProps = {
@@ -41,6 +40,7 @@ type ProfileTemplateProps = {
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
+
   return (
     <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
       <View style={styles.profile}>
@@ -180,12 +180,6 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <TouchableOpacity onPress={props.onPrivacy}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>개인정보 처리방침</Text>
-          <WithLocalSvg
-            width={12}
-            height={12}
-            asset={svgs.right}
-            color={colors.darkGrey}
-          />
         </View>
       </TouchableOpacity>
 
@@ -194,12 +188,6 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <TouchableOpacity onPress={props.onTerms}>
         <View style={[styles.listItem, {paddingVertical: 15}]}>
           <Text>이용약관</Text>
-          <WithLocalSvg
-            width={12}
-            height={12}
-            asset={svgs.right}
-            color={colors.darkGrey}
-          />
         </View>
       </TouchableOpacity>
       <Divider mx={13} />

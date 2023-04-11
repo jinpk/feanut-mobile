@@ -26,7 +26,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
       <TouchableWithoutFeedback onPress={props.onBack}>
         <View style={[styles.leftItem]}>
           <WithLocalSvg
-            width={7}
+            width={14}
             height={14}
             asset={svgs.back}
             color={props.absolute ? colors.white : colors.darkGrey}

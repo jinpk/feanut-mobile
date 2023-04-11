@@ -25,6 +25,7 @@ import {GuideModal} from './modals/guide';
 import NetInfo from '@react-native-community/netinfo';
 import {Alert, View} from 'react-native';
 import {VersionCheckerModal} from './modals/version-checker';
+import {WebviewModal} from './modals/webview';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -162,6 +163,7 @@ function FeanutApp(props: AppProps): JSX.Element {
       <NavigationApp />
       {/** Modals */}
       <GuideModal />
+      <WebviewModal />
       <WelcomeModal />
       <CoinModal />
       <VersionCheckerModal />

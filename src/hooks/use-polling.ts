@@ -10,6 +10,8 @@ import {
 } from '../libs/api/poll';
 import {configs} from '../libs/common/configs';
 import {
+  AUTH_ERROR_INVAILD_REFRESH_TOKEN,
+  AUTH_MODULE_NAME,
   POLLING_ERROR_ALREADY_DONE,
   POLLING_ERROR_EXCEED_REFRESH,
   POLLING_ERROR_EXCEED_SKIP,
@@ -24,7 +26,7 @@ import {
   PostPollingVoteRequest,
   RoundEvent,
 } from '../libs/interfaces/polling';
-import {useEmojiStore, useUserStore} from '../libs/stores';
+import {useEmojiStore} from '../libs/stores';
 import FastImage from 'react-native-fast-image';
 import {getObjectURLByKey} from '../libs/common/file';
 
@@ -82,6 +84,22 @@ export function usePolling() {
     }, {});
   }, [emojis, emojiInitialized]);
 
+  /** state === 'polling' 상태일때 화면 focus 및 한번 조회해서 친구수 체크 */
+  const handleRequiredFriendsCount = async () => {
+    try {
+      await postPollingRound();
+    } catch (error) {
+      const apiError = error as APIError;
+      if (apiError && apiError.code === POLLING_ERROR_MIN_FRIENDS) {
+        setState('reject');
+      } else {
+        if (__DEV__) {
+          console.error(error);
+        }
+      }
+    }
+  };
+
   /** Fetch round */
   useEffect(() => {
     // 이모지 초기화 선행 필요.
@@ -121,17 +139,26 @@ export function usePolling() {
               // 하루 최대 참여
               return 'reach';
             } else {
-              // 시간 제한
+              // 하루 N번 참여로 시간 제한
               setRemainTime(pollingRound.remainTime);
               return 'lock';
             }
           }
         } catch (error: any) {
           const apiError = error as APIError;
-          if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
-            return 'reject';
+          if (
+            apiError.module === AUTH_MODULE_NAME &&
+            apiError.code === AUTH_ERROR_INVAILD_REFRESH_TOKEN
+          ) {
+            // 리프레시 토큰 오류는 자동으로 로그아웃됨.
+            // 앱 처음 화면에서 필수로 조회하는 API라 오류 메시지 hide 필요.
           } else {
-            Alert.alert(apiError.message);
+            if (apiError)
+              if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
+                return 'reject';
+              } else {
+                Alert.alert(apiError.message);
+              }
           }
         }
       };
@@ -343,5 +370,7 @@ export function usePolling() {
     clearEvent,
     remainTime,
     event: roundEvent,
+
+    requiredFriendsCount: handleRequiredFriendsCount,
   };
 }

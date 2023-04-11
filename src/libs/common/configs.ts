@@ -4,6 +4,15 @@ let apiBaseURL = 'https://api.feanut.com';
 if (__DEV__) {
   apiBaseURL = 'https://api.dev.feanut.com';
   // apiBaseURL = 'http://192.168.35.205:3000';
+} else {
+  apiBaseURL = 'https://api.dev.feanut.com';
+}
+
+let cdnBaseUrl = 'https://cdn.feanut.com';
+if (__DEV__) {
+  cdnBaseUrl = 'https://cdn.dev.feanut.com';
+} else {
+  cdnBaseUrl = 'https://cdn.dev.feanut.com';
 }
 
 const assetBaseUrl = 'https://storage.googleapis.com/assets.feanut.com';

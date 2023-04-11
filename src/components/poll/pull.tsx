@@ -2,7 +2,6 @@ import React, {useMemo} from 'react';
 import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {colors, constants, emotionPointColor, svgs} from '../../libs/common';
-import {configs} from '../../libs/common/configs';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
 import {Avatar} from '../avatar';
 import {PollFriendItem} from '../poll-friend-item';
@@ -26,22 +25,31 @@ export const Pull = (props: PullProps) => {
     <PollLayout emotion={props.pollId.emotion}>
       <View style={styles.body}>
         <View style={{alignItems: 'center'}}>
-          <Avatar
-            uri={getObjectURLByKey(props.voter.imageFileKey, '70')}
-            size={55 * ratio}
-            defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
-          />
+          <TouchableWithoutFeedback onPress={props.onOpen}>
+            <View>
+              <Avatar
+                uri={getObjectURLByKey(props.voter.imageFileKey, '70')}
+                size={55 * ratio}
+                defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+
           {props.isOpened && (
             <Text color={colors.white} mt={15 * ratio}>
               <Text weight="bold" color={colors.white}>
                 {props.voter.name}
               </Text>{' '}
-              님이 나를 투표했어요!
+              님이 투표에서 나를 선택했어요!
             </Text>
           )}
           {!props.isOpened && (
             <Text color={colors.white} mt={15 * ratio}>
-              친구가 나를 투표했어요!
+              누군가{' '}
+              <Text color={colors.white} weight="medium">
+                나
+              </Text>
+              를 투표했어요!
             </Text>
           )}
         </View>
@@ -78,13 +86,21 @@ export const Pull = (props: PullProps) => {
 
         <View style={[styles.footer]}>
           <TouchableWithoutFeedback onPress={props.onOpen}>
-            <View style={[styles.share, styles.open]}>
-              <WithLocalSvg
-                width={12}
-                height={15}
-                asset={svgs.lock}
-                style={styles.shareIcon}
-              />
+            <View
+              style={[
+                styles.share,
+                styles.open,
+                {paddingLeft: props.isOpened ? 0 : 10},
+              ]}>
+              {!props.isOpened && (
+                <WithLocalSvg
+                  width={12}
+                  height={15}
+                  asset={svgs.lock}
+                  style={styles.shareIcon}
+                />
+              )}
+
               <Text size={12}>
                 {props.isOpened
                   ? `${props.voter.name}님 프로필 보기`

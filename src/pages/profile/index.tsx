@@ -7,7 +7,7 @@ import {getFriendshipStatus} from '../../libs/api/friendship';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
 import {colors, routes} from '../../libs/common';
 import {configs} from '../../libs/common/configs';
-import {useProfileStore, useUserStore} from '../../libs/stores';
+import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
 import {InstagramModalTemplate} from '../../templates/modal';
 import ProfileTemplate from '../../templates/profile';
 
@@ -22,6 +22,8 @@ function Profile(): JSX.Element {
   const [friendsCount, setFriendsCount] = useState(0);
 
   const [instagramModal, setInstagramModal] = useState(false);
+
+  const openWebview = useModalStore(s => s.actions.openWebview);
 
   const coin = useCoin();
 
@@ -112,11 +114,11 @@ function Profile(): JSX.Element {
   }, []);
 
   const handlePrivacy = useCallback(() => {
-    Linking.openURL(configs.privacyUrl);
+    openWebview(configs.privacyUrl);
   }, []);
 
   const handleTerms = useCallback(() => {
-    Linking.openURL(configs.termsUrl);
+    openWebview(configs.termsUrl);
   }, []);
 
   const handleWithdrawal = useCallback(() => {

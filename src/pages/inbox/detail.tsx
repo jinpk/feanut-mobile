@@ -14,8 +14,8 @@ import {useCoin, useGetEmojiURI} from '../../hooks';
 import DrawedShareTemplate from '../../templates/inbox/drawed-share';
 import {useProfileStore} from '../../libs/stores';
 import {getMyProfile} from '../../libs/api/profile';
-import {configs} from '../../libs/common/configs';
 import {getObjectURLByKey} from '../../libs/common/file';
+import OpenModalTemplate from '../../templates/inbox/open-modal';
 
 function InboxDetail() {
   const {
@@ -30,6 +30,9 @@ function InboxDetail() {
   const name = useProfileStore(s => s.profile.name);
   const profileImageKey = useProfileStore(s => s.profile.profileImageKey);
   const updateProfile = useProfileStore(s => s.actions.update);
+
+  const [opened, setOpened] = useState(false);
+
   useEffect(() => {
     if (!name) {
       getMyProfile().then(updateProfile);
@@ -61,6 +64,7 @@ function InboxDetail() {
       await openPull(pollingId);
       fetchData(pollingId);
       fetchAmount();
+      setOpened(true);
     } catch (error) {
       const apiError = error as APIError;
       if (apiError.code === POLLING_ERROR_LACK_COIN_AMOUNT) {
@@ -118,6 +122,18 @@ function InboxDetail() {
           }}
         />
       )}
+      <OpenModalTemplate
+        visible={(pull?.isOpened && opened) || false}
+        onClose={() => {
+          setOpened(false);
+        }}
+        name={pull?.voter?.name || ''}
+        onProfile={() => {
+          navigation.navigate(routes.feanutCard, {
+            profileId: pull.voter.profileId,
+          });
+        }}
+      />
     </>
   );
 }

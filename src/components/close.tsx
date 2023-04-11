@@ -13,7 +13,12 @@ export const Close = (props: CloseProps) => {
     <TouchableOpacity
       onPress={props.onClose}
       style={[styles.close, props.style]}>
-      <WithLocalSvg asset={svgs.close} width={8.4} height={8.4} />
+      <WithLocalSvg
+        asset={svgs.close}
+        width={8.4}
+        height={8.4}
+        color={colors.darkGrey}
+      />
     </TouchableOpacity>
   );
 };

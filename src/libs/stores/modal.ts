@@ -5,6 +5,9 @@ export interface ModalStore {
   coin: boolean;
   guide: boolean;
 
+  webview: boolean;
+  webviewURI: string;
+
   actions: {
     openGuide: () => void;
     closeGuide: () => void;
@@ -14,6 +17,9 @@ export interface ModalStore {
 
     openCoin: () => void;
     closeCoin: () => void;
+
+    openWebview: (uri: string) => void;
+    closeWebview: () => void;
   };
 }
 
@@ -21,6 +27,8 @@ const initialState = {
   welcome: false,
   coin: false,
   guide: false,
+  webview: false,
+  webviewURI: '',
 };
 
 export const useModalStore = create<ModalStore>(set => ({
@@ -34,5 +42,8 @@ export const useModalStore = create<ModalStore>(set => ({
 
     openCoin: () => set({coin: true}),
     closeCoin: () => set({coin: false}),
+
+    openWebview: (webviewURI: string) => set({webview: true, webviewURI}),
+    closeWebview: () => set({webview: false, webviewURI: ''}),
   },
 }));

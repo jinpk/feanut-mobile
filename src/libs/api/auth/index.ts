@@ -9,6 +9,11 @@ import {
   TokenResponse,
 } from '../../interfaces';
 
+export const postSignOut = async () => {
+  const res = await feanutAPI.post('/signout');
+  return res.data;
+};
+
 export const postSignInVerification = async (
   body: SignInVerificationRequest,
 ): Promise<AuthResponse> => {

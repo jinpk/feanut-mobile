@@ -7,6 +7,7 @@ import {
   getUserFromStorage,
 } from '../common';
 import {NotificationData, TokenResponse, User} from '../interfaces';
+import {postSignOut} from '../api/auth';
 
 export interface UserStore {
   // 세션정보 조회중 상태
@@ -55,7 +56,15 @@ export const useUserStore = create<UserStore>((set, get) => ({
     login: (user: User) => set({logged: true, user, loading: false}),
     logout: async () => {
       console.log('logout');
-      await clearCredentials();
+      try {
+        await postSignOut();
+        await clearCredentials();
+      } catch (error: any) {
+        if (__DEV__) {
+          console.error(error);
+        }
+      }
+
       await clearUser();
       setAPIAuthorization('');
       set({logged: false, loading: false, user: null});

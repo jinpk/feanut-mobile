@@ -18,7 +18,12 @@ export const CasualTopBar = (props: CasualTopBarProps): JSX.Element => {
         <TouchableOpacity
           onPress={props.onClose}
           style={[styles.close, {marginTop: insets.top}]}>
-          <WithLocalSvg width={14} height={14} asset={svgs.close} />
+          <WithLocalSvg
+            width={15}
+            height={15}
+            asset={svgs.close}
+            color={colors.darkGrey}
+          />
         </TouchableOpacity>
       )}
       <WithLocalSvg width={58} height={30} asset={LogoSvg} />

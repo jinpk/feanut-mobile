@@ -88,7 +88,12 @@ export const TextInput = (props: TextInputProps): JSX.Element => {
       />
       {!props.disabled && !props.hiddenClose && (
         <TouchableOpacity style={styles.clear} onPress={handleClear}>
-          <WithLocalSvg width={6} height={6} asset={svgs.close} />
+          <WithLocalSvg
+            width={6}
+            height={6}
+            asset={svgs.close}
+            color={colors.darkGrey}
+          />
         </TouchableOpacity>
       )}
     </View>

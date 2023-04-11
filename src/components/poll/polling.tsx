@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
+  NativeEventSubscription,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
@@ -24,6 +25,7 @@ import {Text} from '../text';
 import {Feanut, Figure} from './layout';
 import {Animated} from 'react-native';
 import {MainTopBar} from '../top-bar/main';
+import {AppState} from 'react-native';
 
 type PollingProps = {
   style?: ViewStyle;
@@ -49,6 +51,9 @@ type PollingProps = {
   latest?: boolean;
   firstInited: boolean;
   onFirstInited: () => void;
+
+  onInboxPress: () => void;
+  onProfilePress: () => void;
 };
 
 export const Polling = (props: PollingProps) => {
@@ -123,6 +128,33 @@ export const Polling = (props: PollingProps) => {
     }),
   ).current;
 
+  /** 애니메이션중 백그라운드가면 */
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    let subscription: NativeEventSubscription;
+    if (props.focused) {
+      subscription = AppState.addEventListener('change', nextAppState => {
+        if (
+          appState.current.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          // 돌아왔을떄 애니메이션 미처리 초기화
+          if (translateXValue.current !== 0) {
+            translateX.setValue(0);
+          }
+        }
+
+        appState.current = nextAppState;
+      });
+    }
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, [props.focused]);
+
   /**  첫 투표 슬라이드 애니메이션 */
   const [inited, setInited] = useState(props.initialIndex !== props.index);
   useEffect(() => {
@@ -194,11 +226,12 @@ export const Polling = (props: PollingProps) => {
       {...(inited && panResponder.panHandlers)}>
       {props.latest && (
         <>
+          {/** 애니메이션 부드러움을위해 마지막 투표는 탑바 UI 노출 */}
           <MainTopBar
             hideLogo
             white
-            onInboxPress={() => {}}
-            onProfilePress={() => {}}
+            onInboxPress={props.onInboxPress}
+            onProfilePress={props.onProfilePress}
           />
         </>
       )}

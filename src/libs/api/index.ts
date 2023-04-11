@@ -1,5 +1,5 @@
 import * as axios from 'axios';
-import {getCredentials, isTokenExpired, setCredentials} from '../common';
+import {getCredentials, setCredentials} from '../common';
 import {configs} from '../common/configs';
 import {APIError, TokenResponse} from '../interfaces';
 import {useUserStore} from '../stores';
@@ -11,6 +11,10 @@ export const feanutAPI = axios.default.create({
 
 feanutAPI.interceptors.request.use(
   async function (config) {
+    if (__DEV__) {
+      console.log('NETWORK_REQUEST', config.url);
+    }
+
     return config;
   },
   function (error) {
@@ -91,16 +95,12 @@ feanutAPI.interceptors.response.use(
       // 토큰 자체가 없으면
       const credentials = await getCredentials();
       if (!credentials) {
-        throw new Error('empty token.');
+        throw new Error(
+          '인증 정보를 확인할 수 없습니다.\n다시 로그인해 주세요.',
+        );
       }
 
       const token = credentials as TokenResponse;
-
-      // 리프레시 만료시 전체 초기화
-      // 토큰 갱신하며 리프레시도 갱신될거라 케이스 드뭄.
-      if (isTokenExpired(token.refreshToken)) {
-        throw new Error('refresh token exipred.');
-      }
 
       // 토큰 새로 발급
       const newToken = await postToken({

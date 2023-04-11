@@ -96,9 +96,16 @@ function Home(): JSX.Element {
     polling.fetchRound();
   }, []);
 
-  // reject이고 화면 포커스된 경우 다시 조회
   const isTried = useRef(false);
   useEffect(() => {
+    // 투표중이고 화면 포커스된 경우 최소 친구수 체크
+    if (focused && polling.state === 'polling') {
+      polling.requiredFriendsCount();
+      // 되돌아와서 체크할때는 아래 로직 실행 안되도록 isTried: true 처리
+      isTried.current = true;
+    }
+
+    // reject이고 화면 포커스된 경우 다시 조회
     const needToFetch = !polling.state || polling.state === 'reject';
     if (focused && needToFetch && !isTried.current) {
       polling.fetchRound();
@@ -123,15 +130,15 @@ function Home(): JSX.Element {
     });
   }, [tabIndex]);
 
+  const handleInboxPress = useCallback(() => {
+    navigation.navigate(routes.inbox);
+  }, []);
+
+  const handleProfilePress = useCallback(() => {
+    navigation.navigate(routes.profile);
+  }, []);
+
   const renderTopBar = useCallback(() => {
-    const handleInboxPress = () => {
-      navigation.navigate(routes.inbox);
-    };
-
-    const handleProfilePress = () => {
-      navigation.navigate(routes.profile);
-    };
-
     const last = polling.currentPollingIndex === polling.pollings.length - 1;
 
     return (
@@ -159,6 +166,8 @@ function Home(): JSX.Element {
             const zIndex = polling.pollings.length - index;
             return (
               <Polling
+                onInboxPress={handleInboxPress}
+                onProfilePress={handleProfilePress}
                 index={index}
                 initialIndex={polling.initialIndex}
                 latest={index === polling.pollings.length - 1}

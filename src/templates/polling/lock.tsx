@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, {Fragment, useEffect, useMemo, useState} from 'react';
+import React, {Fragment, useEffect, useMemo, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
@@ -19,30 +19,35 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
   const insets = useSafeAreaInsets();
   const [second, setSecond] = useState(0);
 
+  // 컴포넌트 매번 초기화되서 ref에 now 저장
+  const now = useRef(dayjs());
+  const triggeredTimeout = useRef(false);
   useEffect(() => {
-    if (!props.remainTime || props.isReached) return;
+    if (!props.remainTime || props.isReached || triggeredTimeout.current)
+      return;
 
-    const startSecond = props.remainTime / 1000;
-    setSecond(startSecond);
+    // 투표 재참여 가능 시간
+    const expiredAt = now.current.add(props.remainTime, 'milliseconds');
+    let remainSecond = expiredAt.diff(dayjs(), 'seconds');
+    if (remainSecond > 0 && !second) {
+      setSecond(remainSecond);
+    }
 
-    let currentSecond = startSecond;
-    let tm: number | null = setInterval(() => {
-      currentSecond--;
-      if (currentSecond >= 0) {
-        setSecond(currentSecond);
-      } else {
+    let tm = setTimeout(() => {
+      let remainSecond = expiredAt.diff(dayjs(), 'seconds');
+      if (remainSecond <= 0) {
+        triggeredTimeout.current = true;
         props.onTimeout();
-        clearInterval(tm as number);
-        tm = null;
+        setSecond(0);
+        return;
       }
+      setSecond(remainSecond);
     }, 1000);
 
     return () => {
-      if (tm) {
-        clearInterval(tm);
-      }
+      clearTimeout(tm);
     };
-  }, [props.remainTime, props.isReached]);
+  }, [props.remainTime, props.isReached, second]);
 
   const renderChildren = () => {
     return (
@@ -127,8 +132,8 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
         <Information
           icon={gifs.hourglassNotDone}
           message={title}
-          subMessage={`투표는 하루에 ${props.maxDailyCount}번만 참여할 수 있어요.`}
-          markingText="투표가 준비">
+          subMessage={`투표는 하루에 ${props.maxDailyCount}번 참여할 수 있어요.\n내일 더 특별한 투표로 찾아뵐게요!`}
+          markingText={`${props.maxDailyCount}번`}>
           {renderChildren()}
         </Information>
       )}

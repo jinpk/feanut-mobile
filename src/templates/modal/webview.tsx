@@ -5,20 +5,15 @@ import {colors, svgs} from '../../libs/common';
 import {WithLocalSvg} from 'react-native-svg';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Text} from '../../components/text';
-import {configs} from '../../libs/common/configs';
 
-type InstagramModalTemplateProps = {
+type WebviewModalTemplateProps = {
   visible: boolean;
   onClose: () => void;
-  onSucceed: () => void;
-  state: string;
+  uri: string;
 };
 
-const INSTAGRAM_REDIRECT_URL = `${configs.apiBaseURL}/oauth/instagram`;
-const INSTAGRAM_REDIRECT_SUCCESS_URL = `${INSTAGRAM_REDIRECT_URL}/success`;
-
-export const InstagramModalTemplate = (
-  props: InstagramModalTemplateProps,
+export const WebviewModalTemplate = (
+  props: WebviewModalTemplateProps,
 ): JSX.Element => {
   const [webview, setWebview] = useState<WebViewNavigation | undefined>();
   const insets = useSafeAreaInsets();
@@ -50,23 +45,28 @@ export const InstagramModalTemplate = (
             />
           </TouchableOpacity>
 
-          <Text size={16} weight="medium">
-            인스타그램 계정 연결
-          </Text>
-        </View>
+          <WithLocalSvg
+            style={styles.lock}
+            asset={svgs.lock}
+            width={14}
+            height={14}
+          />
 
+          <View style={styles.navigation}>
+            <Text numberOfLines={1} size={14}>
+              {webview?.title}
+            </Text>
+            <Text numberOfLines={1} size={12} color={colors.darkGrey}>
+              {webview?.url}
+            </Text>
+          </View>
+        </View>
         <WebView
-          startInLoadingState
           source={{
-            uri: `https://api.instagram.com/oauth/authorize?client_id=${configs.instagramClientId}&redirect_uri=${INSTAGRAM_REDIRECT_URL}&scope=user_profile&response_type=code&state=${props.state}`,
-          }}
-          onNavigationStateChange={state => {
-            if (state.url.startsWith(INSTAGRAM_REDIRECT_SUCCESS_URL)) {
-              props.onSucceed();
-              props.onClose();
-            }
+            uri: props.uri,
           }}
           style={styles.webview}
+          onNavigationStateChange={setWebview}
         />
       </View>
     </Modal>

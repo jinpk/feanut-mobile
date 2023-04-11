@@ -5,9 +5,12 @@ import {configs} from '../libs/common/configs';
 import StartTemplate from '../templates/start';
 import {routes} from '../libs/common';
 import {VerificationParams} from '../libs/interfaces';
+import {useModalStore} from '../libs/stores';
 
 function Start(): JSX.Element {
   const navigation = useNavigation();
+
+  const openWebview = useModalStore(s => s.actions.openWebview);
 
   const handleLogin = useCallback(() => {
     const params: VerificationParams = {
@@ -19,10 +22,10 @@ function Start(): JSX.Element {
   return (
     <StartTemplate
       onPrivacy={() => {
-        Linking.openURL(configs.privacyUrl);
+        openWebview(configs.privacyUrl);
       }}
       onTerms={() => {
-        Linking.openURL(configs.termsUrl);
+        openWebview(configs.termsUrl);
       }}
       onStart={() => {
         navigation.navigate(routes.signup);
