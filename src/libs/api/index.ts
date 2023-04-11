@@ -4,6 +4,7 @@ import {configs} from '../common/configs';
 import {APIError, TokenResponse} from '../interfaces';
 import {useUserStore} from '../stores';
 import {postToken} from './auth';
+import {AUTH_ERROR_NOT_FOUND_USER, AUTH_MODULE_NAME} from '../common/errors';
 
 export const feanutAPI = axios.default.create({
   baseURL: configs.apiBaseURL,
@@ -56,22 +57,34 @@ feanutAPI.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     }
+
+    const wrappedError: APIError = {
+      ...error.response.data,
+      status: error.response.status,
+      method: error.response.config.method,
+      path: error.response.config.url,
+    };
+
+    if (!wrappedError.message) {
+      wrappedError.message =
+        '일시적인 문제가 발생 하였습니다.\n다시 시도해 주세요.';
+    }
+
     // 401 제외 오류 미들웨어
     if (error.response.status !== 401) {
-      const wrappedError: APIError = {
-        ...error.response.data,
-        status: error.response.status,
-        method: error.response.config.method,
-        path: error.response.config.url,
-      };
-      if (!wrappedError.message) {
-        wrappedError.message = '오류입니다.';
-      }
+      return Promise.reject(wrappedError);
+    }
+
+    // 접근 불가능한 계정에대한 토큰 오류라면 바로 로그아웃
+    if (
+      wrappedError.module === AUTH_MODULE_NAME &&
+      wrappedError.code === AUTH_ERROR_NOT_FOUND_USER
+    ) {
+      await useUserStore.getState().actions.logout();
       return Promise.reject(wrappedError);
     }
 
     /** 토큰 재발급 요청 */
-
     // 토큰 발급중일때 들어온 request 전부 큐에담고 후처리
     if (isRefreshing && !originalRequest._retry) {
       return new Promise((resolve, reject) => {
