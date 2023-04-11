@@ -6,14 +6,20 @@ if (__DEV__) {
   // apiBaseURL = 'http://192.168.35.205:3000';
 }
 
-const assetBaseUrl = 'https://storage.cloud.google.com/assets.feanut.com';
+const assetBaseUrl = 'https://storage.googleapis.com/assets.feanut.com';
+
+const verionUrl =
+  'https://asia-northeast3-feanut.cloudfunctions.net/feanut-apps-version';
 
 export const configs = {
   instagramClientId: '201156389218583',
-  apiBaseURL,
-  cdnBaseUrl: __DEV__ ? 'https://cdn.dev.feanut.com' : 'https://cdn.feanut.com',
 
+  apiBaseURL,
+
+  cdnBaseUrl: __DEV__ ? 'https://cdn.dev.feanut.com' : 'https://cdn.feanut.com',
   assetBaseUrl,
+  verionUrl,
+
   websiteUrl: WEBSITE_URL,
   privacyUrl: WEBSITE_URL + '/privacy',
   termsUrl: WEBSITE_URL + '/terms',

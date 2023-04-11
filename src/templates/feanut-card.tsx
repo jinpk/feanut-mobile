@@ -7,6 +7,7 @@ import {BackTopBar} from '../components/top-bar';
 import {colors, constants, svgs} from '../libs/common';
 import {Gender} from '../libs/interfaces';
 import ViewShot from 'react-native-view-shot';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type FeanutCardTemplateProps = {
   drawViewRef: RefObject<ViewShot>;
@@ -47,6 +48,8 @@ const svgProps = {
 };
 
 function FeanutCardTemplate(props: FeanutCardTemplateProps) {
+  const insets = useSafeAreaInsets();
+
   const getLengthLabel = useCallback((length: string | number) => {
     if (!length) {
       return '0';
@@ -65,6 +68,7 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
       return length;
     }
   }, []);
+
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} logo />
@@ -249,7 +253,9 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
         </ViewShot>
       </View>
 
-      <TouchableOpacity onPress={props.onShare} style={styles.share}>
+      <TouchableOpacity
+        onPress={props.onShare}
+        style={[styles.share, {marginBottom: insets.bottom + 30}]}>
         <WithLocalSvg
           width={12}
           height={15}
@@ -303,7 +309,6 @@ const styles = StyleSheet.create({
   share: {
     backgroundColor: colors.lightGrey,
     alignItems: 'center',
-    marginBottom: 30,
     flexDirection: 'row',
     borderRadius: 21,
     paddingVertical: 14,

@@ -37,6 +37,7 @@ function EventModalTemplate(props: EventModalTemplateProps) {
       if (!result.finished) {
         opacity.setValue(1);
       }
+
       let tm = setTimeout(() => {
         clearTimeout(tm);
         // hide

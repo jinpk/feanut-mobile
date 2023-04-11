@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {constants, routes, setUser} from './libs/common';
+import {colors, constants, routes, setUser} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {CoinModal, WelcomeModal} from './modals';
@@ -23,7 +23,8 @@ import Start from './pages/start';
 import Verification from './pages/verification';
 import {GuideModal} from './modals/guide';
 import NetInfo from '@react-native-community/netinfo';
-import {Alert} from 'react-native';
+import {Alert, View} from 'react-native';
+import {VersionCheckerModal} from './modals/version-checker';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -66,8 +67,6 @@ function NavigationApp() {
     }
   }, [user]);
 
-  const internetConnected = useRef(false);
-
   useEffect(() => {
     checkLogin();
 
@@ -82,15 +81,16 @@ function NavigationApp() {
       });
     });
 
+    let internetConnected = false;
     const unsubscribe2 = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
-        if (internetConnected.current) return;
+        if (internetConnected) return;
         Alert.alert('오프라인 상태입니다.', '인터넷에 연결을 확인해 주세요', [
           {text: '확인'},
         ]);
-        internetConnected.current = true;
+        internetConnected = true;
       } else {
-        internetConnected.current = false;
+        internetConnected = false;
       }
     });
 
@@ -101,7 +101,7 @@ function NavigationApp() {
   }, []);
 
   if (loginLoading) {
-    return null;
+    return <View style={{flex: 1, backgroundColor: colors.white}} />;
   }
 
   return (
@@ -164,6 +164,7 @@ function FeanutApp(props: AppProps): JSX.Element {
       <GuideModal />
       <WelcomeModal />
       <CoinModal />
+      <VersionCheckerModal />
     </SafeAreaProvider>
   );
 }

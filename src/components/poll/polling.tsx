@@ -208,7 +208,6 @@ export const Polling = (props: PollingProps) => {
           <Feanut emotion={props.emotion} />
         </>
       )}
-
       <View style={styles.body}>
         <View style={styles.titleArea}>
           <FastImage
