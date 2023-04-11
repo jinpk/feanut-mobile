@@ -9,10 +9,16 @@ import {
   putObject,
 } from '../../libs/api/common';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
-import {PatchProfileRequest, ProfileForm} from '../../libs/interfaces';
+import {
+  APIError,
+  PatchProfileRequest,
+  PostFileResponse,
+  ProfileForm,
+} from '../../libs/interfaces';
 import {useProfileStore} from '../../libs/stores';
 import ProfileEditTemplate from '../../templates/profile/edit';
 import {getObjectURLByKey} from '../../libs/common/file';
+import {HttpStatusCode} from 'axios';
 
 const initialFormValues: ProfileForm = {
   name: '',
@@ -66,10 +72,21 @@ function ProfileEdit(): JSX.Element {
       if (data.profileImage?.fileName) {
         const contentType = data.profileImage.type;
         const buffer = await localImageURIToArrayBuffer(data.profileImage.uri);
-        const fileResponse = await postFile({
-          purpose: 'profileimage',
-          contentType: contentType,
-        });
+
+        let fileResponse: PostFileResponse;
+        try {
+          fileResponse = await postFile({
+            purpose: 'profileimage',
+            contentType: contentType,
+          });
+        } catch (error: any) {
+          const apiError = error as APIError;
+          if (apiError.status === HttpStatusCode.BadRequest) {
+            throw new Error('지원되지 않는 형식의 파일입니다.');
+          }
+          throw apiError;
+        }
+
         params.imageFileId = fileResponse.fileId;
         await putObject(fileResponse.signedUrl, {
           buffer,
