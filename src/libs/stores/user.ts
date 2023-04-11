@@ -56,17 +56,19 @@ export const useUserStore = create<UserStore>((set, get) => ({
     login: (user: User) => set({logged: true, user, loading: false}),
     logout: async (isDeleted?: boolean) => {
       console.log('logout');
-      try {
-        if (!isDeleted) {
+
+      // 탈퇴가 아닌 경우 로그아웃
+      if (!isDeleted) {
+        try {
           await postSignOut();
-        }
-        await clearCredentials();
-      } catch (error: any) {
-        if (__DEV__) {
-          console.error(error);
+        } catch (error: any) {
+          if (__DEV__) {
+            console.error(error);
+          }
         }
       }
 
+      await clearCredentials();
       await clearUser();
       setAPIAuthorization('');
       set({logged: false, loading: false, user: null});
