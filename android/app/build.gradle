@@ -100,8 +100,8 @@ android {
         applicationId "com.feanut.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "0.9.7"
+        versionCode 13
+        versionName "0.9.8"
     }
 
     splits {

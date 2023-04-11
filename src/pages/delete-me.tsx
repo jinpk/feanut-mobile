@@ -19,7 +19,7 @@ function DeleteMe() {
         throw '이유를 10자 이상으로 입력해 주세요';
       }
       await deleteMe(reasonTrim);
-      logout();
+      logout(true);
     } catch (error: any) {
       Alert.alert(error.message || error);
     }
