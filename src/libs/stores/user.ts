@@ -19,7 +19,7 @@ export interface UserStore {
   notification?: NotificationData;
   actions: {
     login: (user: User) => void;
-    logout: (isDeleted?: boolean) => Promise<void>;
+    logout: (callSignOut?: boolean) => Promise<void>;
     check: () => Promise<void>;
     clearNotification: () => void;
   };
@@ -54,18 +54,13 @@ export const useUserStore = create<UserStore>((set, get) => ({
     },
     clearNotification: () => set({notification: undefined}),
     login: (user: User) => set({logged: true, user, loading: false}),
-    logout: async (isDeleted?: boolean) => {
-      console.log('logout');
-
-      // 탈퇴가 아닌 경우 로그아웃
-      if (!isDeleted) {
-        try {
-          await postSignOut();
-        } catch (error: any) {
+    logout: async (callSignOut?: boolean) => {
+      if (callSignOut) {
+        postSignOut().catch(error => {
           if (__DEV__) {
             console.error(error);
           }
-        }
+        });
       }
 
       await clearCredentials();

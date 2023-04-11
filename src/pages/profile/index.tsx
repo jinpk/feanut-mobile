@@ -136,7 +136,12 @@ function Profile(): JSX.Element {
   const handleLogout = useCallback(() => {
     Alert.alert('로그아웃 하시겠습니까?', '', [
       {text: '취소', style: 'cancel'},
-      {text: '확인', onPress: logout},
+      {
+        text: '확인',
+        onPress: () => {
+          logout(true);
+        },
+      },
     ]);
   }, []);
 
