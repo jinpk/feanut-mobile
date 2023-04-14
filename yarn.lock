@@ -1719,6 +1719,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-firebase/app-distribution@^17.4.2":
+  version "17.4.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app-distribution/-/app-distribution-17.4.2.tgz#81644d2147515f3c506eae398915753ca2af661a"
+  integrity sha512-5H7q2OiroSHElJ3IuyzbMLmByMxzOJ385FTUT3gq9g8bRJJmEAA2j2FmQax7hB0/JwSq/zKwcAKER2a53SNMsA==
+
 "@react-native-firebase/app@^17.4.0":
   version "17.4.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-17.4.0.tgz#44aa5d02bb3ddc8f21c99341775f422af6b3d0b5"

@@ -18,6 +18,7 @@
     "@react-native-community/netinfo": "^9.3.9",
     "@react-native-community/push-notification-ios": "^1.10.1",
     "@react-native-firebase/app": "^17.4.0",
+    "@react-native-firebase/app-distribution": "^17.4.2",
     "@react-native-firebase/messaging": "^17.4.0",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
