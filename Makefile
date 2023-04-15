@@ -10,4 +10,4 @@ build-android:
 deploy-android-development:
 	firebase appdistribution:distribute android/app/build/outputs/apk/release/app-release.apk  \
     --app 1:619040145320:android:e832af9667be2a4252e79d  \
-    --release-notes "version: $(VERSION)" --groups qa-team
+    --release-notes "commit: $(VERSION)" --groups qa-team
