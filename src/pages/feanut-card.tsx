@@ -58,7 +58,7 @@ function FeanutCard() {
 
   useEffect(() => {
     // 친구관계 조회
-    if (myUserId) {
+    if (myUserId && profileId !== myProfileId) {
       getFriendByProfileId(myUserId, profileId)
         .then(friend => {
           if (friend) {

@@ -9,6 +9,7 @@ export const AUTH_ERROR_NOT_FOUND_USER = 6;
 export const AUTH_ERROR_INVAILD_VERIFICATION = 7;
 export const AUTH_ERROR_INVAILD_REFRESH_TOKEN = 8;
 // polling
+export const POLLING_MODULE_NAME = 'pollings';
 export const POLLING_ERROR_EXIST_POLLING = 1;
 export const POLLING_ERROR_EXIST_USERROUND = 2;
 export const POLLING_ERROR_NOT_INCLUDES_POLLID = 3;

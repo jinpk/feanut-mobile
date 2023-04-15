@@ -10,12 +10,11 @@ import {
 } from '../libs/api/poll';
 import {configs} from '../libs/common/configs';
 import {
-  AUTH_ERROR_INVAILD_REFRESH_TOKEN,
-  AUTH_MODULE_NAME,
   POLLING_ERROR_ALREADY_DONE,
   POLLING_ERROR_EXCEED_REFRESH,
   POLLING_ERROR_EXCEED_SKIP,
   POLLING_ERROR_MIN_FRIENDS,
+  POLLING_MODULE_NAME,
 } from '../libs/common/errors';
 import {APIError} from '../libs/interfaces';
 import {
@@ -147,18 +146,15 @@ export function usePolling() {
         } catch (error: any) {
           const apiError = error as APIError;
           if (
-            apiError.module === AUTH_MODULE_NAME &&
-            apiError.code === AUTH_ERROR_INVAILD_REFRESH_TOKEN
+            apiError &&
+            apiError.code === POLLING_ERROR_MIN_FRIENDS &&
+            apiError.module === POLLING_MODULE_NAME
           ) {
-            // 리프레시 토큰 오류는 자동으로 로그아웃됨.
-            // 앱 처음 화면에서 필수로 조회하는 API라 오류 메시지 hide 필요.
+            return 'reject';
           } else {
-            if (apiError)
-              if (apiError.code === POLLING_ERROR_MIN_FRIENDS) {
-                return 'reject';
-              } else {
-                Alert.alert(apiError.message);
-              }
+            if (__DEV__) {
+              console.error(error);
+            }
           }
         }
       };
