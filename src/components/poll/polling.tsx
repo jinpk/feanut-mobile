@@ -154,6 +154,43 @@ export const Polling = (props: PollingProps) => {
     };
   }, [props.focused]);
 
+  /** 친구 선택후 반응 없으면 스크롤 가이드 */
+  const didAnimatedGuide = useRef(false);
+  useEffect(() => {
+    let tm: number | undefined;
+    if (props.selectedFriend && !didAnimatedGuide.current) {
+      let tmMS = 2000;
+      if (props.index >= 5) {
+        tmMS = 5000;
+      } else if (props.index >= 2) {
+        tmMS = 3000;
+      }
+
+      tm = setTimeout(() => {
+        Animated.sequence([
+          Animated.timing(translateX, {
+            useNativeDriver: true,
+            toValue: -(constants.screenWidth / 5),
+          }),
+          Animated.delay(1000),
+          Animated.timing(translateX, {
+            useNativeDriver: true,
+            toValue: 0,
+          }),
+        ]).start(r => {
+          console.log(r.finished);
+        });
+        didAnimatedGuide.current = true;
+      }, tmMS);
+    }
+    return () => {
+      if (tm) {
+        clearTimeout(tm);
+        tm = undefined;
+      }
+    };
+  }, [props.selectedFriend, props.index]);
+
   /**  첫 투표 슬라이드 애니메이션 */
   const [inited, setInited] = useState(props.initialIndex !== props.index);
   useEffect(() => {

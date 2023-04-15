@@ -158,6 +158,11 @@ function Home(): JSX.Element {
           />
           {polling.pollings.map((item, index) => {
             const zIndex = polling.pollings.length - index;
+
+            // 이미 지니간 투표는 UI 그리지 않음.
+            if (index < polling.currentPollingIndex) {
+              return null;
+            }
             return (
               <Polling
                 onInboxPress={handleInboxPress}

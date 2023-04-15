@@ -129,16 +129,18 @@ export function useSyncContacts() {
           });
         }
       });
-      console.log(contacts.length);
-      console.log(params.contacts.length);
     } catch (error: any) {
       Alert.alert('연락처 읽기 실패', error.message || error);
       setLoading(false);
       return;
     }
 
+    const range = 50;
     try {
-      await postFriendsMany(userId, params);
+      // 페이징 처리
+      for (let i = 0; i < params.contacts.length; i += range) {
+        await postFriendsMany(userId, params);
+      }
       if (cb) {
         cb();
       }
