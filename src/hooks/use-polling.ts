@@ -308,12 +308,6 @@ export function usePolling() {
     return false;
   };
 
-  const handleSkip = async (pollingId: string) => {
-    handlePollingVote(pollingId, {
-      skipped: true,
-    });
-  };
-
   const handleSelectFriend = (pollingId: string, selectedProfileId: string) => {
     setPollings(prev => {
       const index = prev.findIndex(x => x.pollingId === pollingId);
@@ -363,7 +357,6 @@ export function usePolling() {
     vote: handleVote,
     todayCount,
     selectFriend: handleSelectFriend,
-    skip: handleSkip,
     initialIndex,
     shuffle: handleShuffle,
     currentPollingIndex: pollingIndex,

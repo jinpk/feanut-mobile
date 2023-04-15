@@ -1,6 +1,5 @@
 import {Source} from 'react-native-fast-image';
 import {emotions} from '../common';
-import {Friend} from './friend';
 import {Gender} from './user';
 
 export interface InternalPolling {
@@ -73,7 +72,6 @@ export interface PostPollingReqequest {
 }
 export interface PostPollingVoteRequest {
   selectedProfileId?: string;
-  skipped?: boolean;
 }
 
 export interface RoundEvent {

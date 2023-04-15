@@ -188,9 +188,6 @@ function Home(): JSX.Element {
                 onSelected={(selectedProfileId: string) => {
                   polling.selectFriend(item.pollingId!, selectedProfileId);
                 }}
-                onSkip={() => {
-                  polling.skip(item.pollingId!);
-                }}
                 onShuffle={() => {
                   polling.shuffle(item.pollingId!);
                 }}
@@ -216,7 +213,6 @@ function Home(): JSX.Element {
           }}
           icon={gifs.teddyBear}
           title={'친구를 추가하고\n다양한 주제의 투표를 경험해 보세요!'}
-          message={'4명 이상의 친구가 있어야 시작할 수 있어요'}
         />
       )}
 

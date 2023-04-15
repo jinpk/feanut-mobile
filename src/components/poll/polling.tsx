@@ -36,7 +36,6 @@ type PollingProps = {
   friends: PollingFriendItem[];
   selectedFriend?: string;
   onShuffle: () => void;
-  onSkip: () => void;
   onSelected: (value: string) => void;
 
   // 다음 순서
@@ -282,23 +281,19 @@ export const Polling = (props: PollingProps) => {
         </View>
       </View>
 
-      <View style={[styles.footer, {marginBottom: 30 + insets.bottom}]}>
-        <TouchableOpacity onPress={props.onSkip} style={styles.footerButton}>
-          <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
-          <Text ml={7} color={colors.white} size={12}>
-            투표 건너뛰기
-          </Text>
-        </TouchableOpacity>
-
-        <View style={styles.footerDivider} />
-
-        <TouchableOpacity onPress={props.onShuffle} style={styles.footerButton}>
-          <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
-          <Text ml={7} color={colors.white} size={12}>
-            친구 다시찾기
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={props.onShuffle}
+        style={[
+          styles.footerButton,
+          {
+            marginBottom: 30 + insets.bottom,
+          },
+        ]}>
+        <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
+        <Text ml={7} color={colors.white} size={12}>
+          친구 새로고침
+        </Text>
+      </TouchableOpacity>
     </Animated.View>
   );
 };
@@ -319,20 +314,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  footer: {
-    flexDirection: 'row',
-    zIndex: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  footerDivider: {
-    width: 1,
-    height: 18,
-    backgroundColor: colors.white,
-    marginHorizontal: 30,
-  },
   footerButton: {
+    zIndex: 100,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'center',
   },
 });
