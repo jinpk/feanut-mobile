@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {Gender} from '../libs/interfaces';
@@ -28,7 +27,10 @@ type FriendItemProps = {
 export const FriendItem = memo((props: FriendItemProps) => {
   return (
     <View style={styles.root}>
-      <TouchableOpacity onPress={props.onPress} disabled={!props.onPress}>
+      <TouchableOpacity
+        style={styles.content}
+        onPress={props.onPress}
+        disabled={!props.onPress}>
         {props.icon || (
           <Avatar
             size={42}
@@ -42,16 +44,11 @@ export const FriendItem = memo((props: FriendItemProps) => {
             }
           />
         )}
-      </TouchableOpacity>
 
-      <TouchableWithoutFeedback
-        onPress={props.onPress}
-        disabled={!props.onPress}>
         <View style={styles.body}>
           <Text>{props.name}</Text>
         </View>
-      </TouchableWithoutFeedback>
-
+      </TouchableOpacity>
       {Boolean(props.button) &&
         (props.buttonLoading ? (
           <View style={styles.loadingWrap}>
@@ -88,4 +85,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  content: {flex: 1, alignItems: 'center', flexDirection: 'row'},
 });

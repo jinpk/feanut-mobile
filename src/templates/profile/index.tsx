@@ -1,5 +1,11 @@
 import React from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {Avatar} from '../../components/avatar';
 import {BadgeButton, Button} from '../../components/button';
@@ -52,43 +58,51 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
 
         <View style={styles.profileContent}>
           <View style={styles.profileContentButton}>
-            <Text color={colors.darkGrey} size={12}>
-              이름
-            </Text>
-            <Text my={7}>{props.profile.name}</Text>
-            <TextButton
-              onPress={props.onCard}
-              hiddenBorder
-              title="내 피넛카드"
-              rightIcon={
-                <WithLocalSvg
-                  color={colors.blue}
-                  width={4.5}
-                  height={9}
-                  asset={svgs.right}
+            <TouchableWithoutFeedback onPress={props.onCard}>
+              <View>
+                <Text color={colors.darkGrey} size={12}>
+                  이름
+                </Text>
+                <Text my={7}>{props.profile.name}</Text>
+                <TextButton
+                  onPress={props.onCard}
+                  hiddenBorder
+                  title="내 피넛카드"
+                  rightIcon={
+                    <WithLocalSvg
+                      color={colors.blue}
+                      width={4.5}
+                      height={9}
+                      asset={svgs.right}
+                    />
+                  }
                 />
-              }
-            />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
 
           <View style={styles.profileContentButton}>
-            <Text color={colors.darkGrey} size={12}>
-              친구
-            </Text>
-            <Text my={7}>{props.friendsCount || 0}</Text>
-            <TextButton
-              onPress={props.onFriend}
-              hiddenBorder
-              title="친구 관리"
-              rightIcon={
-                <WithLocalSvg
-                  color={colors.blue}
-                  width={4.5}
-                  height={9}
-                  asset={svgs.right}
+            <TouchableWithoutFeedback onPress={props.onFriend}>
+              <View>
+                <Text color={colors.darkGrey} size={12}>
+                  친구
+                </Text>
+                <Text my={7}>{props.friendsCount || 0}</Text>
+                <TextButton
+                  onPress={props.onFriend}
+                  hiddenBorder
+                  title="친구 관리"
+                  rightIcon={
+                    <WithLocalSvg
+                      color={colors.blue}
+                      width={4.5}
+                      height={9}
+                      asset={svgs.right}
+                    />
+                  }
                 />
-              }
-            />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </View>
