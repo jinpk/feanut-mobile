@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
   content: {
     justifyContent: 'center',
     borderRadius: 20,
+    backgroundColor: colors.white,
   },
   root: {
     flex: 1,
@@ -280,6 +281,7 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: colors.white,
   },
   stats: {
     flexDirection: 'row',
