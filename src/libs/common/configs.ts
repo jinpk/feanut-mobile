@@ -1,27 +1,19 @@
 const WEBSITE_URL = 'https://feanut.com';
 
+const PRODUCTION_MODE = false;
+
 let apiBaseURL = 'https://api.feanut.com';
-if (__DEV__) {
+if (__DEV__ || !PRODUCTION_MODE) {
   apiBaseURL = 'https://api.dev.feanut.com';
-  // apiBaseURL = 'http://192.168.0.2:3000'
-} else {
-  // apiBaseURL = 'https://api.dev.feanut.com';
 }
 
 let cdnBaseUrl = 'https://cdn.feanut.com';
-if (__DEV__) {
+if (__DEV__ || !PRODUCTION_MODE) {
   cdnBaseUrl = 'https://cdn.dev.feanut.com';
-} else {
-  // cdnBaseUrl = 'https://cdn.dev.feanut.com';
 }
 
-let verionUrl =
+const verionUrl =
   'https://asia-northeast3-feanut.cloudfunctions.net/feanut-apps-version';
-if (__DEV__) {
-  // verionUrl = 'https://cdn.dev.feanut.com';
-} else {
-  // verionUrl = 'https://cdn.dev.feanut.com';
-}
 
 const assetBaseUrl = 'https://storage.googleapis.com/assets.feanut.com';
 
