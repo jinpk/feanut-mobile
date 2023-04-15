@@ -40,8 +40,10 @@ function Home(): JSX.Element {
       if (action === 'pull') {
         navigation.navigate(routes.inbox);
         navigation.navigate(routes.inboxDetail, {pollingId: value});
-        clearNotification();
+      } else if (action === 'poll') {
+        navigation.navigate(routes.home);
       }
+      clearNotification();
     }
   }, [initialNotification]);
 
