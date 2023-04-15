@@ -1,8 +1,11 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Alert, Linking} from 'react-native';
 import {BackTopBar} from '../components/top-bar';
-import {getFriendshipStatusByProfile} from '../libs/api/friendship';
+import {
+  getFriendByProfileId,
+  getFriendshipStatusByProfile,
+} from '../libs/api/friendship';
 import {
   getFeanutCardByProfile,
   getPollingStatsByProfile,
@@ -14,7 +17,7 @@ import {
   FeanutCard as FeanutCardI,
   PollingStats,
 } from '../libs/interfaces/polling';
-import {useProfileStore} from '../libs/stores';
+import {useProfileStore, useUserStore} from '../libs/stores';
 import FeanutCardTemplate from '../templates/feanut-card';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
@@ -25,12 +28,10 @@ import {getObjectURLByKey} from '../libs/common/file';
 function FeanutCard() {
   const navigation = useNavigation();
   const myProfileId = useProfileStore(s => s.profile.id);
+  const myUserId = useUserStore(s => s.user?.id);
   const {
-    params: {profileId, name},
-  } =
-    useRoute<
-      RouteProp<{FeanutCard: {profileId: string; name?: string}}, 'FeanutCard'>
-    >();
+    params: {profileId},
+  } = useRoute<RouteProp<{FeanutCard: {profileId: string}}, 'FeanutCard'>>();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [friendsCount, setFriendsCount] = useState(0);
@@ -53,7 +54,24 @@ function FeanutCard() {
 
   const drawViewRef = useRef<ViewShot>(null);
 
+  const [friendshipName, setFriendshipName] = useState('');
+
   useEffect(() => {
+    // 친구관계 조회
+    if (myUserId) {
+      getFriendByProfileId(myUserId, profileId)
+        .then(friend => {
+          if (friend) {
+            setFriendshipName(friend.name);
+          }
+        })
+        .catch((error: any) => {
+          if (__DEV__) {
+            console.error(error);
+          }
+        });
+    }
+
     // 기본정보 조회
     getProfile(profileId)
       .then(profile => {
@@ -125,7 +143,7 @@ function FeanutCard() {
       }
     } else {
       if (!profile?.instagram) {
-        Alert.alert('친구가 인스타그램 계정을 연결하지 않았어요');
+        Alert.alert('친구가 아직 인스타그램 계정을 연결하지 않았어요.');
       } else {
         const instagramURL = `instagram://user?username=${profile.instagram}`;
         const instagramWebsiteURL = `https://www.instagram.com/${profile.instagram}`;
@@ -139,6 +157,20 @@ function FeanutCard() {
       }
     }
   }, [profileId, myProfileId, profile?.instagram, profile?.name]);
+
+  const finalName = useMemo(() => {
+    if (profile?.ownerId) {
+      // 가입 이름
+      return profile?.name;
+    } else {
+      // 내 연락처 설정 이름
+      if (friendshipName) {
+        return friendshipName;
+      }
+      // 서비스 default 이름
+      return profile?.name;
+    }
+  }, [friendshipName, profile?.name, profile?.ownerId]);
 
   if (!profile) {
     return (
@@ -154,7 +186,7 @@ function FeanutCard() {
       onBack={navigation.goBack}
       onShare={handleShare}
       gender={profile.gender}
-      name={profile.name || name || ''}
+      name={finalName}
       statusMessage={profile.statusMessage}
       instagram={profile.instagram}
       uri={getObjectURLByKey(profile.profileImageKey, '150')}

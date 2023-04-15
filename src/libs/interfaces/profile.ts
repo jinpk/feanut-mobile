@@ -5,6 +5,7 @@ export interface Profile {
   birth: string;
   statusMessage: string;
   profileImageKey: string;
+  ownerId?: string;
   instagram?: string;
 }
 

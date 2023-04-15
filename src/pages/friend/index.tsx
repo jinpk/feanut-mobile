@@ -142,7 +142,6 @@ function Friend() {
     if (friend.profileId) {
       navigation.navigate(routes.feanutCard, {
         profileId: friend.profileId,
-        name: friend.name,
       });
     }
   }, []);

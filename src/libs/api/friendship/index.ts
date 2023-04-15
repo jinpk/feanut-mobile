@@ -41,6 +41,16 @@ export const getHasFriends = async (userId: string): Promise<boolean> => {
   return res.data;
 };
 
+export const getFriendByProfileId = async (
+  userId: string,
+  profileId: string,
+): Promise<Friend> => {
+  const res = await feanutAPI.get<Friend>(
+    `/friendships/${userId}/friends/${profileId}/byprofile`,
+  );
+  return res.data;
+};
+
 export const getFriendshipStatus = async (
   userId: string,
 ): Promise<FriendshipStatus> => {

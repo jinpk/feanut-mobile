@@ -3,6 +3,7 @@ const WEBSITE_URL = 'https://feanut.com';
 let apiBaseURL = 'https://api.feanut.com';
 if (__DEV__) {
   apiBaseURL = 'https://api.dev.feanut.com';
+  apiBaseURL = 'http://192.168.0.2:3000'
 } else {
   // apiBaseURL = 'https://api.dev.feanut.com';
 }
