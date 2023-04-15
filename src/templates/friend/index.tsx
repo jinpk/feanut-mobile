@@ -51,9 +51,19 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     };
   }, [keyword]);
 
-  const renderHeader = useCallback(() => {
+  const renderHeader = () => {
     return (
       <View>
+        <SearchInput
+          value={keyword}
+          onChange={setKeyword}
+          maxLength={10}
+          placeholder="검색"
+          returnKeyType="search"
+          mx={16}
+          mb={15}
+        />
+
         {props.hiddenFriend && (
           <View style={styles.labelWrap}>
             <Text color={colors.darkGrey} size={12} ml={16}>
@@ -104,13 +114,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         )}
       </View>
     );
-  }, [
-    props.hiddenFriend,
-    props.synchronizing,
-    props.keyword,
-    props.loading,
-    props.totalCount,
-  ]);
+  };
 
   const handleKeyExtractor = useCallback((item: Friend, index: number) => {
     return index.toString();
@@ -162,20 +166,9 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
           ) : undefined
         }
       />
-      <Text weight="bold" size={18} mt={16} ml={16}>
+      <Text weight="bold" size={18} mt={16} ml={16} mb={7}>
         {props.hiddenFriend ? '숨김친구 목록' : '친구 목록'}
       </Text>
-
-      <SearchInput
-        value={keyword}
-        onChange={setKeyword}
-        maxLength={10}
-        placeholder="검색"
-        mt={7}
-        returnKeyType="search"
-        mx={16}
-        mb={15}
-      />
 
       <FlatList
         data={props.data}

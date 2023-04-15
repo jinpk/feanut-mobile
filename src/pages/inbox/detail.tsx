@@ -1,9 +1,4 @@
-import {
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
@@ -17,7 +12,7 @@ import {
 } from '../../libs/common/errors';
 import {useCoin, useGetEmojiURI} from '../../hooks';
 import DrawedShareTemplate from '../../templates/inbox/drawed-share';
-import {useProfileStore} from '../../libs/stores';
+import {useModalStore, useProfileStore} from '../../libs/stores';
 import {getMyProfile} from '../../libs/api/profile';
 import {getObjectURLByKey} from '../../libs/common/file';
 import OpenModalTemplate from '../../templates/inbox/open-modal';
@@ -37,6 +32,8 @@ function InboxDetail() {
   const updateProfile = useProfileStore(s => s.actions.update);
 
   const [opened, setOpened] = useState(false);
+
+  const openCoinModal = useModalStore(s => s.actions.openCoin);
 
   /** iOS 상태바 색 변경 */
   useEffect(() => {
@@ -85,10 +82,14 @@ function InboxDetail() {
     } catch (error) {
       const apiError = error as APIError;
       if (apiError.code === POLLING_ERROR_LACK_COIN_AMOUNT) {
-        Alert.alert(
-          '보유한 피넛 수량이 부족합니다.',
-          '홈 > 프로필 메뉴에서 피넛을 구매할 수 있어요.',
-        );
+        Alert.alert('피넛코인이 부족해요.', undefined, [
+          {
+            text: '구매하기',
+            onPress: () => {
+              openCoinModal();
+            },
+          },
+        ]);
       } else if (apiError.code === POLLING_ERROR_ALREADY_DONE) {
         Alert.alert('이미 결제한 투표입니다');
         fetchData(pollingId);
@@ -101,8 +102,8 @@ function InboxDetail() {
   const handleOpen = async () => {
     if (!pull?.isOpened) {
       Alert.alert(
-        '투표한 친구 확인하기',
-        '피넛 3개를 사용하여 나를\n투표한 친구를 확인할까요?',
+        '피넛코인 3개로 누가 나를 선택했는지 확인합니다.',
+        undefined,
         [
           {
             text: '확인하기',

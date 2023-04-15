@@ -312,9 +312,9 @@ export const Polling = (props: PollingProps) => {
                 />
               );
             })
-          ) : (
+          ) : props.focused ? (
             <ActivityIndicator color={colors.white} />
-          )}
+          ) : null}
         </View>
       </View>
 
