@@ -61,6 +61,7 @@ function InboxTemplate(props: InboxTemplateProps) {
 
       return (
         <PullItem
+          index={index}
           source={
             item.imageFileKey
               ? {uri: getObjectURLByKey(item.imageFileKey, '70')}
@@ -91,7 +92,7 @@ function InboxTemplate(props: InboxTemplateProps) {
     <View style={styles.root}>
       <BackTopBar logo onBack={props.onBack} />
 
-      <Text weight="bold" size={18} mt={16} ml={16} mb={23}>
+      <Text weight="bold" size={18} mt={16} ml={16} mb={7}>
         수신함
       </Text>
 

@@ -17,6 +17,7 @@ export function useInbox() {
 
   const fetchPollingReceives = async (params: PagenatedRequest) => {
     try {
+      console.log(params);
       const data = await getPollingReceive(params);
       setData(prev => ({
         total: data.total,
@@ -46,7 +47,7 @@ export function useInbox() {
   }, []);
 
   const handleNextPage = () => {
-    if (data.data.length < data.total) {
+    if (data.data.length < data.total && !query.loading) {
       setQuery(prev => ({...prev, page: prev.page + 1, loading: true}));
     }
   };

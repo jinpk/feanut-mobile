@@ -13,12 +13,13 @@ type PollingItemProps = {
   name?: string;
   isOpened: boolean;
   time: string;
+  index: number;
   onPress: () => void;
 };
 
 export const PullItem = memo(function (props: PollingItemProps): JSX.Element {
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, props.index === 0 && styles.rootFirst]}>
       <Avatar
         source={props.source}
         defaultLogo={props.gender === 'male' ? 'm' : 'w'}
@@ -64,5 +65,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  rootFirst: {
+    marginTop: 16,
   },
 });
