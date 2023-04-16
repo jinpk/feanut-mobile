@@ -12,7 +12,6 @@ import {useLayoutEffect, useMemo, useRef} from 'react';
 import {Text} from '../../components/text';
 import dayjs from 'dayjs';
 import ViewShot from 'react-native-view-shot';
-import {Animated} from 'react-native';
 import Share from 'react-native-share';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -71,6 +70,9 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
 
       case emotions.hope:
         return svgs.pullHope;
+
+      default:
+        return undefined;
     }
   }, [props.emotion]);
 
@@ -111,12 +113,14 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
               backgroundColor: emotionBackgorundColor[props.emotion],
               overflow: 'hidden',
             }}>
-            <WithLocalSvg
-              style={styles.figure}
-              asset={figure}
-              width={546 * ratio}
-              height={815 * ratio}
-            />
+            {figure && (
+              <WithLocalSvg
+                style={styles.figure}
+                asset={figure}
+                width={546 * ratio}
+                height={815 * ratio}
+              />
+            )}
 
             <Text weight="medium" color={colors.white} size={25 * ratio}>
               {dayjs(props.completedAt).format('YYYY. MM. DD')}

@@ -39,7 +39,7 @@ type PollingState =
 const makeFriendItems = (friend: PollingFriend[]): PollingFriendItem[] => {
   return friend.map((x, i) => {
     return {
-      gender: i % 2 === 0 ? 'male' : 'female',
+      gender: undefined,
       value: x.profileId,
       source: x.imageFileKey
         ? {uri: getObjectURLByKey(x.imageFileKey, '70')}

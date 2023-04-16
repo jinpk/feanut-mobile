@@ -302,8 +302,8 @@ export const Polling = (props: PollingProps) => {
             props.friends.map((x, i) => {
               return (
                 <PollFriendItem
-                  gender={x.gender}
                   label={x.label}
+                  
                   key={i.toString()}
                   source={x.source}
                   selected={props.selectedFriend === x.value}

@@ -51,71 +51,6 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     };
   }, [keyword]);
 
-  const renderHeader = () => {
-    return (
-      <View>
-        <SearchInput
-          value={keyword}
-          onChange={setKeyword}
-          maxLength={10}
-          placeholder="검색"
-          returnKeyType="search"
-          mx={16}
-          mb={15}
-        />
-
-        {props.hiddenFriend && (
-          <View style={styles.labelWrap}>
-            <Text color={colors.darkGrey} size={12} ml={16}>
-              {props.keyword ? '검색 결과' : '숨김친구'}
-            </Text>
-            <Text color={colors.darkGrey} weight="medium" ml={2} size={12}>
-              {props.totalCount}
-            </Text>
-          </View>
-        )}
-        {!props.hiddenFriend && (
-          <View>
-            {props.keyword?.length === 0 && (
-              <>
-                <Text color={colors.darkGrey} size={12} mx={16}>
-                  동기화
-                </Text>
-                <Divider mt={8} mb={7.5} mx={16} />
-                <FriendItem
-                  name="연락처 동기화"
-                  button="동기화"
-                  buttonColor={colors.blue}
-                  buttonLoading={props.synchronizing}
-                  onButtonPress={props.onSyncContact}
-                  icon={
-                    <View style={styles.sync}>
-                      <WithLocalSvg width={16} height={16} asset={svgs.sync} />
-                    </View>
-                  }
-                />
-              </>
-            )}
-
-            <View
-              style={[
-                styles.labelWrap,
-                {marginTop: props.keyword?.length > 0 ? 0 : 22.5},
-              ]}>
-              <Text color={colors.darkGrey} size={12} ml={16}>
-                {props.keyword ? '검색 결과' : '친구'}
-              </Text>
-              <Text color={colors.darkGrey} weight="medium" ml={2} size={12}>
-                {props.totalCount}
-              </Text>
-            </View>
-            <Divider mt={8} mb={7.5} mx={16} />
-          </View>
-        )}
-      </View>
-    );
-  };
-
   const handleKeyExtractor = useCallback((item: Friend, index: number) => {
     return index.toString();
   }, []);
@@ -173,7 +108,6 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
       <FlatList
         data={props.data}
         extraData={props.data}
-        ListHeaderComponent={renderHeader}
         keyExtractor={handleKeyExtractor}
         renderItem={handleRenderItem}
         contentContainerStyle={styles.list}
@@ -196,6 +130,76 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
             refreshing={false}
             onRefresh={handleRefresh}
           />
+        }
+        ListHeaderComponent={
+          <>
+            <SearchInput
+              value={keyword}
+              onChange={setKeyword}
+              maxLength={10}
+              placeholder="검색"
+              returnKeyType="search"
+              mx={16}
+              mb={15}
+            />
+
+            {props.hiddenFriend && (
+              <View style={styles.labelWrap}>
+                <Text color={colors.darkGrey} size={12} ml={16}>
+                  {props.keyword ? '검색 결과' : '숨김친구'}
+                </Text>
+                <Text color={colors.darkGrey} weight="medium" ml={2} size={12}>
+                  {props.totalCount}
+                </Text>
+              </View>
+            )}
+            {!props.hiddenFriend && (
+              <View>
+                {props.keyword?.length === 0 && (
+                  <>
+                    <Text color={colors.darkGrey} size={12} mx={16}>
+                      동기화
+                    </Text>
+                    <Divider mt={8} mb={7.5} mx={16} />
+                    <FriendItem
+                      name="연락처 동기화"
+                      button="동기화"
+                      buttonColor={colors.blue}
+                      buttonLoading={props.synchronizing}
+                      onButtonPress={props.onSyncContact}
+                      icon={
+                        <View style={styles.sync}>
+                          <WithLocalSvg
+                            width={16}
+                            height={16}
+                            asset={svgs.sync}
+                          />
+                        </View>
+                      }
+                    />
+                  </>
+                )}
+
+                <View
+                  style={[
+                    styles.labelWrap,
+                    {marginTop: props.keyword?.length > 0 ? 0 : 22.5},
+                  ]}>
+                  <Text color={colors.darkGrey} size={12} ml={16}>
+                    {props.keyword ? '검색 결과' : '친구'}
+                  </Text>
+                  <Text
+                    color={colors.darkGrey}
+                    weight="medium"
+                    ml={2}
+                    size={12}>
+                    {props.totalCount}
+                  </Text>
+                </View>
+                <Divider mt={8} mb={7.5} mx={16} />
+              </View>
+            )}
+          </>
         }
       />
     </View>

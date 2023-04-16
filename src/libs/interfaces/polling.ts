@@ -20,7 +20,7 @@ export interface PollingFriendItem {
   label: string;
   source?: Source | number;
   value: string;
-  gender: Gender;
+  gender?: Gender;
 }
 
 export interface PollingFriend {

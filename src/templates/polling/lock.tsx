@@ -112,7 +112,7 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
         <Information
           icon={gifs.hourglassNotDone}
           message={title}
-          subMessage={`수신함을 확인해 보세요.\n친구들이 나를 투표했을 수도 있어요!`}
+          subMessage={`수신함을 확인해보세요\n친구들이 나를 투표했을 수도 있어요.`}
           markingText="수신함을 확인">
           {renderChildren()}
         </Information>
@@ -132,7 +132,7 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
         <Information
           icon={gifs.highVoltage}
           message={title}
-          subMessage={`내일 더 다양한 주제의 투표에 참여할 수 있어요!`}
+          subMessage={`내일 더 다양한 주제의 투표에 참여할 수 있어요.`}
           markingText="다양한 주제">
           {renderChildren()}
         </Information>
