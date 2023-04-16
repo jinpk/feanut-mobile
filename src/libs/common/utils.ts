@@ -3,14 +3,17 @@ export function colorToHex(color: string) {
   return hexadecimal.length == 1 ? '0' + hexadecimal : hexadecimal;
 }
 
-export function formatPhoneNumber(phoneNumber: string) {
+export function formatPhoneNumber(phoneNumber: string, divider?: string) {
   if (!phoneNumber) {
     return '';
   }
 
   return phoneNumber
     .replace(/[^0-9]/g, '')
-    .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, '$1-$2-$3');
+    .replace(
+      /(^02.{0}|^01.{1}|[0-9]{3})([0-9]{3,4})([0-9]{4})/g,
+      `$1${divider || '-'}$2${divider || '-'}$3`,
+    );
 }
 
 export function convertRGBtoHex(rgb: string) {

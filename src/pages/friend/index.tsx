@@ -1,10 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
@@ -17,14 +12,22 @@ import {
 } from '../../libs/stores';
 import {FreidnsListTemplate} from '../../templates/friend';
 
+type FriendRouteProps = RouteProp<
+  {
+    Friend: {
+      hidden: boolean;
+      autoSync?: boolean;
+    };
+  },
+  'Friend'
+>;
+
 function Friend() {
   const navigation = useNavigation();
-  const {params} =
-    useRoute<
-      RouteProp<{Friend: {hidden: boolean; autoSync?: boolean}}, 'Friend'>
-    >();
+  const {params} = useRoute<FriendRouteProps>();
 
   const hiddeFriend = params.hidden;
+
   const ueeStore = hiddeFriend ? useHiddenFriendStore : useFriendStore;
 
   const friends = ueeStore(s => s.friends);
@@ -41,9 +44,7 @@ function Friend() {
   const setLoading = ueeStore(s => s.actions.setLoading);
   const contact = useSyncContacts();
 
-  const focused = useIsFocused();
-
-  // 자동 동기화 params
+  // 자동 동기화 진행
   useEffect(() => {
     if (params.autoSync) {
       contact.syncContacts(() => {
@@ -53,6 +54,15 @@ function Friend() {
     }
   }, [params.autoSync]);
 
+  // 화면 첫 진입 시 조회 요청
+  useEffect(() => {
+    setLoading(true);
+    return () => {
+      clear();
+    };
+  }, []);
+
+  // 친구 조회
   useEffect(() => {
     if (userId && loading) {
       let tm = setTimeout(() => {
@@ -80,19 +90,6 @@ function Friend() {
       };
     }
   }, [loading, query.page]);
-
-  useEffect(() => {
-    if (focused) {
-      setQuery({page: 1, limit: 20});
-      setLoading(true);
-    }
-  }, [focused]);
-
-  useEffect(() => {
-    return () => {
-      clear();
-    };
-  }, []);
 
   // 연속클릭 중복 API 호출 방지
   const patchState = useRef(false);

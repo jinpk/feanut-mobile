@@ -9,6 +9,7 @@ import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
 import {constants} from '../../libs/common';
 import {PhoneNumberForm} from '../../libs/interfaces';
+import {formatPhoneNumber} from '../../libs/common/utils';
 
 export type PhoneNumberTemplateProps = {
   form: UseFormReturn<PhoneNumberForm>;
@@ -44,14 +45,15 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
         render={({field: {onChange, onBlur, value}}) => (
           <LargeInput
             autoFocus
-            value={value}
+            value={formatPhoneNumber(value, ' ')}
             disabled={sendingCode}
             onChange={t => {
+              t = t.replace(/-/g, '').replace(/ /g, '');
+              if (t.length > constants.phoneNumberMaxLength) return;
               onChange(t);
               props.form.clearErrors('phoneNumber');
             }}
             onBlur={onBlur}
-            maxLength={constants.phoneNumberMaxLength}
             placeholder={'01012345678'}
             mx={16}
             mt={14}

@@ -197,12 +197,10 @@ export const Polling = (props: PollingProps) => {
   const [inited, setInited] = useState(props.initialIndex !== props.index);
   useEffect(() => {
     if (!inited) {
-      Animated.spring(translateX, {
-        velocity: 10,
+      Animated.timing(translateX, {
         useNativeDriver: true,
+        duration: 500,
         toValue: 0,
-        bounciness: 1,
-        speed: 5,
       }).start(r => {
         if (!r.finished) {
           translateX.setValue(0);

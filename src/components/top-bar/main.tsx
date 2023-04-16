@@ -26,21 +26,25 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
 
   useEffect(() => {
     if (props.hideLogo) {
-      Animated.timing(opacity, {useNativeDriver: false, toValue: 0}).start(
-        r => {
-          if (!r.finished) {
-            opacity.setValue(0);
-          }
-        },
-      );
+      Animated.timing(opacity, {
+        useNativeDriver: false,
+        toValue: 0,
+        duration: 1000,
+      }).start(r => {
+        if (!r.finished) {
+          opacity.setValue(0);
+        }
+      });
     } else {
-      Animated.timing(opacity, {useNativeDriver: false, toValue: 1}).start(
-        r => {
-          if (!r.finished) {
-            opacity.setValue(1);
-          }
-        },
-      );
+      Animated.timing(opacity, {
+        useNativeDriver: false,
+        toValue: 1,
+        duration: 1000,
+      }).start(r => {
+        if (!r.finished) {
+          opacity.setValue(1);
+        }
+      });
     }
   }, [props.hideLogo]);
 

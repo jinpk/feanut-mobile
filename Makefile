@@ -3,6 +3,8 @@ include .env
 
 # ANDROID
 
+android: prebuild-android build-android deploy-android-development
+
 prebuild-android:
 	cd android && ./gradlew clean
 	cd android && ./gradlew --refresh-dependencies
