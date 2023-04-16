@@ -11,11 +11,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Information, PullItem} from '../../components';
 import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
-import {colors, constants, gifs} from '../../libs/common';
+import {colors, gifs} from '../../libs/common';
 import {PollingReceiveItem} from '../../libs/interfaces/polling';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import {configs} from '../../libs/common/configs';
 import {getObjectURLByKey} from '../../libs/common/file';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -29,7 +28,7 @@ type InboxTemplateProps = {
   onLoadMore: () => void;
   onRefresh: () => void;
   loading: boolean;
-  name: stirng;
+  name: string;
 };
 
 function InboxTemplate(props: InboxTemplateProps) {
@@ -107,12 +106,13 @@ function InboxTemplate(props: InboxTemplateProps) {
         onEndReachedThreshold={0.1}
         getItemLayout={handleGetItemLayout}
         ListFooterComponent={
-          props.data.length && props.loading ? (
-            <ActivityIndicator
-              style={{marginVertical: 16}}
-              color={colors.primary}
-            />
-          ) : undefined
+          <View
+            style={[
+              styles.loadingWrap,
+              {opacity: props.data.length && props.loading ? 1 : 0},
+            ]}>
+            <ActivityIndicator color={colors.primary} />
+          </View>
         }
         refreshControl={
           <RefreshControl
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   },
   hiddenFriend: {paddingHorizontal: 16, paddingVertical: 15},
   loading: {position: 'absolute', alignSelf: 'center'},
+  loadingWrap: {position: 'absolute', bottom: 0, alignSelf: 'center'},
 });
 
 export default InboxTemplate;

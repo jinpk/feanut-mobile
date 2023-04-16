@@ -182,9 +182,13 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         onEndReachedThreshold={0.1}
         getItemLayout={handleGetItemLayout}
         ListFooterComponent={
-          props.data.length && props.loading ? (
+          <View
+            style={[
+              styles.loadingWrap,
+              {opacity: props.data.length && props.loading ? 1 : 0},
+            ]}>
             <ActivityIndicator color={colors.primary} />
-          ) : undefined
+          </View>
         }
         refreshControl={
           <RefreshControl
@@ -218,4 +222,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  loadingWrap: {position: 'absolute', bottom: 0, alignSelf: 'center'},
 });
