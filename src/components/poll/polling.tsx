@@ -303,7 +303,7 @@ export const Polling = (props: PollingProps) => {
               return (
                 <PollFriendItem
                   label={x.label}
-                  
+                  gender={x.gender}
                   key={i.toString()}
                   source={x.source}
                   selected={props.selectedFriend === x.value}

@@ -102,7 +102,7 @@ function InboxDetail() {
   const handleOpen = async () => {
     if (!pull?.isOpened) {
       Alert.alert(
-        '피넛코인 3개로 누가 나를 선택했는지 확인합니다.',
+        '피넛코인 3개를 사용하여\n투표한 친구를 확인할 수 있어요.',
         undefined,
         [
           {
