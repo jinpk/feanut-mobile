@@ -136,10 +136,17 @@ export function useSyncContacts() {
     }
 
     const range = 50;
+
     try {
       // 페이징 처리
+      const invalidContacts = params.invalidContacts;
       for (let i = 0; i < params.contacts.length; i += range) {
-        await postFriendsMany(userId, params);
+        const paginatedContacts = params.contacts.slice(i, i + range);
+        await postFriendsMany(userId, {
+          contacts: paginatedContacts,
+          // i === 0인 경우 유효하지 않은 연락처 logging 용도로 서버에 보냄
+          invalidContacts: i === 0 ? invalidContacts : [],
+        });
       }
       if (cb) {
         cb();

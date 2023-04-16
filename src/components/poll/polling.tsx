@@ -164,6 +164,8 @@ export const Polling = (props: PollingProps) => {
         tmMS = 5000;
       } else if (props.index >= 2) {
         tmMS = 3000;
+      } else if (props.index === 0) {
+        tmMS = 500;
       }
 
       tm = setTimeout(() => {
@@ -294,10 +296,12 @@ export const Polling = (props: PollingProps) => {
             {props.title}
           </Text>
         </View>
-        <View style={styles.friends}>
-          {props.friends?.length >= 1 ? (
+        <View
+          key={props.friends?.map(x => x.value).join('-')}
+          style={styles.friends}>
+          {props.friends?.length >= 1 &&
+            props.focused &&
             props.friends.map((x, i) => {
-              console.log('hi')
               return (
                 <PollFriendItem
                   gender={x.gender}
@@ -312,10 +316,10 @@ export const Polling = (props: PollingProps) => {
                   mb={15}
                 />
               );
-            })
-          ) : props.focused ? (
+            })}
+          {!props.friends?.length && props.focused && (
             <ActivityIndicator color={colors.white} />
-          ) : null}
+          )}
         </View>
       </View>
 
