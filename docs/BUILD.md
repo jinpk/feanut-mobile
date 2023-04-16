@@ -1,6 +1,29 @@
 # BUILD Requirement
 
+## iOS
+
+1. .env 파일 설정
+```bash
+APPSTORE_API_KEY=
+APPSTORE_API_ISSUER=
+```
+
+2. APPSTORE Private Key 설정
+```bash
+cp AuthKey_{APPSTORE_API_KEY}.p8 ~/.private_keys/AuthKey_{APPSTORE_API_KEY}.p8
+```
+
+3. ios/mobile.xcodeproj/project.pbxproj 버전 설정
+```bash
+CURRENT_PROJECT_VERSION =
+MARKETING_VERSION = 
+```
+
+4. BUILD & DEPLOY with Makefile
+
+
 ## iOS 
+
 
 ### react-native-fast-image
 

@@ -14,6 +14,7 @@ import ProfileTemplate from '../../templates/profile';
 function Profile(): JSX.Element {
   const navigation = useNavigation();
   const userId = useUserStore(s => s.user?.id);
+  const phoneNumber = useUserStore(s => s.user.phoneNumber);
   const logout = useUserStore(s => s.actions.logout);
   const focused = useIsFocused();
   const profile = useProfileStore(s => s.profile);
@@ -150,6 +151,7 @@ function Profile(): JSX.Element {
       <BackTopBar logo onBack={navigation.goBack} />
       {Boolean(profile) && (
         <ProfileTemplate
+          phoneNumber={phoneNumber}
           friendsCount={friendsCount}
           onEditProfile={handleEditProfile}
           profile={profile}
@@ -169,7 +171,7 @@ function Profile(): JSX.Element {
           onFriend={handleFriend}
         />
       )}
-
+      {/**
       <InstagramModalTemplate
         visible={instagramModal}
         onClose={() => {
@@ -178,6 +180,7 @@ function Profile(): JSX.Element {
         onSucceed={fetchProfile}
         state={profile.id}
       />
+       */}
     </View>
   );
 }

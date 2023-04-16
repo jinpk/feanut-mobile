@@ -4,5 +4,9 @@
 <dict>
   <key>method</key>
   <string>app-store</string>
+   <key>teamID</key>
+    <string>Z6C9B4Q4KN</string>
+    <key>teamName</key>
+    <string>VAN.F Inc</string>
 </dict>
 </plist>

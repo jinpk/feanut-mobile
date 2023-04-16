@@ -18,8 +18,10 @@ import {colors, svgs} from '../../libs/common';
 import {Profile} from '../../libs/interfaces';
 import DeviceInfo from 'react-native-device-info';
 import {getObjectURLByKey} from '../../libs/common/file';
+import {formatPhoneNumber} from '../../libs/common/utils';
 
 type ProfileTemplateProps = {
+  phoneNumber: stirng;
   profile: Profile;
   friendsCount: number;
   feanutAmount: number;
@@ -137,19 +139,17 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         </Text>
       </View>
 
-      <Divider mt={16} mx={13} mb={15} />
-      {/**
-        <View style={styles.listItem}>
+      <Divider mt={16} mx={13} />
+
+      <View style={styles.listItem}>
         <View>
           <Text color={colors.darkGrey} size={12}>
             내 전화번호
           </Text>
-          <Text mt={7}>01021883985</Text>
+          <Text mt={7}>{formatPhoneNumber(props.phoneNumber)}</Text>
         </View>
       </View>
-       */}
-
-      <View style={styles.listAccountItem}>
+      {/**<View style={styles.listAccountItem}>
         <View>
           <Text color={colors.darkGrey} size={12}>
             인스타그램 계정
@@ -167,7 +167,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           value={Boolean(props.profile.instagram)}
           onChange={props.onInstagram}
         />
-      </View>
+      </View> */}
 
       <Divider mx={13} />
 
