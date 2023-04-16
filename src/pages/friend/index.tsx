@@ -1,5 +1,10 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useNavigationState,
+  useRoute,
+} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
@@ -25,6 +30,17 @@ type FriendRouteProps = RouteProp<
 function Friend() {
   const navigation = useNavigation();
   const {params} = useRoute<FriendRouteProps>();
+  const latestRoute = useNavigationState(s => s.routes[s.routes.length - 1]);
+
+  useEffect(() => {
+    if (latestRoute?.params?.hidden) {
+      return () => {
+        // 숨김 친구에서 돌아오면 list 초기화
+        setQuery({page: 1, limit: 20});
+        setLoading(true);
+      };
+    }
+  }, [latestRoute]);
 
   const hiddeFriend = params.hidden;
 
