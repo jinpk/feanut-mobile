@@ -1,10 +1,16 @@
 const WEBSITE_URL = 'https://feanut.com';
 
-const PRODUCTION_MODE = false;
+const isLocal = false;
+const localHost = 'http://192.168.35.74:3000';
+
+const PRODUCTION_MODE = true;
 
 let apiBaseURL = 'https://api.feanut.com';
 if (__DEV__ || !PRODUCTION_MODE) {
   apiBaseURL = 'https://api.dev.feanut.com';
+  if (isLocal) {
+    apiBaseURL = localHost;
+  }
 }
 
 let cdnBaseUrl = 'https://cdn.feanut.com';
