@@ -5,10 +5,8 @@
 import {AppRegistry, Text, TextInput, Appearance} from 'react-native';
 import App from './src/app';
 import {name as appName} from './app.json';
-import {colors, constants} from './src/libs/common';
+import {constants} from './src/libs/common';
 import PushNotification from 'react-native-push-notification';
-import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import { StatusBar } from 'react-native';
 
 if (constants.platform === 'ios') {
   TextInput.defaultProps = {};
@@ -23,13 +21,6 @@ if (constants.platform === 'ios') {
     playSound: true,
     vibrate: true,
   });
-
-  const colorScheme = Appearance.getColorScheme();
-  if (colorScheme === 'light') {
-    StatusBar.setBackgroundColor('#fff');
-    StatusBar.setBarStyle('dark-content');
-    changeNavigationBarColor(colors.white, true, true);
-  }
 }
 
 AppRegistry.registerComponent(appName, () => App);

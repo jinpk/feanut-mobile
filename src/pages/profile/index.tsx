@@ -151,7 +151,9 @@ function Profile(): JSX.Element {
 
   const openImageModal = useModalStore(s => s.actions.openImage);
   const handleProfileImage = useCallback(() => {
-    openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
+    if (profile.profileImageKey) {
+      openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
+    }
   }, [profile.profileImageKey]);
 
   return (

@@ -297,6 +297,7 @@ export const Polling = (props: PollingProps) => {
         <View style={styles.friends}>
           {props.friends?.length >= 1 ? (
             props.friends.map((x, i) => {
+              console.log('hi')
               return (
                 <PollFriendItem
                   gender={x.gender}
@@ -326,7 +327,7 @@ export const Polling = (props: PollingProps) => {
             marginBottom: 30 + insets.bottom,
           },
         ]}>
-        <WithLocalSvg width={14} height={16} asset={svgs.refresh} />
+        <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
         <Text ml={7} color={colors.white} size={12}>
           친구 새로고침
         </Text>
@@ -356,5 +357,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
+    paddingVertical: 4,
   },
 });

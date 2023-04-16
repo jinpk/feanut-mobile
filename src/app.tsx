@@ -23,7 +23,7 @@ import Start from './pages/start';
 import Verification from './pages/verification';
 import {GuideModal} from './modals/guide';
 import NetInfo from '@react-native-community/netinfo';
-import {Alert, View} from 'react-native';
+import {Alert, Appearance, StatusBar, View} from 'react-native';
 import {VersionCheckerModal} from './modals/version-checker';
 import {WebviewModal} from './modals/webview';
 import {ImageModal} from './modals/image';
@@ -102,6 +102,16 @@ function NavigationApp() {
     };
   }, []);
 
+  useEffect(() => {
+    if (constants.platform === 'android') {
+      const colorScheme = Appearance.getColorScheme();
+      if (colorScheme === 'light') {
+        StatusBar.setBackgroundColor('#fff');
+        StatusBar.setBarStyle('dark-content');
+      }
+    }
+  }, []);
+
   if (loginLoading) {
     return <View style={{flex: 1, backgroundColor: colors.white}} />;
   }
@@ -113,8 +123,8 @@ function NavigationApp() {
           initialRouteName={routes.home}
           screenOptions={{
             headerShown: false,
-            animation:
-              constants.platform === 'android' ? 'slide_from_right' : 'default',
+            //  animation:
+            //  constants.platform === 'android' ? 'slide_from_right' : 'default',
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
@@ -140,8 +150,8 @@ function NavigationApp() {
           initialRouteName={routes.start}
           screenOptions={{
             headerShown: false,
-            animation:
-              constants.platform === 'android' ? 'slide_from_right' : 'default',
+            //  animation:
+            //  constants.platform === 'android' ? 'slide_from_right' : 'default',
           }}>
           <Stack.Screen name={routes.start} component={Start} />
           <Stack.Screen name={routes.signup} component={SignUp} />
