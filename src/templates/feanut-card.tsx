@@ -1,5 +1,10 @@
 import React, {RefObject, useCallback} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
 import {Avatar} from '../components';
 import {Text, TextMarker} from '../components/text';
@@ -14,6 +19,7 @@ type FeanutCardTemplateProps = {
 
   onBack: () => void;
   onShare: () => void;
+  onProfileImage: () => void;
 
   name: string;
   statusMessage: string;
@@ -59,6 +65,12 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
       length = parseInt(length);
     }
 
+    if (length >= 10000) {
+      return `${(
+        Math.floor(length / 1000) +
+        (length % 1000) / 1000
+      ).toPrecision(3)}k`;
+    }
     if (length >= 1000) {
       return `${(
         Math.floor(length / 1000) +
@@ -77,19 +89,21 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
           ref={props.drawViewRef}
           style={styles.content}
           options={{format: 'jpg', quality: 0.7}}>
-          <View style={styles.alignSelft}>
-            <Avatar
-              uri={props.uri}
-              defaultLogo={
-                props.gender === 'male'
-                  ? 'm'
-                  : props.gender === 'female'
-                  ? 'w'
-                  : undefined
-              }
-              size={constants.screenWidth * 0.35}
-            />
-          </View>
+          <TouchableWithoutFeedback onPress={props.onProfileImage}>
+            <View style={styles.alignSelft}>
+              <Avatar
+                uri={props.uri}
+                defaultLogo={
+                  props.gender === 'male'
+                    ? 'm'
+                    : props.gender === 'female'
+                    ? 'w'
+                    : undefined
+                }
+                size={constants.screenWidth * 0.35}
+              />
+            </View>
+          </TouchableWithoutFeedback>
 
           <Text style={styles.alignSelft} weight="bold" mt={15}>
             {props.name}
@@ -252,18 +266,19 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
           </View>
         </ViewShot>
       </View>
-
-      <TouchableOpacity
-        onPress={props.onShare}
-        style={[styles.share, {marginBottom: insets.bottom + 30}]}>
-        <WithLocalSvg
-          width={12}
-          height={15}
-          asset={props.me ? svgs.share : svgs.visitSNS}
-          style={styles.shareIcon}
-        />
-        <Text size={12}>{props.me ? '자랑하기' : 'Instagram 방문'}</Text>
-      </TouchableOpacity>
+      {props.me && (
+        <TouchableOpacity
+          onPress={props.onShare}
+          style={[styles.share, {marginBottom: insets.bottom + 30}]}>
+          <WithLocalSvg
+            width={12}
+            height={15}
+            asset={props.me ? svgs.share : svgs.visitSNS}
+            style={styles.shareIcon}
+          />
+          <Text size={12}>{props.me ? '자랑하기' : 'Instagram 방문'}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

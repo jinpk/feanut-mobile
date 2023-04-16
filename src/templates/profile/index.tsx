@@ -21,7 +21,7 @@ import {getObjectURLByKey} from '../../libs/common/file';
 import {formatPhoneNumber} from '../../libs/common/utils';
 
 type ProfileTemplateProps = {
-  phoneNumber: stirng;
+  phoneNumber: string;
   profile: Profile;
   friendsCount: number;
   feanutAmount: number;
@@ -29,7 +29,7 @@ type ProfileTemplateProps = {
   onPurchaseFeanut: () => void;
   onEditProfile: () => void;
   onWithdrawal: () => void;
-  onInstagram: (value: boolean) => void;
+  // onInstagram: (value: boolean) => void;
 
   onService: () => void;
   onTerms: () => void;
@@ -44,6 +44,8 @@ type ProfileTemplateProps = {
 
   onFriend: () => void;
   onCard: () => void;
+
+  onProfileImage: () => void;
 };
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
@@ -52,11 +54,15 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
   return (
     <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
       <View style={styles.profile}>
-        <Avatar
-          size={100}
-          defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
-          uri={getObjectURLByKey(props.profile.profileImageKey, '150')}
-        />
+        <TouchableWithoutFeedback onPress={props.onProfileImage}>
+          <View>
+            <Avatar
+              size={100}
+              defaultLogo={props.profile.gender === 'male' ? 'm' : 'w'}
+              uri={getObjectURLByKey(props.profile.profileImageKey, '150')}
+            />
+          </View>
+        </TouchableWithoutFeedback>
 
         <View style={styles.profileContent}>
           <View style={styles.profileContentButton}>

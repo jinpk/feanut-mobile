@@ -8,13 +8,14 @@ import {getMyProfile, patchProfile} from '../../libs/api/profile';
 import {colors, routes} from '../../libs/common';
 import {configs} from '../../libs/common/configs';
 import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
-import {InstagramModalTemplate} from '../../templates/modal';
 import ProfileTemplate from '../../templates/profile';
+import {getObjectURLByKey} from '../../libs/common/file';
+// import {InstagramModalTemplate} from '../../templates/modal';
 
 function Profile(): JSX.Element {
   const navigation = useNavigation();
   const userId = useUserStore(s => s.user?.id);
-  const phoneNumber = useUserStore(s => s.user.phoneNumber);
+  const phoneNumber = useUserStore(s => s.user?.phoneNumber);
   const logout = useUserStore(s => s.actions.logout);
   const focused = useIsFocused();
   const profile = useProfileStore(s => s.profile);
@@ -22,7 +23,7 @@ function Profile(): JSX.Element {
 
   const [friendsCount, setFriendsCount] = useState(0);
 
-  const [instagramModal, setInstagramModal] = useState(false);
+  // const [instagramModal, setInstagramModal] = useState(false);
 
   const openWebview = useModalStore(s => s.actions.openWebview);
 
@@ -89,6 +90,7 @@ function Profile(): JSX.Element {
     }
   }, [profile.id]);
 
+  /**
   const handleInstagram = useCallback(
     (on: boolean) => {
       if (on) {
@@ -109,6 +111,7 @@ function Profile(): JSX.Element {
     },
     [profile.instagram],
   );
+   */
 
   const handleService = useCallback(() => {
     Linking.openURL(configs.websiteUrl);
@@ -146,19 +149,24 @@ function Profile(): JSX.Element {
     ]);
   }, []);
 
+  const openImageModal = useModalStore(s => s.actions.openImage);
+  const handleProfileImage = useCallback(() => {
+    openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
+  }, [profile.profileImageKey]);
+
   return (
     <View style={styles.root}>
       <BackTopBar logo onBack={navigation.goBack} />
       {Boolean(profile) && (
         <ProfileTemplate
-          phoneNumber={phoneNumber}
+          phoneNumber={phoneNumber!}
           friendsCount={friendsCount}
           onEditProfile={handleEditProfile}
           profile={profile}
           onLogout={handleLogout}
           feanutAmount={coin.amount}
           onPurchaseFeanut={coin.openPurchaseModal}
-          onInstagram={handleInstagram}
+          // onInstagram={handleInstagram}
           onPrivacy={handlePrivacy}
           onTerms={handleTerms}
           onService={handleService}
@@ -169,6 +177,7 @@ function Profile(): JSX.Element {
           onReceivePull={notificationUserConfig.changePull}
           onCard={handleCard}
           onFriend={handleFriend}
+          onProfileImage={handleProfileImage}
         />
       )}
       {/**

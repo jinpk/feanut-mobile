@@ -17,7 +17,7 @@ import {
   FeanutCard as FeanutCardI,
   PollingStats,
 } from '../libs/interfaces/polling';
-import {useProfileStore, useUserStore} from '../libs/stores';
+import {useModalStore, useProfileStore, useUserStore} from '../libs/stores';
 import FeanutCardTemplate from '../templates/feanut-card';
 import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
@@ -158,6 +158,13 @@ function FeanutCard() {
     }
   }, [profileId, myProfileId, profile?.instagram, profile?.name]);
 
+  const openImageModal = useModalStore(s => s.actions.openImage);
+  const handleProfileImage = useCallback(() => {
+    if (profile?.profileImageKey) {
+      openImageModal({uri: getObjectURLByKey(profile?.profileImageKey)});
+    }
+  }, [profile?.profileImageKey]);
+
   const finalName = useMemo(() => {
     if (profile?.ownerId) {
       // 가입 이름
@@ -186,6 +193,7 @@ function FeanutCard() {
       onBack={navigation.goBack}
       onShare={handleShare}
       gender={profile.gender}
+      onProfileImage={handleProfileImage}
       name={finalName}
       statusMessage={profile.statusMessage}
       instagram={profile.instagram}
