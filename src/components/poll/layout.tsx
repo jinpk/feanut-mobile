@@ -27,7 +27,7 @@ export const Figure = memo((props: FigureProps) => {
     asset: 0,
     style: {},
     width: 0,
-    height: constants.screenHeight * 0.42,
+    height: constants.screenHeight * 0.42723,
   };
 
   if (props.emotion === emotions.joy) {
