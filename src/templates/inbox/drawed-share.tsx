@@ -8,7 +8,7 @@ import {
   svgs,
 } from '../../libs/common';
 import {WithLocalSvg} from 'react-native-svg';
-import {useLayoutEffect, useMemo, useRef} from 'react';
+import {useCallback, useLayoutEffect, useMemo, useRef} from 'react';
 import {Text} from '../../components/text';
 import dayjs from 'dayjs';
 import ViewShot from 'react-native-view-shot';
@@ -43,39 +43,6 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
     return emotionPointColor[props.emotion];
   }, [props.emotion]);
 
-  const figure = useMemo(() => {
-    switch (props.emotion) {
-      case emotions.joy:
-        return svgs.pullHappiness;
-      case emotions.gratitude:
-        return svgs.pullGratitude;
-      case emotions.serenity:
-        return svgs.pullSerenity;
-      case emotions.pride:
-        return svgs.pullPride;
-
-      case emotions.inspiration:
-        return svgs.pullInspiration;
-      case emotions.awe:
-        return svgs.pullAwe;
-
-      case emotions.interest:
-        return svgs.pullInterest;
-
-      case emotions.love:
-        return svgs.pullLove;
-
-      case emotions.amusement:
-        return svgs.pullAmusement;
-
-      case emotions.hope:
-        return svgs.pullHope;
-
-      default:
-        return undefined;
-    }
-  }, [props.emotion]);
-
   useLayoutEffect(() => {
     let tm = setTimeout(() => {
       if (viewShotRef.current?.capture) {
@@ -101,6 +68,61 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
     };
   }, []);
 
+  const renderFigure = useCallback(() => {
+    let asset: number;
+    let width = 525;
+    let height = 675;
+    switch (props.emotion) {
+      case emotions.joy:
+        asset = svgs.pullHappiness;
+        break;
+      case emotions.gratitude:
+        asset = svgs.pullGratitude;
+        break;
+      case emotions.serenity:
+        asset = svgs.pullSerenity;
+        width = 630;
+        height = 780;
+        break;
+      case emotions.pride:
+        asset = svgs.pullPride;
+        height = 850;
+        width = 350;
+        break;
+      case emotions.inspiration:
+        asset = svgs.pullInspiration;
+        break;
+      case emotions.awe:
+        asset = svgs.pullAwe;
+        break;
+      case emotions.interest:
+        asset = svgs.pullInterest;
+        height = 770;
+        width = 620;
+        break;
+      case emotions.love:
+        asset = svgs.pullLove;
+        break;
+      case emotions.amusement:
+        asset = svgs.pullAmusement;
+        break;
+      case emotions.hope:
+        asset = svgs.pullHope;
+        break;
+      default:
+        return null;
+    }
+
+    return (
+      <WithLocalSvg
+        style={styles.figure}
+        asset={asset}
+        width={width * ratio}
+        height={height * ratio}
+      />
+    );
+  }, [props.emotion]);
+
   return (
     <Modal visible transparent animationType="fade">
       <View style={styles.root} collapsable={false}>
@@ -113,15 +135,7 @@ function DrawedShareTemplate(props: DrawedShareTemplateProps) {
               backgroundColor: emotionBackgorundColor[props.emotion],
               overflow: 'hidden',
             }}>
-            {figure && (
-              <WithLocalSvg
-                style={styles.figure}
-                asset={figure}
-                width={546 * ratio}
-                height={815 * ratio}
-              />
-            )}
-
+            {renderFigure()}
             <Text weight="medium" color={colors.white} size={25 * ratio}>
               {dayjs(props.completedAt).format('YYYY. MM. DD')}
             </Text>

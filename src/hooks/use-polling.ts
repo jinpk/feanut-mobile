@@ -279,7 +279,14 @@ export function usePolling() {
         console.error(apiError, 'handlePollingVote');
       }
       if (apiError.code === POLLING_ERROR_ALREADY_DONE) {
-        Alert.alert('이미 참여한 투표입니다.');
+        Alert.alert('이미 참여한 투표입니다.', undefined, [
+          {
+            text: '확인',
+            onPress: () => {
+              setState('loading');
+            },
+          },
+        ]);
       } else if (apiError.code === POLLING_ERROR_EXCEED_SKIP) {
         Alert.alert(
           '투표는 3번까지 건너뛸 수 있어요.',
