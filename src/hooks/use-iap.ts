@@ -74,8 +74,7 @@ export function useIAP() {
               });
               await finishTransaction({purchase, isConsumable: true});
             } catch (error: any) {
-              const err = error as APIError;
-              Alert.alert(err.message);
+              console.error(error);
             }
 
             getMyCoin().then(result => {

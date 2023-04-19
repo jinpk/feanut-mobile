@@ -10,11 +10,19 @@ PODS:
     - React-Core (= 0.71.4)
     - React-jsi (= 0.71.4)
     - ReactCommon/turbomodule/core (= 0.71.4)
+  - Firebase/AppDistribution (10.7.0):
+    - Firebase/CoreOnly
+    - FirebaseAppDistribution (~> 10.7.0-beta)
   - Firebase/CoreOnly (10.7.0):
     - FirebaseCore (= 10.7.0)
   - Firebase/Messaging (10.7.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.7.0)
+  - FirebaseAppDistribution (10.7.0-beta):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
   - FirebaseCore (10.7.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
@@ -521,6 +529,10 @@ PODS:
   - RNFBApp (17.4.0):
     - Firebase/CoreOnly (= 10.7.0)
     - React-Core
+  - RNFBAppDistribution (17.4.2):
+    - Firebase/AppDistribution (= 10.7.0)
+    - React-Core
+    - RNFBApp
   - RNFBMessaging (17.4.0):
     - Firebase/Messaging (= 10.7.0)
     - FirebaseCoreExtension (= 10.7.0)
@@ -620,6 +632,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBAppDistribution (from `../node_modules/@react-native-firebase/app-distribution`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNIap (from `../node_modules/react-native-iap`)
@@ -632,6 +645,7 @@ SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
     - Firebase
+    - FirebaseAppDistribution
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
@@ -748,6 +762,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBAppDistribution:
+    :path: "../node_modules/@react-native-firebase/app-distribution"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFS:
@@ -770,6 +786,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 446e84642979fff0ba57f3c804c2228a473aeac2
   FBReactNativeSpec: 241709e132e3bf1526c1c4f00bc5384dd39dfba9
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
+  FirebaseAppDistribution: f990e8a748106da0f1a67960b13f3c4a7bba21f7
   FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
   FirebaseCoreExtension: f17247ba8c61e4d3c8d136b5e2de3cb4ac6a85b6
   FirebaseCoreInternal: 8845798510aae74703467480f71ac613788d0696
@@ -832,6 +849,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 749f2e049dcd79e2e44f134f66b73a06951b5066
   RNFastImage: 246de6b52d7642992cfd01e2005dda36d00a6660
   RNFBApp: 525cc4317f7955eda6bac09fac3acf7ee06afa0b
+  RNFBAppDistribution: 33e835fd4f6932ca254cf1e00b57baf8e02c1b0b
   RNFBMessaging: 7a3e2fa01d4b2a93b6d79fc250d50ecef3ced110
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNIap: cc309cf426a6df5240e38108ffa6c270a52c03ac
