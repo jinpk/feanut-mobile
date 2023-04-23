@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Information, PullItem} from '../../components';
-import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
 import {colors, gifs} from '../../libs/common';
 import {PollingReceiveItem} from '../../libs/interfaces/polling';
@@ -89,12 +88,7 @@ function InboxTemplate(props: InboxTemplateProps) {
 
   return (
     <View style={styles.root}>
-      <BackTopBar logo onBack={props.onBack} />
-
-      <Text weight="bold" size={18} mt={16} ml={16} mb={7}>
-        수신함
-      </Text>
-
+      <BackTopBar onBack={props.onBack} title="수신함" />
       <FlatList
         data={props.data}
         extraData={props.data}

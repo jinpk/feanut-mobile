@@ -182,7 +182,7 @@ function FeanutCard() {
   if (!profile) {
     return (
       <View style={{flex: 1, backgroundColor: colors.white}}>
-        <BackTopBar logo onBack={navigation.goBack} />
+        <BackTopBar onBack={navigation.goBack} />
       </View>
     );
   }
