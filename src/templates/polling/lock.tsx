@@ -6,6 +6,7 @@ import {WithLocalSvg} from 'react-native-svg';
 import {Text} from '../../components/text';
 import {gifs, svgs} from '../../libs/common';
 import {Information} from '../../components';
+import {Gif} from '../../components/image';
 
 type PollLockTemplateProps = {
   todayCount: number;
@@ -52,21 +53,7 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
   const renderChildren = () => {
     return (
       <Fragment>
-        {!props.isReached && (
-          <Fragment>
-            <Text mt={30} align="center">
-              다음 투표까지
-            </Text>
-
-            <Text size={27} weight="bold" mt={7}>
-              {dayjs()
-                .set('minutes', Math.floor(second / 60))
-                .set('seconds', second % 60)
-                .format('mm:ss')}
-            </Text>
-          </Fragment>
-        )}
-        <View style={styles.voltages}>
+        <View style={[styles.voltages, {marginTop: props.isReached ? 60 : 33}]}>
           <WithLocalSvg
             width={30}
             height={15}
@@ -94,44 +81,29 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
     );
   };
 
-  const title = useMemo(() => {
-    if (props.isReached) {
-      return '오늘의 칭찬 투표를 다 하셨군요!';
-    }
-    switch (props.todayCount) {
-      case 1:
-        return '오늘의 첫 칭찬 투표를 완료 하셨군요!';
-      default:
-        return `오늘 ${props.todayCount}번이나 친구들을 칭찬했어요!`;
-    }
-  }, [props.todayCount, props.isReached]);
-
   return (
     <View style={[styles.root, {marginTop: insets.top}]}>
-      {props.todayCount === 1 && (
-        <Information
-          icon={gifs.hourglassNotDone}
-          message={title}
-          subMessage={`수신함을 확인해보세요\n친구들이 나를 투표했을 수도 있어요.`}
-          markingText="수신함을 확인">
-          {renderChildren()}
-        </Information>
-      )}
+      {(props.todayCount === 1 || props.todayCount === 2) && (
+        <Fragment>
+          <Gif source={gifs.hourglassNotDone} />
+          <Text mt={30} align="center">
+            {props.todayCount === 1 ? '다음' : '마지막'} 투표까지 남은 시간
+          </Text>
 
-      {props.todayCount === 2 && (
-        <Information
-          icon={gifs.hourglassNotDone}
-          message={title}
-          subMessage={`친구에게 마음을 표현하고 더 가까워져 볼까요?`}
-          markingText="마음을 표현">
+          <Text size={43} weight="bold" mt={7}>
+            {dayjs()
+              .set('minutes', Math.floor(second / 60))
+              .set('seconds', second % 60)
+              .format('mm:ss')}
+          </Text>
           {renderChildren()}
-        </Information>
+        </Fragment>
       )}
 
       {props.isReached && (
         <Information
           icon={gifs.highVoltage}
-          message={title}
+          message={'오늘의 칭찬 투표를 다 하셨군요!'}
           subMessage={`내일 더 다양한 주제의 투표에 참여할 수 있어요.`}
           markingText="다양한 주제">
           {renderChildren()}

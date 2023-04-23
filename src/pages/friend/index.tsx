@@ -66,6 +66,7 @@ function Friend() {
       contact.syncContacts(() => {
         setQuery({page: 1, limit: 20});
         setLoading(true);
+        navigation.navigate(routes.home);
       });
     }
   }, [params.autoSync]);

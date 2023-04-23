@@ -31,7 +31,7 @@ export const CoinModalTemplate = (
       <View style={styles.root}>
         <View style={[styles.content, {paddingBottom: insests.bottom + 30}]}>
           <Text size={18} weight="bold" mb={23}>
-            피넛코인 가게
+            피넛코인 구매
           </Text>
           <Close onClose={handleClose} style={styles.close} />
           {props.data.map((x, i) => {
