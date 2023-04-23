@@ -89,8 +89,8 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
   return (
     <View style={styles.root}>
       <BackTopBar
-        logo
         onBack={props.onBack}
+        title={props.hiddenFriend ? '숨김친구 목록' : '친구 목록'}
         rightComponent={
           !props.hiddenFriend ? (
             <TouchableOpacity
@@ -101,9 +101,6 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
           ) : undefined
         }
       />
-      <Text weight="bold" size={18} mt={16} ml={16} mb={7}>
-        {props.hiddenFriend ? '숨김친구 목록' : '친구 목록'}
-      </Text>
 
       <FlatList
         data={props.data}
@@ -140,6 +137,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
               placeholder="검색"
               returnKeyType="search"
               mx={16}
+              mt={15}
               mb={15}
             />
 

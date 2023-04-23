@@ -158,7 +158,7 @@ function Profile(): JSX.Element {
 
   return (
     <View style={styles.root}>
-      <BackTopBar logo onBack={navigation.goBack} />
+      <BackTopBar title="프로필" onBack={navigation.goBack} />
       {Boolean(profile) && (
         <ProfileTemplate
           phoneNumber={phoneNumber!}

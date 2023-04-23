@@ -26,7 +26,6 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
     <View style={styles.root}>
       <BackTopBar
         title="프로필 편집"
-        onBack={props.onBack}
         rightComponent={
           <TouchableOpacity
             disabled={disabled}

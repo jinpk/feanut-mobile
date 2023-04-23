@@ -83,7 +83,10 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
 
   return (
     <View style={styles.root}>
-      <BackTopBar onBack={props.onBack} logo />
+      <BackTopBar
+        onBack={props.onBack}
+        title={props.me ? '내 피넛카드' : '프로필'}
+      />
       <View style={styles.body}>
         <ViewShot
           ref={props.drawViewRef}
