@@ -13,6 +13,9 @@ export const routes = {
   profile: '/profile',
   profileEdit: '/profile/edit',
 
+  setting: '/setting',
+
+
   friend: '/friend',
   friendHidden: '/friend/hidden',
 

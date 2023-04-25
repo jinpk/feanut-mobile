@@ -1,16 +1,14 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Linking, StyleSheet, View} from 'react-native';
-import {BackTopBar} from '../../components/top-bar';
+import {Alert, Linking} from 'react-native';
 import {useCoin, useNotificationUserConfig} from '../../hooks';
 import {getFriendshipStatus} from '../../libs/api/friendship';
 import {getMyProfile, patchProfile} from '../../libs/api/profile';
-import {colors, routes} from '../../libs/common';
+import {routes} from '../../libs/common';
 import {configs} from '../../libs/common/configs';
 import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
 import ProfileTemplate from '../../templates/profile';
 import {getObjectURLByKey} from '../../libs/common/file';
-// import {InstagramModalTemplate} from '../../templates/modal';
 
 function Profile(): JSX.Element {
   const navigation = useNavigation();
@@ -22,8 +20,6 @@ function Profile(): JSX.Element {
   const update = useProfileStore(s => s.actions.update);
 
   const [friendsCount, setFriendsCount] = useState(0);
-
-  // const [instagramModal, setInstagramModal] = useState(false);
 
   const openWebview = useModalStore(s => s.actions.openWebview);
 
@@ -156,50 +152,34 @@ function Profile(): JSX.Element {
     }
   }, [profile.profileImageKey]);
 
+  const handleSetting = useCallback(() => {
+    navigation.navigate(routes.setting);
+  }, []);
+
   return (
-    <View style={styles.root}>
-      <BackTopBar title="프로필" onBack={navigation.goBack} />
-      {Boolean(profile) && (
-        <ProfileTemplate
-          phoneNumber={phoneNumber!}
-          friendsCount={friendsCount}
-          onEditProfile={handleEditProfile}
-          profile={profile}
-          onLogout={handleLogout}
-          feanutAmount={coin.amount}
-          onPurchaseFeanut={coin.openPurchaseModal}
-          // onInstagram={handleInstagram}
-          onPrivacy={handlePrivacy}
-          onTerms={handleTerms}
-          onService={handleService}
-          onWithdrawal={handleWithdrawal}
-          receivePull={notificationUserConfig.config.receivePull}
-          receivePoll={notificationUserConfig.config.receivePoll}
-          onReceivePoll={notificationUserConfig.changePoll}
-          onReceivePull={notificationUserConfig.changePull}
-          onCard={handleCard}
-          onFriend={handleFriend}
-          onProfileImage={handleProfileImage}
-        />
-      )}
-      {/**
-      <InstagramModalTemplate
-        visible={instagramModal}
-        onClose={() => {
-          setInstagramModal(false);
-        }}
-        onSucceed={fetchProfile}
-        state={profile.id}
-      />
-       */}
-    </View>
+    <ProfileTemplate
+      onSetting={handleSetting}
+      onBack={navigation.goBack}
+      phoneNumber={phoneNumber!}
+      friendsCount={friendsCount}
+      onEditProfile={handleEditProfile}
+      profile={profile}
+      onLogout={handleLogout}
+      feanutAmount={coin.amount}
+      onPurchaseFeanut={coin.openPurchaseModal}
+      onPrivacy={handlePrivacy}
+      onTerms={handleTerms}
+      onService={handleService}
+      onWithdrawal={handleWithdrawal}
+      receivePull={notificationUserConfig.config.receivePull}
+      receivePoll={notificationUserConfig.config.receivePoll}
+      onReceivePoll={notificationUserConfig.changePoll}
+      onReceivePull={notificationUserConfig.changePull}
+      onCard={handleCard}
+      onFriend={handleFriend}
+      onProfileImage={handleProfileImage}
+    />
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-});
 export default Profile;

@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import {colors} from '../../libs/common';
 import {Text, TextColorProps, TextSizeProps} from '../text';
@@ -15,6 +16,7 @@ type TextButtonProps = PropsWithChildren<{
   hiddenBorder?: boolean;
   onPress?: (e: GestureResponderEvent) => void;
   rightIcon?: JSX.Element;
+  style?: ViewStyle;
 }>;
 
 export const TextButton = (props: TextButtonProps): JSX.Element => {
@@ -30,6 +32,7 @@ export const TextButton = (props: TextButtonProps): JSX.Element => {
           borderBottomColor: color,
           borderBottomWidth: props.hiddenBorder ? 0 : 1,
         },
+        props.style,
       ]}>
       <Text size={props.fontSize || 12} color={color}>
         {props.title}

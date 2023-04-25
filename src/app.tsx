@@ -27,6 +27,7 @@ import {Alert, Appearance, StatusBar, View} from 'react-native';
 import {VersionCheckerModal} from './modals/version-checker';
 import {WebviewModal} from './modals/webview';
 import {ImageModal} from './modals/image';
+import Setting from './pages/setting';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -132,6 +133,8 @@ function NavigationApp() {
           <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+          <Stack.Screen name={routes.setting} component={Setting} />
+
           <Stack.Screen
             name={routes.friend}
             initialParams={{hidden: false}}
