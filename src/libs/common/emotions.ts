@@ -55,14 +55,14 @@ export const emotionKRLabel = {
 };
 
 export const emotionKRMessage = {
-  joy: '친구들에게\n밝은 에너지를\n전해주는 사람',
-  gratitude: '친구들에게\n항상 고마움을\n전하는 사람',
-  serenity: '친구들에게\n항상 편안함을\n주는 사람',
-  interest: '친구들에게\n흥미와 관심을\n받는 사람',
-  hope: '친구들에게\n무한한 희망을\n주는 사람',
-  pride: '친구들에게\n항상 자신감을\n주는 사람',
-  amusement: '친구들에게\n늘 즐거움을\n주는 사람',
-  inspiration: '친구들에게\n무한한 영감을\n주는 사람',
-  awe: '친구들에게\n새로운 놀라움을\n주는 사람',
-  love: '친구들에게\n열렬한 사랑을\n받는 사람',
+  joy: '밝은 에너지를\n전해주는 사람',
+  gratitude: '항상 고마움을\n전하는 사람',
+  serenity: '항상 편안함을\n주는 사람',
+  interest: '흥미와 관심을\n받는 사람',
+  hope: '무한한 희망을\n주는 사람',
+  pride: '항상 자신감을\n주는 사람',
+  amusement: '늘 즐거움을\n주는 사람',
+  inspiration: '무한한 영감을\n주는 사람',
+  awe: '새로운 놀라움을\n주는 사람',
+  love: '열렬한 사랑을\n받는 사람',
 };

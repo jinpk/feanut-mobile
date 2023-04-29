@@ -1,30 +1,19 @@
 import React, {useCallback} from 'react';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {SignUpRequest} from '../../libs/interfaces';
+import {useNavigation} from '@react-navigation/native';
 import {SchoolTemplate} from '../../templates/school';
 import {School} from '../../libs/interfaces/school';
 import {routes} from '../../libs/common';
 import {useSchool} from '../../hooks';
 
-type SignUpSchoolProps = RouteProp<
-  {SignUpSchool: {payload: SignUpRequest}},
-  'SignUpSchool'
->;
-
-function SignUpSchool() {
+function ProfileEditSchool() {
   const schoolHooks = useSchool();
   const navigation = useNavigation();
-  const {params} = useRoute<SignUpSchoolProps>();
 
-  const handleItemPress = useCallback(
-    (school: School) => {
-      navigation.navigate(routes.signupGrade, {
-        school,
-        payload: params.payload,
-      });
-    },
-    [params],
-  );
+  const handleItemPress = useCallback((school: School) => {
+    navigation.navigate(routes.profileEditGrade, {
+      school,
+    });
+  }, []);
 
   return (
     <SchoolTemplate
@@ -41,4 +30,4 @@ function SignUpSchool() {
   );
 }
 
-export default SignUpSchool;
+export default ProfileEditSchool;

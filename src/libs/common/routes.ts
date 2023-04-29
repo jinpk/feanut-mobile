@@ -13,6 +13,8 @@ export const routes = {
 
   profile: '/profile',
   profileEdit: '/profile/edit',
+  profileEditSchool: '/profile/edit/school',
+  profileEditGrade: '/profile/edit/grade',
 
   setting: '/setting',
 

@@ -7,6 +7,8 @@ import {Text} from '../../components/text';
 import {BackTopBar} from '../../components/top-bar';
 import {colors, constants} from '../../libs/common';
 import {Profile, ProfileForm} from '../../libs/interfaces';
+import {MySchool} from '../../libs/interfaces/school';
+import {TextButton} from '../../components/button/text-button';
 
 type ProfileEditTemplateProps = {
   onBack: () => void;
@@ -16,6 +18,10 @@ type ProfileEditTemplateProps = {
   profile: Profile;
 
   form: UseFormReturn<ProfileForm>;
+
+  mySchool: MySchool;
+
+  onSchool: () => void;
 };
 
 function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
@@ -107,11 +113,33 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
 
       <View style={[styles.form, styles.formRow]}>
         <View style={styles.formContent}>
-          <Text color={colors.darkGrey} size={12} mb={6}>
-            성별
-          </Text>
+          <View style={[styles.formTitleWrap, {paddingVertical: 8}]}>
+            <Text color={colors.darkGrey} size={12}>
+              성별
+            </Text>
+          </View>
           <Text>{props.profile.gender === 'male' ? '남자' : '여자'}</Text>
         </View>
+
+        <View style={[styles.formContent, {marginLeft: 12}]}>
+          <View style={styles.formTitleWrap}>
+            <Text color={colors.darkGrey} size={12}>
+              학교 / 학년
+            </Text>
+            <TextButton
+              onPress={props.onSchool}
+              style={styles.update}
+              title={props.mySchool.code ? '변경' : '등록'}
+              hiddenBorder
+            />
+          </View>
+          {Boolean(props.mySchool.code) && (
+            <Text>
+              {props.mySchool?.name} / {props.mySchool.grade}학년
+            </Text>
+          )}
+        </View>
+
         {/**
         <View style={styles.formContent}>
           <Text color={colors.darkGrey} size={12} mb={6}>
@@ -157,6 +185,14 @@ const styles = StyleSheet.create({
   },
   formContent: {
     flex: 1,
+  },
+  formTitleWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  update: {
+    padding: 8,
   },
 });
 
