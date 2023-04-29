@@ -242,7 +242,7 @@ export function usePolling() {
         if (__DEV__) {
           console.error(error, 'handlePolling');
         }
-        Alert.alert(error.message || error);
+        // Alert.alert(error.message || error);
       }
     };
 

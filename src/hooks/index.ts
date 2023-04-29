@@ -10,3 +10,4 @@ export * from './use-pull';
 export * from './use-handle-back';
 export * from './use-inbox';
 export * from './use-get-emoji-uri';
+export * from './use-legacy-friendship';

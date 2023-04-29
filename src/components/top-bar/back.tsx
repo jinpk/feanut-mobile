@@ -38,7 +38,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
           <WithLocalSvg width={67.5} height={35} asset={svgs.logoWithLetter} />
         )}
         {Boolean(props.title) && (
-          <Text size={16} weight="medium">
+          <Text size={18} weight="bold">
             {props.title}
           </Text>
         )}

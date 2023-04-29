@@ -5,16 +5,21 @@ export interface ModalStore {
   welcome: boolean;
   coin: boolean;
   guide: boolean;
-  
+
   image: boolean;
   imageSource: Source | number | undefined;
 
   webview: boolean;
   webviewURI: string;
 
+  legacyFriendship: boolean;
+
   actions: {
     openGuide: () => void;
     closeGuide: () => void;
+
+    openLegacyFriendship: () => void;
+    closeLegacyFriendship: () => void;
 
     openWelcome: () => void;
     closeWelcome: () => void;
@@ -38,6 +43,7 @@ const initialState = {
   webview: false,
   imageSource: undefined,
   webviewURI: '',
+  legacyFriendship: false,
 };
 
 export const useModalStore = create<ModalStore>(set => ({
@@ -52,6 +58,9 @@ export const useModalStore = create<ModalStore>(set => ({
 
     openWelcome: () => set({welcome: true}),
     closeWelcome: () => set({welcome: false}),
+
+    openLegacyFriendship: () => set({legacyFriendship: true}),
+    closeLegacyFriendship: () => set({legacyFriendship: false}),
 
     openCoin: () => set({coin: true}),
     closeCoin: () => set({coin: false}),

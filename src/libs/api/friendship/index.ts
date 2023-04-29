@@ -87,3 +87,13 @@ export const postFriendsMany = async (
   );
   return res.data;
 };
+
+export const getLegacyFriendship = async (userId: string): Promise<Boolean> => {
+  const res = await feanutAPI.get<Boolean>(`/friendships/${userId}/legacy`);
+  return res.data;
+};
+
+export const postClearFriendsForLegacy = async (userId: string) => {
+  const res = await feanutAPI.post(`/friendships/${userId}/legacy/clear`);
+  return res.data;
+};

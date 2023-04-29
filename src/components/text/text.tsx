@@ -4,7 +4,16 @@ import {StyleProp, Text as RNText, TextStyle} from 'react-native';
 import {colors, fonts} from '../../libs/common';
 
 export type TextColorProps = string | undefined;
-export type TextSizeProps = 27 | 18 | 16 | 14 | 13 | 12 | 10 | undefined | number;
+export type TextSizeProps =
+  | 27
+  | 18
+  | 16
+  | 14
+  | 13
+  | 12
+  | 10
+  | undefined
+  | number;
 
 type TextProps = PropsWithChildren<{
   color?: TextColorProps;
@@ -18,6 +27,7 @@ type TextProps = PropsWithChildren<{
   ml?: number;
   mx?: number;
   numberOfLines?: number | undefined;
+  lineHeight?: number;
 }>;
 
 export const Text = (props: TextProps): JSX.Element => {
@@ -38,7 +48,7 @@ export const Text = (props: TextProps): JSX.Element => {
           fontFamily: fontFamily,
           fontSize: props.size || 14,
           color: props.color || colors.dark,
-          lineHeight: (props.size || 14) * 1.193,
+          lineHeight: props.lineHeight || (props.size || 14) * 1.193,
           marginTop: props.mt,
           marginBottom: props.mb,
           textAlign: props.align,

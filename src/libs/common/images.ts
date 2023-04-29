@@ -50,6 +50,7 @@ import coin100 from '../../assets/pngs/coin100.png';
 import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
 import guide1 from '../../assets/pngs/guide-1.png';
+import mailbox from '../../assets/pngs/mailbox.png';
 import guide2 from '../../assets/pngs/guide-2.png';
 
 import feanutYellowPNG from '../../assets/pngs/feanut-yellow.png';
@@ -161,7 +162,7 @@ export const gifs = {
 
 export const pngs = {
   coin10,
-  guide1,
+  guide1,mailbox,
   guide2,
   coin5,school,
   coin30,

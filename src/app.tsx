@@ -4,13 +4,23 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {colors, constants, routes, setUser} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
-import {CoinModal, MessageModal, WelcomeModal} from './modals';
+import {
+  CoinModal,
+  LegacyFriendshipModal,
+  MessageModal,
+  WelcomeModal,
+} from './modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
 import SignUp from './pages/signup';
 import ProfileEdit from './pages/profile/edit';
-import {useIAP, useInitEmoji, useNotificationUserConfig} from './hooks';
+import {
+  useIAP,
+  useInitEmoji,
+  useLegacyFriendship,
+  useNotificationUserConfig,
+} from './hooks';
 import Friend from './pages/friend';
 import DeleteMe from './pages/delete-me';
 import FeanutCard from './pages/feanut-card';
@@ -60,6 +70,8 @@ function NavigationApp() {
   useIAP();
   useInitEmoji();
   useNotificationUserConfig(true);
+  // 친구 추가 방법 변경전 기존회원 친구 초기화 기능 제공
+  useLegacyFriendship();
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
@@ -190,6 +202,7 @@ function FeanutApp(props: AppProps): JSX.Element {
       <CoinModal />
       <VersionCheckerModal />
       <MessageModal />
+      <LegacyFriendshipModal />
     </SafeAreaProvider>
   );
 }

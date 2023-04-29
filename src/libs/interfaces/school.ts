@@ -14,7 +14,7 @@ export interface PostSchoolRequest {
 }
 
 export interface GetListSchoolRequest extends PagenatedRequest {
-  name: string;
+  keyword: string;
 }
 
 export interface GetListSchoolResponse extends PagenatedResponse<School> {}

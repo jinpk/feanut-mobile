@@ -21,7 +21,7 @@ function SignUpSchool() {
   const [query, setQuery] = useState<GetListSchoolRequest>({
     page: 1,
     limit: 20,
-    name: '',
+    keyword: '',
   });
   const [data, setData] = useState<GetListSchoolResponse>({
     data: [],
@@ -38,7 +38,7 @@ function SignUpSchool() {
 
   //  조회
   useEffect(() => {
-    if (loading && query.name && query.name.length >= 1) {
+    if (loading && query.keyword && query.keyword.length >= 1) {
       console.log('fetch shcool', query);
       let tm = setTimeout(() => {
         setFetching(true);
@@ -69,7 +69,7 @@ function SignUpSchool() {
         clearTimeout(tm);
       };
     }
-  }, [loading, query.page, query.name]);
+  }, [loading, query.page, query.keyword]);
 
   const handleItemPress = useCallback(
     (school: School) => {
@@ -88,7 +88,7 @@ function SignUpSchool() {
     // 아이템 없어지면 리스트 최신화 필요
     if (data.data.length < data.total) {
       setQuery(prev => ({
-        name: prev.name,
+        keyword: prev.keyword,
         page: query.page + 1,
         limit: 20,
       }));
@@ -101,11 +101,11 @@ function SignUpSchool() {
     setLoading(true);
   }, []);
 
-  const handleKeyword = useCallback((name: string) => {
-    if (!name) {
+  const handleKeyword = useCallback((keyword: string) => {
+    if (!keyword) {
       setData({data: [], total: 0});
     }
-    setQuery({page: 1, name: name || '', limit: 20});
+    setQuery({page: 1, keyword: keyword || '', limit: 20});
     setLoading(true);
   }, []);
 
@@ -118,7 +118,7 @@ function SignUpSchool() {
       loading={loading}
       onRefresh={handleRefresh}
       onKeyword={handleKeyword}
-      keyword={query.name || ''}
+      keyword={query.keyword || ''}
       fetching={fetching}
     />
   );
