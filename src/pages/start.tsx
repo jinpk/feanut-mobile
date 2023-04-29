@@ -1,5 +1,4 @@
 import React, {useCallback} from 'react';
-import {Linking} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {configs} from '../libs/common/configs';
 import StartTemplate from '../templates/start';
@@ -19,6 +18,13 @@ function Start(): JSX.Element {
     navigation.navigate(routes.verification, params);
   }, []);
 
+  const handleSignUp = useCallback(() => {
+    const params: VerificationParams = {
+      type: 'signup',
+    };
+    navigation.navigate(routes.verification, params);
+  }, []);
+
   return (
     <StartTemplate
       onPrivacy={() => {
@@ -27,9 +33,7 @@ function Start(): JSX.Element {
       onTerms={() => {
         openWebview(configs.termsUrl);
       }}
-      onStart={() => {
-        navigation.navigate(routes.signup);
-      }}
+      onStart={handleSignUp}
       onLogin={handleLogin}
     />
   );

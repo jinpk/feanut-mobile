@@ -1,11 +1,13 @@
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {useForm} from 'react-hook-form';
-import {SignUpForm, VerificationParams} from '../libs/interfaces';
-import SignUpTemplate from '../templates/signup';
-import {constants, routes, yupValidators} from '../libs/common';
+import {SignUpForm, SignUpRequest} from '../../libs/interfaces';
+import SignUpTemplate from '../../templates/signup';
+import {constants, pngs, routes, yupValidators} from '../../libs/common';
 import {Keyboard, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useMessageModalStore} from '../../libs/stores/message-modal';
+import {useSignUp} from '../../hooks/use-signup';
 
 const initialFormValues: SignUpForm = {
   name: '',
@@ -15,6 +17,9 @@ const initialFormValues: SignUpForm = {
 function SignUp(): JSX.Element {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const {params} = useRoute<RouteProp<{SignUp: {authId: string}}, 'SignUp'>>();
+  const openMessageModal = useMessageModalStore(s => s.actions.open);
+  const signUp = useSignUp();
   const form = useForm<SignUpForm>({
     defaultValues: initialFormValues,
   });
@@ -36,13 +41,31 @@ function SignUp(): JSX.Element {
 
     Keyboard.dismiss();
 
-    const params: VerificationParams = {
-      type: 'signup',
-      payload: form.getValues(),
+    const body: SignUpRequest = {
+      gender,
+      name,
+      authId: params.authId,
     };
 
-    navigation.navigate(routes.verification, params);
-  }, []);
+    openMessageModal(
+      `${body.name}님 학생이신가요?\n\n재학중인 학교를 선택하면\n학교 친구를 추가할 수 있어요!`,
+      [
+        {
+          text: '아닙니다',
+          onPress: () => {
+            signUp(body);
+          },
+        },
+        {
+          text: '학생입니다',
+          onPress: () => {
+            navigation.navigate(routes.signupSchool, {payload: body});
+          },
+        },
+      ],
+      pngs.school,
+    );
+  }, [params.authId]);
 
   return (
     <KeyboardAvoidingView

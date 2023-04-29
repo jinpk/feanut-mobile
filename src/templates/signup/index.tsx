@@ -43,10 +43,10 @@ function SignUpTemplate(props: SignUpTemplateProps) {
     <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <BackTopBar onBack={props.onBack} />
       <Text weight="bold" size={18} mt={15} mx={16}>
-        친구들이 알아볼 수 있도록 정보를 입력해 주세요
+        친구에게 내가 누구인지 알려주세요
       </Text>
       <Text mt={30} mx={16}>
-        친구가 투표할 때 보게 될 이름이에요
+        이름을 입력해주세요.
       </Text>
 
       <Controller
@@ -74,7 +74,7 @@ function SignUpTemplate(props: SignUpTemplateProps) {
       <Errors errors={[errorsName]} mx={16} />
 
       <Text mt={57} mx={16}>
-        성별을 선택해 주세요
+        성별을 선택해주세요.
       </Text>
 
       <Controller

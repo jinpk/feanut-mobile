@@ -4,6 +4,7 @@ import {
   SignInRequest,
   SignInVerificationRequest,
   SignUpRequest,
+  SignUpVerificationConfirmationRequest,
   SignUpVerificationRequest,
   TokenRequest,
   TokenResponse,
@@ -30,6 +31,16 @@ export const postSignIn = async (
 
 export const postToken = async (body: TokenRequest): Promise<TokenResponse> => {
   const res = await feanutAPI.post<TokenResponse>('/token', body);
+  return res.data;
+};
+
+export const postSignUpVerificationConfirmation = async (
+  body: SignUpVerificationConfirmationRequest,
+): Promise<any> => {
+  const res = await feanutAPI.post<AuthResponse>(
+    '/signup/verification/confirmation',
+    body,
+  );
   return res.data;
 };
 

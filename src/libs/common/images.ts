@@ -55,6 +55,7 @@ import guide2 from '../../assets/pngs/guide-2.png';
 import feanutYellowPNG from '../../assets/pngs/feanut-yellow.png';
 import feanutBluePNG from '../../assets/pngs/feanut-blue.png';
 import feanutDarkGreyPNG from '../../assets/pngs/feanut-dark-grey.png';
+import school from '../../assets/pngs/school.png';
 
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
@@ -82,8 +83,10 @@ import pullAwe from '../../assets/svgs/pull-awe.svg';
 import pullLove from '../../assets/svgs/pull-love.svg';
 
 import visitSNS from '../../assets/svgs/visit-sns.svg';
+import add from '../../assets/svgs/add.svg';
 
 export const svgs = {
+  add,
   feanutCardHappiness,
   feanutCardGratitude,
   feanutCardSerenity,
@@ -160,7 +163,7 @@ export const pngs = {
   coin10,
   guide1,
   guide2,
-  coin5,
+  coin5,school,
   coin30,
   feanutYellow: feanutYellowPNG,
   feanutBlue: feanutBluePNG,

@@ -72,7 +72,7 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
         mx={16}
         mt={14}
         text={
-          '회원님의 전화번호는 인증 용도로만 사용되며\nfeanut은 개인정보를 안전하게 관리합니다'
+          '회원님의 전화번호는 인증 용도로만 사용되며\nfeanut은 개인정보를 안전하게 관리합니다.'
         }
       />
 
@@ -80,7 +80,7 @@ function PhoneNumberTemplate(props: PhoneNumberTemplateProps) {
       <Button
         disabled={Boolean(errorsphoneNumber)}
         onPress={props.onConfirm}
-        title={'인증번호 보내기'}
+        title={'SMS 인증번호 받기'}
         mx={16}
         mb={15}
       />

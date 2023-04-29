@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {colors, constants, routes, setUser} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
-import {CoinModal, WelcomeModal} from './modals';
+import {CoinModal, MessageModal, WelcomeModal} from './modals';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Inbox from './pages/inbox';
 import Profile from './pages/profile';
@@ -28,6 +28,8 @@ import {VersionCheckerModal} from './modals/version-checker';
 import {WebviewModal} from './modals/webview';
 import {ImageModal} from './modals/image';
 import Setting from './pages/setting';
+import SignUpSchool from './pages/signup/school';
+import SignUpGrade from './pages/signup/grade';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -124,8 +126,6 @@ function NavigationApp() {
           initialRouteName={routes.home}
           screenOptions={{
             headerShown: false,
-            //  animation:
-            //  constants.platform === 'android' ? 'slide_from_right' : 'default',
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
@@ -153,11 +153,18 @@ function NavigationApp() {
           initialRouteName={routes.start}
           screenOptions={{
             headerShown: false,
-            //  animation:
-            //  constants.platform === 'android' ? 'slide_from_right' : 'default',
           }}>
           <Stack.Screen name={routes.start} component={Start} />
-          <Stack.Screen name={routes.signup} component={SignUp} />
+          <Stack.Screen
+            name={routes.signup}
+            component={SignUp}
+            options={{
+              //  회원가입 정보 입력 도중 뒤로 나가지는 불편 예방
+              gestureEnabled: false,
+            }}
+          />
+          <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
+          <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
           <Stack.Screen
             name={routes.verification}
             component={Verification}
@@ -182,6 +189,7 @@ function FeanutApp(props: AppProps): JSX.Element {
       <WelcomeModal />
       <CoinModal />
       <VersionCheckerModal />
+      <MessageModal />
     </SafeAreaProvider>
   );
 }

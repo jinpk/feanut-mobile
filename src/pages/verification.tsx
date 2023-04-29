@@ -1,4 +1,9 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  ParamListBase,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
@@ -12,14 +17,17 @@ import {
 import {
   APIError,
   AuthResponse,
-  Gender,
   PhoneNumberForm,
   SignInVerificationRequest,
-  SignUpForm,
-  SignUpVerificationRequest,
   VerificationParams,
 } from '../libs/interfaces';
-import {colors, constants, setCredentials, yupValidators} from '../libs/common';
+import {
+  colors,
+  constants,
+  routes,
+  setCredentials,
+  yupValidators,
+} from '../libs/common';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import PhoneNumberTemplate from '../templates/phone-number';
 import PhoneNumberCodeTemplate from '../templates/phone-number/code';
@@ -28,6 +36,7 @@ import {
   postSignInVerification,
   postSignUp,
   postSignUpVerification,
+  postSignUpVerificationConfirmation,
 } from '../libs/api/auth';
 import {
   AUTH_ERROR_COOL_TIME,
@@ -41,6 +50,7 @@ import {setAPIAuthorization} from '../libs/api';
 import {useModalStore, useUserStore} from '../libs/stores';
 import {getMe} from '../libs/api/users';
 import {useHandleBack} from '../hooks';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const initialFormValues: PhoneNumberForm = {
   phoneNumber: '',
@@ -55,7 +65,7 @@ function Verification(): JSX.Element {
 
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const form = useForm<PhoneNumberForm>({
     defaultValues: initialFormValues,
@@ -116,13 +126,9 @@ function Verification(): JSX.Element {
 
       /** 회원가입 인증코드 */
       if (params.type === 'signup') {
-        const payload = params.payload as SignUpForm;
-        const body: SignUpVerificationRequest = {
-          name: payload.name,
-          gender: payload.gender as Gender,
+        response = await postSignUpVerification({
           phoneNumber: data.phoneNumber,
-        };
-        response = await postSignUpVerification(body);
+        });
       } else if (params.type === 'signin') {
         const body: SignInVerificationRequest = {
           phoneNumber: data.phoneNumber,
@@ -167,13 +173,10 @@ function Verification(): JSX.Element {
     try {
       /** 회원가입 및 자동 로그인 */
       if (params.type === 'signup') {
-        const token = await postSignUp(data);
-        setCredentials(token);
-        setAPIAuthorization(token.accessToken);
-        /** 로그인 완료시 자동 화면 이동됨. app.tsx */
-        useUserStore.getState().actions.login(await getMe());
-        // 애니메이션 적용후 오픈
-        openGuideModal();
+        // 회원가입 인증 확인
+        await postSignUpVerificationConfirmation(data);
+        // 회원가입 정보 입력 화면으로 이동
+        navigation.replace(routes.signup, {authId: data.authId});
       } else if (params.type === 'signin') {
         const token = await postSignIn(data);
         setCredentials(token);
@@ -213,7 +216,8 @@ function Verification(): JSX.Element {
     if (params.type === 'signin') {
       return '';
     }
-    return '친구가 이미 회원님을 투표했을 수도 있어요';
+    return '';
+    // return '친구가 이미 회원님을 투표했을 수도 있어요';
   }, [params.type]);
 
   return (

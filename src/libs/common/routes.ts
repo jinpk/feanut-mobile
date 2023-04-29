@@ -3,7 +3,8 @@ export const routes = {
 
   login: '/login',
   signup: '/signup',
-
+  signupSchool: '/signup/school',
+  signupGrade: '/signup/grade',
   verification: '/verification',
 
   main: '/main',
@@ -14,7 +15,6 @@ export const routes = {
   profileEdit: '/profile/edit',
 
   setting: '/setting',
-
 
   friend: '/friend',
   friendHidden: '/friend/hidden',

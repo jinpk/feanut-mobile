@@ -5,6 +5,7 @@ export interface ModalStore {
   welcome: boolean;
   coin: boolean;
   guide: boolean;
+  
   image: boolean;
   imageSource: Source | number | undefined;
 
