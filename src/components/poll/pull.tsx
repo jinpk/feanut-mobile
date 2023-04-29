@@ -1,17 +1,27 @@
 import React, {useMemo} from 'react';
 import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import {colors, constants, emotionPointColor, svgs} from '../../libs/common';
+import {
+  colors,
+  constants,
+  emotionPointColor,
+  gifs,
+  svgs,
+} from '../../libs/common';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
 import {Avatar} from '../avatar';
-import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
 import {PollLayout} from './layout';
 import {getObjectURLByKey} from '../../libs/common/file';
+import {Gif} from '../image';
+import {useGetEmojiURI} from '../../hooks';
+import {Profile} from '../../libs/interfaces';
 
 type PullProps = PollingReceiveDetail & {
   onShare: () => void;
   onOpen: () => void;
+
+  myProfile: Profile;
 };
 
 const ratio = constants.screenWidth / 393;
@@ -21,26 +31,19 @@ export const Pull = (props: PullProps) => {
     return emotionPointColor[props.pollId.emotion];
   }, [props.pollId]);
 
+  const emojiURI = useGetEmojiURI(props.pollId.emojiId);
+
   return (
     <PollLayout emotion={props.pollId.emotion}>
       <View style={styles.body}>
         <View style={{alignItems: 'center'}}>
-          <TouchableWithoutFeedback onPress={props.onOpen}>
-            <View>
-              <Avatar
-                uri={getObjectURLByKey(props.voter.imageFileKey, '70')}
-                size={55 * ratio}
-                defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-
+          {Boolean(emojiURI) && <Gif source={{uri: emojiURI}} />}
           {props.isOpened && (
             <Text color={colors.white} mt={15 * ratio}>
               <Text weight="bold" color={colors.white}>
                 {props.voter.name}
               </Text>{' '}
-              님이 투표에서 나를 선택했어요!
+              님이 나를 투표했어요!
             </Text>
           )}
           {!props.isOpened && (
@@ -63,6 +66,16 @@ export const Pull = (props: PullProps) => {
           {props.pollId.contentText}
         </Text>
 
+        {/** <TouchableWithoutFeedback onPress={props.onOpen}>
+            <View>
+              <Avatar
+                uri={getObjectURLByKey(props.voter.imageFileKey, '70')}
+                size={55 * ratio}
+                defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+
         <View>
           {props.friendIds.map((x, i) => {
             return (
@@ -82,6 +95,38 @@ export const Pull = (props: PullProps) => {
               />
             );
           })}
+        </View> */}
+
+        <TouchableWithoutFeedback onPress={props.onOpen}>
+          <View style={styles.voter}>
+            <Avatar
+              uri={getObjectURLByKey(props.voter.imageFileKey, '150')}
+              size={100 * ratio}
+              defaultLogo={props.voter.gender === 'male' ? 'm' : 'w'}
+            />
+            <Text color={colors.white} weight="medium" mt={10}>
+              {props.isOpened
+                ? props.voter.name
+                : `친구(${props.voter.gender === 'male' ? '남자' : '여자'})`}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <Gif
+          size={60 * ratio}
+          source={gifs.pointingRight}
+          style={styles.pointing}
+        />
+
+        <View style={styles.voter}>
+          <Avatar
+            uri={getObjectURLByKey(props.myProfile.profileImageKey, '150')}
+            size={100 * ratio}
+            defaultLogo={props.myProfile.gender === 'male' ? 'm' : 'w'}
+          />
+          <Text color={colors.white} weight="medium" mt={10}>
+            {props.myProfile.name}
+          </Text>
         </View>
 
         <View style={[styles.footer]}>
@@ -171,5 +216,12 @@ const styles = StyleSheet.create({
     marginRight: 7,
     paddingLeft: 10,
     paddingRight: 0,
+  },
+  voter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pointing: {
+    transform: [{rotate: '90deg'}],
   },
 });

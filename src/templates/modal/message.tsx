@@ -25,8 +25,8 @@ export const MessageModalTemplate = (props: MessageModalTemplateProps) => {
       visible={props.visible}>
       <View style={styles.root}>
         <View style={styles.popup}>
-          <Gif source={props.icon} />
-          <Text mt={25} mb={25} align="center" mx={30}>
+          {Boolean(props.icon) && <Gif source={props.icon} />}
+          <Text mt={props.icon ? 25 : 0} mb={25} align="center" mx={30}>
             {props.message}
           </Text>
           <View style={styles.buttons}>

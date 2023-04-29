@@ -26,6 +26,7 @@ type TextProps = PropsWithChildren<{
   my?: number;
   ml?: number;
   mx?: number;
+  mr?: number;
   numberOfLines?: number | undefined;
   lineHeight?: number;
 }>;
@@ -51,6 +52,7 @@ export const Text = (props: TextProps): JSX.Element => {
           lineHeight: props.lineHeight || (props.size || 14) * 1.193,
           marginTop: props.mt,
           marginBottom: props.mb,
+          marginRight: props.mr,
           textAlign: props.align,
           marginVertical: props.my,
           marginLeft: props.ml,

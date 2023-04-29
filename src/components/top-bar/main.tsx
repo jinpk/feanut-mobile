@@ -51,7 +51,10 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
   return (
     <View style={[styles.root, {top: insets.top, zIndex: props.zIndex || 50}]}>
       <TouchableOpacity onPress={props.onInboxPress} style={styles.optionItem}>
-        <Text weight="medium" color={props.white ? colors.white : colors.dark}>
+        <Text
+          size={16}
+          weight="medium"
+          color={props.white ? colors.white : colors.dark}>
           수신함
         </Text>
       </TouchableOpacity>
@@ -63,7 +66,10 @@ export const MainTopBar = (props: MainTopBar): JSX.Element => {
       <TouchableOpacity
         onPress={props.onProfilePress}
         style={styles.optionItem}>
-        <Text weight="medium" color={props.white ? colors.white : colors.dark}>
+        <Text
+          size={16}
+          weight="medium"
+          color={props.white ? colors.white : colors.dark}>
           프로필
         </Text>
       </TouchableOpacity>

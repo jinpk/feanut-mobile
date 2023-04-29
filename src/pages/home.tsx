@@ -47,6 +47,16 @@ function Home(): JSX.Element {
     }
   }, [initialNotification]);
 
+  const legacyFriendshipOpened = useModalStore(s => s.legacyFriendship);
+  useEffect(() => {
+    if (legacyFriendshipOpened) {
+      return () => {
+        // 재로딩
+        polling.fetchRound();
+      };
+    }
+  }, [legacyFriendshipOpened]);
+
   const welcomModalOpened = useModalStore(s => s.welcome);
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
 

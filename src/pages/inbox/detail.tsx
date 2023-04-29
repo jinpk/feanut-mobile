@@ -1,4 +1,9 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
@@ -27,13 +32,25 @@ function InboxDetail() {
   const [shareMode, setShareMode] = useState(false);
 
   /** 공유하기 기능용 프로필 업데이트 */
-  const name = useProfileStore(s => s.profile.name);
-  const profileImageKey = useProfileStore(s => s.profile.profileImageKey);
+  const profile = useProfileStore(s => s.profile);
+  const name = profile.name;
+  const profileImageKey = profile.profileImageKey;
   const updateProfile = useProfileStore(s => s.actions.update);
 
   const [opened, setOpened] = useState(false);
 
   const openCoinModal = useModalStore(s => s.actions.openCoin);
+  const focused = useIsFocused();
+  useEffect(() => {
+    if (constants.platform === 'ios') {
+      if (focused) {
+        StatusBar.setBarStyle('light-content');
+        return () => {
+          StatusBar.setBarStyle('dark-content');
+        };
+      }
+    }
+  }, [focused]);
 
   /** iOS 상태바 색 변경 */
   useEffect(() => {
@@ -115,13 +132,14 @@ function InboxDetail() {
         {cancelable: true, userInterfaceStyle: 'light'},
       );
     } else {
-      navigation.navigate(routes.feanutCard, {profileId: pull.voter.profileId});
+      navigation.navigate(routes.profile, {profileId: pull.voter.profileId});
     }
   };
 
   return (
     <>
       <InboxDetailTemplate
+        myProfile={profile}
         onBack={navigation.goBack}
         pull={pull}
         onShare={handleShare}

@@ -7,6 +7,7 @@ import {WithLocalSvg} from 'react-native-svg';
 
 type FeanutCoinProps = {
   onPress: () => void;
+  amount: number;
 };
 
 export const FeanutCoin = (props: FeanutCoinProps) => {
@@ -17,7 +18,7 @@ export const FeanutCoin = (props: FeanutCoinProps) => {
           피넛코인
         </Text>
         <Text color={colors.primary} size={16} weight="medium">
-          36
+          {props.amount}
         </Text>
       </View>
       <WithLocalSvg

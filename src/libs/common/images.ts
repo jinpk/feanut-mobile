@@ -51,17 +51,19 @@ import magnifyingglass from '../../assets/pngs/magnifyingglass.png';
 
 import guide1 from '../../assets/pngs/guide-1.png';
 import mailbox from '../../assets/pngs/mailbox.png';
+import q from '../../assets/pngs/q.png';
 import guide2 from '../../assets/pngs/guide-2.png';
 
 import feanutYellowPNG from '../../assets/pngs/feanut-yellow.png';
 import feanutBluePNG from '../../assets/pngs/feanut-blue.png';
 import feanutDarkGreyPNG from '../../assets/pngs/feanut-dark-grey.png';
 import school from '../../assets/pngs/school.png';
+import modify from '../../assets/pngs/modify.png';
 
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
 
-import feanutCardHappiness from '../../assets/svgs/feanut-card-happiness.svg';
+import feanutCardJoy from '../../assets/svgs/feanut-card-joy.svg';
 import feanutCardGratitude from '../../assets/svgs/feanut-card-gratitude.svg';
 import feanutCardSerenity from '../../assets/svgs/feanut-card-serenity.svg';
 import feanutCardInterest from '../../assets/svgs/feanut-card-interest.svg';
@@ -86,18 +88,29 @@ import pullLove from '../../assets/svgs/pull-love.svg';
 import visitSNS from '../../assets/svgs/visit-sns.svg';
 import add from '../../assets/svgs/add.svg';
 
+import feanutCardJoyIcon from '../../assets/pngs/feanut-card-joy.png';
+import feanutCardAmusementIcon from '../../assets/pngs/feanut-card-amusement.png';
+import feanutCardAweIcon from '../../assets/pngs/feanut-card-awe.png';
+import feanutCardGratitudeIcon from '../../assets/pngs/feanut-card-gratitude.png';
+import feanutCardInterestIcon from '../../assets/pngs/feanut-card-interest.png';
+import feanutCardHopeIcon from '../../assets/pngs/feanut-card-hope.png';
+import feanutCardInspirationIcon from '../../assets/pngs/feanut-card-inspiration.png';
+import feanutCardLoveIcon from '../../assets/pngs/feanut-card-love.png';
+import feanutCardPrideIcon from '../../assets/pngs/feanut-card-pride.png';
+import feanutCardSerenityIcon from '../../assets/pngs/feanut-card-serenity.png';
+
 export const svgs = {
   add,
-  feanutCardHappiness,
-  feanutCardGratitude,
-  feanutCardSerenity,
-  feanutCardInterest,
-  feanutCardHope,
-  feanutCardPride,
-  feanutCardAmusement,
-  feanutCardInspiration,
-  feanutCardAwe,
-  feanutCardLove,
+  ['feanut-card-joy']: feanutCardJoy,
+  ['feanut-card-gratitude']: feanutCardGratitude,
+  ['feanut-card-serenity']: feanutCardSerenity,
+  ['feanut-card-interest']: feanutCardInterest,
+  ['feanut-card-hope']: feanutCardHope,
+  ['feanut-card-pride']: feanutCardPride,
+  ['feanut-card-amusement']: feanutCardAmusement,
+  ['feanut-card-inspiration']: feanutCardInspiration,
+  ['feanut-card-awe']: feanutCardAwe,
+  ['feanut-card-love']: feanutCardLove,
 
   pullHappiness,
   pullGratitude,
@@ -162,14 +175,29 @@ export const gifs = {
 
 export const pngs = {
   coin10,
-  guide1,mailbox,
+  guide1,
+  mailbox,
+  q,
   guide2,
-  coin5,school,
+  coin5,
+  school,
   coin30,
   feanutYellow: feanutYellowPNG,
   feanutBlue: feanutBluePNG,
   feanutDarkGrey: feanutDarkGreyPNG,
   coin50,
+  modify,
   magnifyingglass,
   coin100,
+
+  ['feanut-card-joy']: feanutCardJoyIcon,
+  ['feanut-card-amusement']: feanutCardAmusementIcon,
+  ['feanut-card-gratitude']: feanutCardGratitudeIcon,
+  ['feanut-card-interest']: feanutCardInterestIcon,
+  ['feanut-card-hope']: feanutCardHopeIcon,
+  ['feanut-card-inspiration']: feanutCardInspirationIcon,
+  ['feanut-card-awe']: feanutCardAweIcon,
+  ['feanut-card-love']: feanutCardLoveIcon,
+  ['feanut-card-pride']: feanutCardPrideIcon,
+  ['feanut-card-serenity']: feanutCardSerenityIcon,
 };

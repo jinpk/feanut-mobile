@@ -1,113 +1,120 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Linking} from 'react-native';
-import {useCoin, useNotificationUserConfig} from '../../hooks';
-import {getFriendshipStatus} from '../../libs/api/friendship';
-import {getMyProfile, patchProfile} from '../../libs/api/profile';
-import {routes} from '../../libs/common';
+import {Linking} from 'react-native';
+import {useCoin} from '../../hooks';
+import {getFriendshipStatusByProfile} from '../../libs/api/friendship';
+import {getMyProfile, getProfile} from '../../libs/api/profile';
+import {colors, routes} from '../../libs/common';
 import {configs} from '../../libs/common/configs';
 import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
 import ProfileTemplate from '../../templates/profile';
 import {getObjectURLByKey} from '../../libs/common/file';
+import {APIError, Profile as ProfileI} from '../../libs/interfaces';
+import {BackTopBar} from '../../components/top-bar';
+import {
+  getFeanutCardByProfile,
+  getPollingStatsByProfile,
+} from '../../libs/api/poll';
+import {FeanutCard, PollingStats} from '../../libs/interfaces/polling';
+import {useMessageModalStore} from '../../libs/stores/message-modal';
+
+type ProfileRoute = RouteProp<{Profile: {profileId: string}}, 'Profile'>;
 
 function Profile(): JSX.Element {
+  const {params} = useRoute<ProfileRoute>();
+  const myProfile = useProfileStore(s => s.profile);
+  const [profile, setProfile] = useState<ProfileI>();
+
+  const isMyProfile = profile?.id === myProfile.id;
+
   const navigation = useNavigation();
-  const userId = useUserStore(s => s.user?.id);
   const phoneNumber = useUserStore(s => s.user?.phoneNumber);
-  const logout = useUserStore(s => s.actions.logout);
   const focused = useIsFocused();
-  const profile = useProfileStore(s => s.profile);
-  const update = useProfileStore(s => s.actions.update);
+  const updateMyProfile = useProfileStore(s => s.actions.update);
 
   const [friendsCount, setFriendsCount] = useState(0);
+  const [pollingStats, setPollingStats] = useState<PollingStats>({
+    pollsCount: 0,
+    pullsCount: 0,
+  });
+
+  const [feanutCard, setFeanutCard] = useState<FeanutCard>();
 
   const openWebview = useModalStore(s => s.actions.openWebview);
 
   const coin = useCoin();
-
-  const notificationUserConfig = useNotificationUserConfig();
-
-  const fetchMyProfile = async () => {
-    const profile = await getMyProfile();
-    return profile;
-  };
-
-  const fetchFriendshipStatus = async () => {
-    const profile = await getFriendshipStatus(userId!);
-    return profile;
-  };
-
-  const fetchProfile = useCallback(async () => {
-    try {
-      const profile = await fetchMyProfile();
-      update(profile);
-    } catch (error: any) {
-      if (__DEV__) {
-        console.error(error);
-      }
-    }
-  }, []);
 
   // 프로필 조회
   useEffect(() => {
     if (!focused) {
       return;
     }
-    fetchProfile();
-  }, [focused]);
-
-  // 친구 조회
-  useEffect(() => {
-    if (!focused || !userId) {
-      return;
-    }
-
-    fetchFriendshipStatus()
-      .then(result => {
-        setFriendsCount(result.friendsCount);
-      })
-      .catch((error: any) => {
+    const fetchProfile = async () => {
+      try {
+        if (params?.profileId) {
+          const profile = await getProfile(params.profileId);
+          setProfile(profile);
+        } else {
+          const profile = await getMyProfile();
+          setProfile(profile);
+          updateMyProfile(profile);
+        }
+      } catch (error: any) {
         if (__DEV__) {
           console.error(error);
         }
-      });
-  }, [focused, userId]);
-
-  const handleEditProfile = useCallback(() => {
-    navigation.navigate(routes.profileEdit);
-  }, []);
-
-  const clearInstagram = useCallback(async () => {
-    try {
-      await patchProfile(profile.id, {instagram: ''});
-      fetchProfile();
-    } catch (error: any) {
-      Alert.alert(error.message || error);
-    }
-  }, [profile.id]);
-
-  /**
-  const handleInstagram = useCallback(
-    (on: boolean) => {
-      if (on) {
-        setInstagramModal(true);
-      } else {
-        Alert.alert('인스타그램 계정 연결 해지 하시겠습니까?', '', [
-          {
-            style: 'destructive',
-            text: '취소',
-          },
-          {
-            style: 'cancel',
-            text: '확인',
-            onPress: clearInstagram,
-          },
-        ]);
       }
-    },
-    [profile.instagram],
-  );
-   */
+    };
+
+    fetchProfile();
+  }, [focused, params?.profileId]);
+
+  // stats 조회
+  useEffect(() => {
+    if (!profile?.id) return;
+    // 친구수 조회
+    getFriendshipStatusByProfile(profile.id)
+      .then(stats => {
+        setFriendsCount(stats.friendsCount);
+      })
+      .catch((error: any) => {
+        const apiError = error as APIError;
+        if (__DEV__) {
+          console.error(apiError);
+        }
+      });
+
+    // 투표수 조회
+    getPollingStatsByProfile(profile.id)
+      .then(stats => {
+        setPollingStats(stats);
+      })
+      .catch((error: any) => {
+        const apiError = error as APIError;
+        if (__DEV__) {
+          console.error(apiError);
+        }
+      });
+  }, [profile?.id]);
+
+  // stats 조회
+  useEffect(() => {
+    if (!profile?.id) return;
+    // 피넛카드 조회
+    getFeanutCardByProfile(profile.id)
+      .then(setFeanutCard)
+      .catch((error: any) => {
+        const apiError = error as APIError;
+        if (__DEV__) {
+          console.error(apiError);
+        }
+      });
+  }, [profile?.id]);
 
   const handleService = useCallback(() => {
     Linking.openURL(configs.websiteUrl);
@@ -126,58 +133,70 @@ function Profile(): JSX.Element {
   }, []);
 
   const handleCard = useCallback(() => {
-    navigation.navigate(routes.feanutCard, {profileId: profile.id});
-  }, [profile.id]);
-
-  const handleFriend = useCallback(() => {
-    navigation.navigate(routes.friend);
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    Alert.alert('로그아웃 하시겠습니까?', '', [
-      {text: '취소', style: 'cancel'},
-      {
-        text: '확인',
-        onPress: () => {
-          logout(true);
-        },
-      },
-    ]);
-  }, []);
+    if (profile?.id) {
+      navigation.navigate(routes.feanutCard, {profileId: profile.id});
+    }
+  }, [profile?.id]);
 
   const openImageModal = useModalStore(s => s.actions.openImage);
   const handleProfileImage = useCallback(() => {
-    if (profile.profileImageKey) {
-      openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
+    if (isMyProfile) {
+      navigation.navigate(routes.profileEdit);
+    } else {
+      if (profile?.profileImageKey) {
+        openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
+      }
     }
-  }, [profile.profileImageKey]);
+  }, [profile?.profileImageKey, isMyProfile]);
 
   const handleSetting = useCallback(() => {
     navigation.navigate(routes.setting);
   }, []);
 
+  const handleFriend = useCallback(() => {
+    navigation.navigate(routes.friend);
+  }, []);
+
+  const handleFeanutCard = useCallback(() => {
+    if (profile?.id) {
+      navigation.navigate(routes.feanutCard, {
+        profileId: profile.id,
+        name: profile.name,
+      });
+    }
+  }, [profile?.id]);
+
+  const openMessageModal = useMessageModalStore(s => s.actions.open);
+  const handleFeanutCardTooltip = useCallback(() => {
+    openMessageModal(
+      '피넛 카드란?\n\n피넛 카드는 투표 카테고리 총 10가지 중 득표한 수 순서대로 보여지게 됩니다.\n친구 프로필에서 친구의 피넛카드도\n확인해 보세요!',
+      [{text: '확인', color: colors.blue}],
+    );
+  }, []);
+
+  if (!profile) return <BackTopBar title="프로필" onBack={navigation.goBack} />;
+
   return (
     <ProfileTemplate
+      coinAmount={coin.amount}
       onSetting={handleSetting}
       onBack={navigation.goBack}
+      onFriend={handleFriend}
       phoneNumber={phoneNumber!}
-      friendsCount={friendsCount}
-      onEditProfile={handleEditProfile}
       profile={profile}
-      onLogout={handleLogout}
-      feanutAmount={coin.amount}
       onPurchaseFeanut={coin.openPurchaseModal}
       onPrivacy={handlePrivacy}
       onTerms={handleTerms}
       onService={handleService}
       onWithdrawal={handleWithdrawal}
-      receivePull={notificationUserConfig.config.receivePull}
-      receivePoll={notificationUserConfig.config.receivePoll}
-      onReceivePoll={notificationUserConfig.changePoll}
-      onReceivePull={notificationUserConfig.changePull}
       onCard={handleCard}
-      onFriend={handleFriend}
       onProfileImage={handleProfileImage}
+      me={isMyProfile}
+      onFeautCardTooltip={handleFeanutCardTooltip}
+      friendsCount={friendsCount}
+      feanutCard={feanutCard}
+      onFeautCard={handleFeanutCard}
+      {...pollingStats}
     />
   );
 }
