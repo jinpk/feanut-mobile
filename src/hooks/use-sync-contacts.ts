@@ -9,7 +9,7 @@ import {postFriendsMany} from '../libs/api/friendship';
 export function useSyncContacts() {
   const userId = useUserStore(s => s.user?.id);
   const [loading, setLoading] = useState(false);
-  const checkPermissions = async () => {
+  const checkPermissions = async (): Promise<boolean> => {
     if (constants.platform === 'android') {
       const res = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
@@ -34,6 +34,59 @@ export function useSyncContacts() {
         return false;
       }
     }
+  };
+
+  const fetchContacts = async () => {
+    const data: {name: string; phoneNumber: string}[] = [];
+    const contacts = await Contacts.getAllWithoutPhotos();
+    contacts.forEach(contact => {
+      let name = '';
+      // 한국 이름
+      if (contact.displayName) {
+        name = contact.displayName;
+      } else {
+        if (contact.givenName && contact.familyName) {
+          name = contact.familyName + contact.givenName;
+        } else if (contact.givenName) {
+          name = contact.givenName;
+        } else if (contact.familyName) {
+          name = contact.familyName;
+        }
+      }
+
+      // 한국 전화번호
+      let phoneNumber = '';
+      contact.phoneNumbers.forEach(({number}) => {
+        if (phoneNumber) {
+          return;
+        }
+        // only numbers
+        number = number.replace(/[^0-9]/g, '');
+        // 8210
+        if (number.startsWith('82')) {
+          number = number.replace('82', '');
+        }
+        if (number.startsWith('10')) {
+          number = '0' + number;
+        }
+
+        // ****-****
+        if (number.length === 8) {
+          number = '010' + number;
+        }
+
+        if (number.length == 11) {
+          phoneNumber = number;
+        }
+      });
+
+      // 전화번호와 이름 모두 유효하다면
+      if (phoneNumber && name) {
+        data.push({name, phoneNumber});
+      }
+    });
+
+    return data;
   };
 
   const handleSyncContacts = async (cb?: () => void) => {
@@ -160,6 +213,8 @@ export function useSyncContacts() {
 
   return {
     syncContacts: handleSyncContacts,
+    checkPermissions,
     loading,
+    fetchContacts,
   };
 }

@@ -141,7 +141,7 @@ function Home(): JSX.Element {
   }, []);
 
   const handleProfilePress = useCallback(() => {
-    navigation.navigate(routes.profile);
+    navigation.navigate(routes.profileMe);
   }, []);
 
   const renderTopBar = useCallback(() => {
