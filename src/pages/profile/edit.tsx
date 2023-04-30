@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef} from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert} from 'react-native';
 import {useProfileImage} from '../../hooks';
@@ -19,6 +19,9 @@ import {useProfileStore} from '../../libs/stores';
 import ProfileEditTemplate from '../../templates/profile/edit';
 import {getObjectURLByKey} from '../../libs/common/file';
 import {HttpStatusCode} from 'axios';
+import {getMySchool} from '../../libs/api/school';
+import {MySchool} from '../../libs/interfaces/school';
+import {routes} from '../../libs/common';
 
 const initialFormValues: ProfileForm = {
   name: '',
@@ -34,6 +37,12 @@ function ProfileEdit(): JSX.Element {
     defaultValues: initialFormValues,
   });
 
+  const [mySchool, serMySchool] = useState<MySchool>({
+    name: '',
+    code: '',
+    grade: 0,
+  });
+
   const profileImage = useProfileImage();
 
   const apiLoadingRef = useRef(false);
@@ -43,6 +52,19 @@ function ProfileEdit(): JSX.Element {
       form.setValue('profileImage', asset);
     });
   }, [profileImage]);
+
+  const focused = useIsFocused();
+  useEffect(() => {
+    if (focused) {
+      getMySchool()
+        .then(serMySchool)
+        .catch(e => {
+          if (e.status === HttpStatusCode.NotFound) {
+            // 학교 등록하지 않음
+          }
+        });
+    }
+  }, [focused]);
 
   useEffect(() => {
     form.setValue('name', profile.name);
@@ -105,13 +127,19 @@ function ProfileEdit(): JSX.Element {
     apiLoadingRef.current = false;
   }, []);
 
+  const handleSchool = useCallback(() => {
+    navigation.navigate(routes.profileEditSchool);
+  }, []);
+
   return (
     <ProfileEditTemplate
       form={form}
+      mySchool={mySchool}
       onBack={navigation.goBack}
       profile={profile}
       onProfileImage={handleProfileImage}
       onComplete={form.handleSubmit(onSubmit)}
+      onSchool={handleSchool}
     />
   );
 }

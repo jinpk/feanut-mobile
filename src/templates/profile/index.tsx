@@ -65,7 +65,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
         title="프로필"
         onBack={props.onBack}
         rightComponent={
-          props.me && (
+          props.me ? (
             <TextButton
               fontSize={14}
               title="설정"
@@ -73,7 +73,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               onPress={props.onSetting}
               style={styles.setting}
             />
-          )
+          ) : undefined
         }
       />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -167,17 +167,14 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               {marginBottom: props.me ? 0 : 14, marginTop: props.me ? 21 : 35},
             ]}>
             <TouchableOpacity
-              disabled={!props.me}
               onPress={props.onFeautCardTooltip}
               style={styles.feanutCardTitleWrap}>
               <Text weight="bold" size={16}>
                 피넛 카드
               </Text>
-              {props.me && (
-                <View style={styles.qm}>
-                  <Image source={pngs.q} style={styles.q} />
-                </View>
-              )}
+              <View style={styles.qm}>
+                <Image source={pngs.q} style={styles.q} />
+              </View>
             </TouchableOpacity>
 
             {props.me && (

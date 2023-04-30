@@ -40,6 +40,8 @@ import {ImageModal} from './modals/image';
 import Setting from './pages/setting';
 import SignUpSchool from './pages/signup/school';
 import SignUpGrade from './pages/signup/grade';
+import ProfileEditSchool from './pages/profile/school';
+import ProfileEditGrade from './pages/profile/grade';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -146,6 +148,15 @@ function NavigationApp() {
           <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+          <Stack.Screen
+            name={routes.profileEditSchool}
+            component={ProfileEditSchool}
+          />
+          <Stack.Screen
+            name={routes.profileEditGrade}
+            component={ProfileEditGrade}
+          />
+
           <Stack.Screen name={routes.setting} component={Setting} />
 
           <Stack.Screen

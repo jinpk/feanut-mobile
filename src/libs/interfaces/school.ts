@@ -8,6 +8,12 @@ export interface School {
   joinedCount: number;
 }
 
+export interface MySchool {
+  code: string;
+  name: string;
+  grade: number;
+}
+
 export interface PostSchoolRequest {
   code: string;
   grade: number;
@@ -18,3 +24,8 @@ export interface GetListSchoolRequest extends PagenatedRequest {
 }
 
 export interface GetListSchoolResponse extends PagenatedResponse<School> {}
+
+export interface PostMySchoolRequest {
+  grade: number;
+  code: string;
+}

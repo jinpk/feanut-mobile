@@ -167,12 +167,16 @@ function Profile(): JSX.Element {
   }, [profile?.id]);
 
   const openMessageModal = useMessageModalStore(s => s.actions.open);
+
   const handleFeanutCardTooltip = useCallback(() => {
     openMessageModal(
-      '피넛 카드란?\n\n피넛 카드는 투표 카테고리 총 10가지 중 득표한 수 순서대로 보여지게 됩니다.\n친구 프로필에서 친구의 피넛카드도\n확인해 보세요!',
+      isMyProfile
+        ? '피넛 카드란?\n\n피넛 카드는 투표 카테고리 총 10가지 중 득표한 수 순서대로 보여지게 됩니다.\n친구 프로필에서 친구의 피넛카드도\n확인해 보세요!'
+        : '피넛 카드란?\n\n피넛 카드는 투표 카테고리 총 10가지 중 득표한 수 순서대로 보여지게 됩니다.',
+
       [{text: '확인', color: colors.blue}],
     );
-  }, []);
+  }, [isMyProfile]);
 
   if (!profile) return <BackTopBar title="프로필" onBack={navigation.goBack} />;
 
