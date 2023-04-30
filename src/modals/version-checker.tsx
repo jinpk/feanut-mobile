@@ -14,6 +14,8 @@ export const VersionCheckerModal = (): JSX.Element => {
 
   const checkVersion = () => {
     if (alertOpened.current) return;
+    // 앱 production mode에서만 version check
+    if (!configs.isProduction) return;
 
     fetch(configs.verionUrl + '?os=' + constants.platform, {})
       .then(res => res.json())

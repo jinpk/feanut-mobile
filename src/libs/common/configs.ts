@@ -30,7 +30,7 @@ export const configs = {
   cdnBaseUrl,
   assetBaseUrl,
   verionUrl,
-
+  isProduction: PRODUCTION_MODE,
   websiteUrl: WEBSITE_URL,
   privacyUrl: WEBSITE_URL + '/privacy',
   termsUrl: WEBSITE_URL + '/terms',
