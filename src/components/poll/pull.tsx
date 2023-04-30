@@ -27,10 +27,6 @@ type PullProps = PollingReceiveDetail & {
 const ratio = constants.screenWidth / 393;
 
 export const Pull = (props: PullProps) => {
-  const pointColor = useMemo(() => {
-    return emotionPointColor[props.pollId.emotion];
-  }, [props.pollId]);
-
   const emojiURI = useGetEmojiURI(props.pollId.emojiId);
 
   return (

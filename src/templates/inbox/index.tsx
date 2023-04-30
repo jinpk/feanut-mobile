@@ -16,6 +16,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {getObjectURLByKey} from '../../libs/common/file';
 import {useIsFocused} from '@react-navigation/native';
+import {Text} from '../../components/text';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,6 +61,7 @@ function InboxTemplate(props: InboxTemplateProps) {
       return (
         <PullItem
           index={index}
+          contentText={item.contentText}
           source={
             item.imageFileKey
               ? {uri: getObjectURLByKey(item.imageFileKey, '70')}
@@ -72,6 +74,8 @@ function InboxTemplate(props: InboxTemplateProps) {
           name={item.name}
           gender={item.gender}
           time={time}
+          emotion={item.emotion}
+          emojiId={item.emojiId}
         />
       );
     },
@@ -91,6 +95,7 @@ function InboxTemplate(props: InboxTemplateProps) {
       <BackTopBar onBack={props.onBack} title="수신함" />
       <FlatList
         data={props.data}
+        showsVerticalScrollIndicator={false}
         extraData={props.data}
         keyExtractor={handleKeyExtractor}
         renderItem={handleRenderItem}
@@ -107,6 +112,12 @@ function InboxTemplate(props: InboxTemplateProps) {
             ]}>
             <ActivityIndicator color={colors.primary} />
           </View>
+        }
+        ListHeaderComponent={
+          <Text align="center" color={colors.darkGrey} mx={36} mt={15}>
+            나를 투표한 친구를 확인하지 않은 투표는{'\n'}
+            24시간이 지나면 확인할 수 없어요.
+          </Text>
         }
         refreshControl={
           <RefreshControl

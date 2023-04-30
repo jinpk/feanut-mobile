@@ -88,6 +88,9 @@ import feanutCardFigureLoveIcon from '../../assets/pngs/feanut-card-figure-love.
 import feanutCardFigurePrideIcon from '../../assets/pngs/feanut-card-figure-pride.png';
 import feanutCardFigureSerenityIcon from '../../assets/pngs/feanut-card-figure-serenity.png';
 
+import male from '../../assets/pngs/male.png';
+import female from '../../assets/pngs/female.png';
+
 import feanutCardJoyIcon from '../../assets/pngs/feanut-card-joy.png';
 import feanutCardAmusementIcon from '../../assets/pngs/feanut-card-amusement.png';
 import feanutCardAweIcon from '../../assets/pngs/feanut-card-awe.png';
@@ -98,6 +101,17 @@ import feanutCardInspirationIcon from '../../assets/pngs/feanut-card-inspiration
 import feanutCardLoveIcon from '../../assets/pngs/feanut-card-love.png';
 import feanutCardPrideIcon from '../../assets/pngs/feanut-card-pride.png';
 import feanutCardSerenityIcon from '../../assets/pngs/feanut-card-serenity.png';
+
+import pullListJoyIcon from '../../assets/pngs/pull-list-joy.png';
+import pullListAmusementIcon from '../../assets/pngs/pull-list-amusement.png';
+import pullListAweIcon from '../../assets/pngs/pull-list-awe.png';
+import pullListGratitudeIcon from '../../assets/pngs/pull-list-gratitude.png';
+import pullListInterestIcon from '../../assets/pngs/pull-list-interest.png';
+import pullListHopeIcon from '../../assets/pngs/pull-list-hope.png';
+import pullListInspirationIcon from '../../assets/pngs/pull-list-inspiration.png';
+import pullListLoveIcon from '../../assets/pngs/pull-list-love.png';
+import pullListPrideIcon from '../../assets/pngs/pull-list-pride.png';
+import pullListSerenityIcon from '../../assets/pngs/pull-list-serenity.png';
 
 export const svgs = {
   add,
@@ -169,6 +183,8 @@ export const pngs = {
   mailbox,
   q,
   guide2,
+  male,
+  female,
   coin5,
   school,
   coin30,
@@ -201,4 +217,15 @@ export const pngs = {
   ['feanut-card-figure-love']: feanutCardFigureLoveIcon,
   ['feanut-card-figure-pride']: feanutCardFigurePrideIcon,
   ['feanut-card-figure-serenity']: feanutCardFigureSerenityIcon,
+
+  ['pull-list-joy']: pullListJoyIcon,
+  ['pull-list-amusement']: pullListAmusementIcon,
+  ['pull-list-gratitude']: pullListGratitudeIcon,
+  ['pull-list-interest']: pullListInterestIcon,
+  ['pull-list-hope']: pullListHopeIcon,
+  ['pull-list-inspiration']: pullListInspirationIcon,
+  ['pull-list-awe']: pullListAweIcon,
+  ['pull-list-love']: pullListLoveIcon,
+  ['pull-list-pride']: pullListPrideIcon,
+  ['pull-list-serenity']: pullListSerenityIcon,
 };
