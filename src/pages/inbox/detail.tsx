@@ -165,7 +165,7 @@ function InboxDetail() {
         }}
         name={pull?.voter?.name || ''}
         onProfile={() => {
-          navigation.navigate(routes.feanutCard, {
+          navigation.navigate(routes.profile, {
             profileId: pull.voter.profileId,
           });
         }}

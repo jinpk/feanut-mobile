@@ -17,18 +17,7 @@ function FeanutCard() {
     params: {profileId, name},
   } = useRoute<FeanutCardRoute>();
 
-  const [feanutCard, setFeanutCard] = useState<FeanutCardI>({
-    joy: 0,
-    gratitude: 0,
-    serenity: 0,
-    interest: 0,
-    hope: 0,
-    pride: 0,
-    amusement: 0,
-    inspiration: 0,
-    awe: 0,
-    love: 0,
-  });
+  const [feanutCard, setFeanutCard] = useState<FeanutCardI>();
 
   const drawViewRef = useRef<ViewShot>(null);
 

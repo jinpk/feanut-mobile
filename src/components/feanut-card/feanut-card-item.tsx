@@ -84,7 +84,7 @@ export const FeanutCardItem = (props: FeanutCardItemProps) => {
           : emotionKRMessage[props.emotion]}
       </Text>
       <View style={styles.figure}>
-        <WithLocalSvg asset={svgs[`feanut-card-${props.emotion}`]} />
+        <Image source={pngs[`feanut-card-figure-${props.emotion}`]} />
       </View>
     </View>
   );

@@ -12,7 +12,7 @@ import {colors, constants, gifs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
-import {usePolling} from '../hooks';
+import {usePolling, useSyncContacts} from '../hooks';
 import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
@@ -47,7 +47,7 @@ function Home(): JSX.Element {
     }
   }, [initialNotification]);
 
-  const legacyFriendshipOpened = useModalStore(s => s.legacyFriendship);
+  /*const legacyFriendshipOpened = useModalStore(s => s.legacyFriendship);
   useEffect(() => {
     if (legacyFriendshipOpened) {
       return () => {
@@ -55,7 +55,7 @@ function Home(): JSX.Element {
         polling.fetchRound();
       };
     }
-  }, [legacyFriendshipOpened]);
+  }, [legacyFriendshipOpened]);*/
 
   const welcomModalOpened = useModalStore(s => s.welcome);
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
@@ -144,6 +144,13 @@ function Home(): JSX.Element {
     navigation.navigate(routes.profile);
   }, []);
 
+  const contact = useSyncContacts();
+  const handleSyncContacts = useCallback(() => {
+    contact.syncContacts(() => {
+      polling.fetchRound();
+    });
+  }, []);
+
   const renderTopBar = useCallback(() => {
     const last = polling.currentPollingIndex === polling.pollings.length - 1;
 
@@ -223,11 +230,7 @@ function Home(): JSX.Element {
 
       {polling.state === 'reject' && (
         <FriendSyncTemplate
-          onSyncContacts={() => {
-            navigation.navigate(routes.friend, {
-              autoSync: true,
-            });
-          }}
+          onSyncContacts={handleSyncContacts}
           icon={gifs.teddyBear}
           title={'친구를 추가하고\n다양한 주제의 투표를 경험해 보세요!'}
         />

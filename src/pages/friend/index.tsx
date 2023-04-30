@@ -21,7 +21,6 @@ type FriendRouteProps = RouteProp<
   {
     Friend: {
       hidden: boolean;
-      autoSync?: boolean;
     };
   },
   'Friend'
@@ -59,17 +58,6 @@ function Friend() {
   const loading = ueeStore(s => s.loading);
   const setLoading = ueeStore(s => s.actions.setLoading);
   const contact = useSyncContacts();
-
-  // 자동 동기화 진행
-  useEffect(() => {
-    if (params.autoSync) {
-      contact.syncContacts(() => {
-        setQuery({page: 1, limit: 20});
-        setLoading(true);
-        navigation.navigate(routes.home);
-      });
-    }
-  }, [params.autoSync]);
 
   // 화면 첫 진입 시 조회 요청
   useEffect(() => {

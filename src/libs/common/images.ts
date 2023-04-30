@@ -63,17 +63,6 @@ import modify from '../../assets/pngs/modify.png';
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
 
-import feanutCardJoy from '../../assets/svgs/feanut-card-joy.svg';
-import feanutCardGratitude from '../../assets/svgs/feanut-card-gratitude.svg';
-import feanutCardSerenity from '../../assets/svgs/feanut-card-serenity.svg';
-import feanutCardInterest from '../../assets/svgs/feanut-card-interest.svg';
-import feanutCardHope from '../../assets/svgs/feanut-card-hope.svg';
-import feanutCardPride from '../../assets/svgs/feanut-card-pride.svg';
-import feanutCardAmusement from '../../assets/svgs/feanut-card-amusement.svg';
-import feanutCardInspiration from '../../assets/svgs/feanut-card-inspiration.svg';
-import feanutCardAwe from '../../assets/svgs/feanut-card-awe.svg';
-import feanutCardLove from '../../assets/svgs/feanut-card-love.svg';
-
 import pullHappiness from '../../assets/svgs/pull-joy.svg';
 import pullGratitude from '../../assets/svgs/pull-gratitude.svg';
 import pullSerenity from '../../assets/svgs/pull-serenity.svg';
@@ -88,6 +77,17 @@ import pullLove from '../../assets/svgs/pull-love.svg';
 import visitSNS from '../../assets/svgs/visit-sns.svg';
 import add from '../../assets/svgs/add.svg';
 
+import feanutCardFigureJoyIcon from '../../assets/pngs/feanut-card-figure-joy.png';
+import feanutCardFigureAmusementIcon from '../../assets/pngs/feanut-card-figure-amusement.png';
+import feanutCardFigureGratitudeIcon from '../../assets/pngs/feanut-card-figure-gratitude.png';
+import feanutCardFigureInterestIcon from '../../assets/pngs/feanut-card-figure-interest.png';
+import feanutCardFigureHopeIcon from '../../assets/pngs/feanut-card-figure-hope.png';
+import feanutCardFigureInspirationIcon from '../../assets/pngs/feanut-card-figure-inspiration.png';
+import feanutCardFigureAweIcon from '../../assets/pngs/feanut-card-figure-awe.png';
+import feanutCardFigureLoveIcon from '../../assets/pngs/feanut-card-figure-love.png';
+import feanutCardFigurePrideIcon from '../../assets/pngs/feanut-card-figure-pride.png';
+import feanutCardFigureSerenityIcon from '../../assets/pngs/feanut-card-figure-serenity.png';
+
 import feanutCardJoyIcon from '../../assets/pngs/feanut-card-joy.png';
 import feanutCardAmusementIcon from '../../assets/pngs/feanut-card-amusement.png';
 import feanutCardAweIcon from '../../assets/pngs/feanut-card-awe.png';
@@ -101,16 +101,6 @@ import feanutCardSerenityIcon from '../../assets/pngs/feanut-card-serenity.png';
 
 export const svgs = {
   add,
-  ['feanut-card-joy']: feanutCardJoy,
-  ['feanut-card-gratitude']: feanutCardGratitude,
-  ['feanut-card-serenity']: feanutCardSerenity,
-  ['feanut-card-interest']: feanutCardInterest,
-  ['feanut-card-hope']: feanutCardHope,
-  ['feanut-card-pride']: feanutCardPride,
-  ['feanut-card-amusement']: feanutCardAmusement,
-  ['feanut-card-inspiration']: feanutCardInspiration,
-  ['feanut-card-awe']: feanutCardAwe,
-  ['feanut-card-love']: feanutCardLove,
 
   pullHappiness,
   pullGratitude,
@@ -200,4 +190,15 @@ export const pngs = {
   ['feanut-card-love']: feanutCardLoveIcon,
   ['feanut-card-pride']: feanutCardPrideIcon,
   ['feanut-card-serenity']: feanutCardSerenityIcon,
+
+  ['feanut-card-figure-joy']: feanutCardFigureJoyIcon,
+  ['feanut-card-figure-amusement']: feanutCardFigureAmusementIcon,
+  ['feanut-card-figure-gratitude']: feanutCardFigureGratitudeIcon,
+  ['feanut-card-figure-interest']: feanutCardFigureInterestIcon,
+  ['feanut-card-figure-hope']: feanutCardFigureHopeIcon,
+  ['feanut-card-figure-inspiration']: feanutCardFigureInspirationIcon,
+  ['feanut-card-figure-awe']: feanutCardFigureAweIcon,
+  ['feanut-card-figure-love']: feanutCardFigureLoveIcon,
+  ['feanut-card-figure-pride']: feanutCardFigurePrideIcon,
+  ['feanut-card-figure-serenity']: feanutCardFigureSerenityIcon,
 };

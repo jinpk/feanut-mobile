@@ -16,7 +16,7 @@ type FeanutCardTemplateProps = {
   onBack: () => void;
   onShare: () => void;
 
-  feanutCard: FeanutCard;
+  feanutCard?: FeanutCard;
 
   name: string;
 };
@@ -25,54 +25,57 @@ function FeanutCardTemplate(props: FeanutCardTemplateProps) {
   const insets = useSafeAreaInsets();
 
   const list = useMemo(() => {
+    if (!props.feanutCard) return [];
     return objectToArrWithSorting(props.feanutCard);
   }, [props.feanutCard]);
 
   return (
     <View style={styles.root}>
       <BackTopBar onBack={props.onBack} title={'피넛 카드'} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <ViewShot
-          ref={props.drawViewRef}
-          style={styles.content}
-          options={{format: 'jpg', quality: 0.7}}>
-          <FeanutCardItem
-            name={props.name}
-            width={constants.screenWidth - 32}
-            horizontalLarge
-            emotion={list[0].key as emotions}
-            value={list[0].value}
-          />
+      {list.length >= 1 && (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <ViewShot
+            ref={props.drawViewRef}
+            style={styles.content}
+            options={{format: 'jpg', quality: 0.7}}>
+            <FeanutCardItem
+              name={props.name}
+              width={constants.screenWidth - 32}
+              horizontalLarge
+              emotion={list[0].key as emotions}
+              value={list[0].value}
+            />
 
-          {list
-            .filter((_, i) => i !== 0)
-            .map((x, i) => {
-              return (
-                <FeanutCardItem
-                  mt={13}
-                  mr={(i + 1) % 3 === 0 ? 0 : 13}
-                  width={(constants.screenWidth - 58) / 3}
-                  key={i.toString()}
-                  emotion={x.key as emotions}
-                  value={x.value}
-                />
-              );
-            })}
-        </ViewShot>
+            {list
+              .filter((_, i) => i !== 0)
+              .map((x, i) => {
+                return (
+                  <FeanutCardItem
+                    mt={13}
+                    mr={(i + 1) % 3 === 0 ? 0 : 13}
+                    width={(constants.screenWidth - 58) / 3}
+                    key={i.toString()}
+                    emotion={x.key as emotions}
+                    value={x.value}
+                  />
+                );
+              })}
+          </ViewShot>
 
-        <TouchableOpacity
-          onPress={props.onShare}
-          style={[styles.share, {marginBottom: insets.bottom + 35}]}>
-          <WithLocalSvg
-            width={12}
-            height={15}
-            asset={svgs.share}
-            //asset={props.me ? svgs.share : svgs.visitSNS}
-            style={styles.shareIcon}
-          />
-          <Text size={12}>{'자랑하기'}</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity
+            onPress={props.onShare}
+            style={[styles.share, {marginBottom: insets.bottom + 35}]}>
+            <WithLocalSvg
+              width={12}
+              height={15}
+              asset={svgs.share}
+              //asset={props.me ? svgs.share : svgs.visitSNS}
+              style={styles.shareIcon}
+            />
+            <Text size={12}>{'자랑하기'}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      )}
     </View>
   );
 }
