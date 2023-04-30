@@ -71,7 +71,8 @@ function NavigationApp() {
   useInitEmoji();
   useNotificationUserConfig(true);
   // 친구 추가 방법 변경전 기존회원 친구 초기화 기능 제공
-  useLegacyFriendship();
+  // rollback
+  // useLegacyFriendship();
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
