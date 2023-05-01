@@ -42,6 +42,7 @@ import SignUpSchool from './pages/signup/school';
 import SignUpGrade from './pages/signup/grade';
 import ProfileEditSchool from './pages/profile/school';
 import ProfileEditGrade from './pages/profile/grade';
+import FriendHidden from './pages/friend/hidden';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -147,6 +148,7 @@ function NavigationApp() {
           <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
           <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />
+          <Stack.Screen name={routes.profileMe} component={Profile} />
           <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
           <Stack.Screen
             name={routes.profileEditSchool}
@@ -158,17 +160,8 @@ function NavigationApp() {
           />
 
           <Stack.Screen name={routes.setting} component={Setting} />
-
-          <Stack.Screen
-            name={routes.friend}
-            initialParams={{hidden: false}}
-            component={Friend}
-          />
-          <Stack.Screen
-            name={routes.friendHidden}
-            initialParams={{hidden: true}}
-            component={Friend}
-          />
+          <Stack.Screen name={routes.friend} component={Friend} />
+          <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
           <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
         </Stack.Navigator>
       )}

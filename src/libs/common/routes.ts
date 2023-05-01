@@ -12,6 +12,7 @@ export const routes = {
   inbox: '/inbox',
 
   profile: '/profile',
+  profileMe: '/profile/me',
   profileEdit: '/profile/edit',
   profileEditSchool: '/profile/edit/school',
   profileEditGrade: '/profile/edit/grade',
