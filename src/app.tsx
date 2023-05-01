@@ -44,6 +44,7 @@ import ProfileEditSchool from './pages/profile/school';
 import ProfileEditGrade from './pages/profile/grade';
 import FriendHidden from './pages/friend/hidden';
 import InboxEdit from './pages/inbox/edit';
+import SignUpFriend from './pages/signup/friend';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -183,6 +184,7 @@ function NavigationApp() {
           />
           <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
           <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
+          <Stack.Screen name={routes.signupFriend} component={SignUpFriend} />
           <Stack.Screen
             name={routes.verification}
             component={Verification}

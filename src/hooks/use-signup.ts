@@ -3,8 +3,7 @@ import {APIError, SignUpRequest} from '../libs/interfaces';
 import {postSignUp} from '../libs/api/auth';
 import {routes, setCredentials} from '../libs/common';
 import {setAPIAuthorization} from '../libs/api';
-import {useModalStore, useUserStore} from '../libs/stores';
-import {getMe} from '../libs/api/users';
+import {useModalStore} from '../libs/stores';
 import {
   AUTH_ERROR_EXIST_PHONE_NUMBER,
   AUTH_ERROR_INVAILD_VERIFICATION,
@@ -22,7 +21,11 @@ export function useSignUp() {
         const token = await postSignUp(body);
         setCredentials(token);
         setAPIAuthorization(token.accessToken);
-        useUserStore.getState().actions.login(await getMe());
+        // 초기 친구추가 화면 이동
+        navigation.reset({
+          index: 1,
+          routes: [{name: routes.start}, {name: routes.signupFriend}],
+        });
         openGuideModal();
       } catch (error: any) {
         const apiError = error as APIError;

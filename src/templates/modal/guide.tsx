@@ -64,7 +64,7 @@ export const GuideModalTemplate = (
 
         <Button
           mt={30}
-          title="지금 바로 투표하기"
+          title="친구 추가하기"
           alignSelf="center"
           radius="m"
           px={83}

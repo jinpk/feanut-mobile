@@ -57,8 +57,9 @@ function Inbox(): JSX.Element {
           <TextButton
             style={styles.edit}
             title="편집"
+            fontSize={14}
             hiddenBorder
-            color={colors.darkGrey}
+            color={colors.dark}
             onPress={() => {
               navigation.navigate(routes.inboxEdit);
             }}

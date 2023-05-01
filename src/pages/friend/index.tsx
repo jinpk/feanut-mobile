@@ -8,7 +8,7 @@ import {Text} from '../../components/text';
 import Pager from '../../components/pager';
 import Tabs from '../../components/tabs';
 import FriendListFeature from '../../features/friend-list';
-import {useFriendStore} from '../../libs/stores';
+import {useFriendStore, useUserStore} from '../../libs/stores';
 import FriendFindFeature from '../../features/friend-find';
 
 type FriendRoute = RouteProp<{Friend: {add: boolean}}, 'Friend'>;
@@ -17,6 +17,7 @@ function Friend() {
   const navigation = useNavigation();
   const route = useRoute<FriendRoute>();
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
+  const userId = useUserStore(s => s.user?.id);
 
   const [page, setPage] = useState<number>(1);
 
@@ -58,7 +59,9 @@ function Friend() {
           <FriendListFeature focused={page === 1} />
         </View>
         <View>
-          <FriendFindFeature focused={page === 2} />
+          {userId !== undefined && Boolean(userId) && (
+            <FriendFindFeature focused={page === 2} userId={userId} />
+          )}
         </View>
       </Pager>
     </View>

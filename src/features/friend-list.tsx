@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useRef} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useNavigationState} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import {getFriends, patchFriendHidden} from '../libs/api/friendship';
 import {routes} from '../libs/common';
@@ -23,6 +23,17 @@ function FriendListFeature(props: FriendListFeatureProps) {
   const add = useFriendStore(s => s.actions.add);
   const loading = useFriendStore(s => s.loading);
   const setLoading = useFriendStore(s => s.actions.setLoading);
+
+  /** 숨김 화면에서 돌아오면 새로고침 */
+  const latestRoute = useNavigationState(s => s.routes[s.routes.length - 1]);
+  useEffect(() => {
+    if (latestRoute?.name === routes.friendHidden) {
+      return () => {
+        setQuery({page: 1, limit: 20});
+        setLoading(true);
+      };
+    }
+  }, [latestRoute]);
 
   useEffect(() => {
     if (props.focused) {

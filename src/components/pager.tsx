@@ -17,7 +17,9 @@ export default function Pager(props: PagerProps) {
   const pagerRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    pagerRef.current?.scrollTo({x: (props.page - 1) * constants.screenWidth});
+    pagerRef.current?.scrollTo({
+      x: (props.page - 1) * constants.screenWidth,
+    });
   }, [props.page]);
 
   const handleScroll = useCallback(
@@ -48,6 +50,13 @@ export default function Pager(props: PagerProps) {
           return React.cloneElement(child, {
             style: {...child.props.style, ...styles.view},
             key: index.toString(),
+            onLayout: () => {
+              if (index + 1 === props.page) {
+                pagerRef.current?.scrollTo({
+                  x: (props.page - 1) * constants.screenWidth,
+                });
+              }
+            },
           });
         })}
       </ScrollView>

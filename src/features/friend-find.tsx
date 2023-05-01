@@ -13,12 +13,13 @@ import {getUserRecommendation} from '../libs/api/users';
 import {PagenatedResponse, UserRecommendation} from '../libs/interfaces';
 import {useNavigation} from '@react-navigation/native';
 import {TextButton} from '../components/button/text-button';
-import {useFriendStore, useUserStore} from '../libs/stores';
+import {useFriendStore} from '../libs/stores';
 import useContact from '../hooks/use-contact';
 import FriendFindItem from './friend-find-item';
 
 type FriendFindFeatureProps = {
   focused: boolean;
+  userId: string;
 };
 type SectionType = 'contact' | 'school';
 
@@ -30,10 +31,10 @@ const initialContactQuery = {
 
 function FriendFindFeature(props: FriendFindFeatureProps) {
   const increaseTotalCount = useFriendStore(s => s.actions.increaseTotalCount);
-  const userId = useUserStore(s => s.user?.id);
+  const userId = props.userId;
   const navigation = useNavigation();
   /** 학교 */
-  const mySchoolHook = useMySchool();
+  const mySchoolHook = useMySchool(props.userId);
   const [schoolQuery, setSchoolQuery] = useState({
     page: 1,
     limit: 5,
@@ -63,7 +64,7 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
   }, [mySchoolHook.school]);
 
   useEffect(() => {
-    if (!schoolQuery.loading) {
+    if (!schoolQuery.loading || !schoolQuery.schoolCode) {
       return;
     }
     getUserRecommendation({
@@ -178,12 +179,24 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
   const handleLoadMore = useCallback(
     (type: SectionType) => () => {
       if (type === 'school') {
-        setSchoolQuery(prev => ({...prev, page: prev.page + 1, loading: true}));
+        if (schoolData.data.length !== schoolQuery.limit) {
+          setSchoolQuery(prev => ({
+            ...prev,
+            page: prev.page,
+            loading: true,
+          }));
+        } else {
+          setSchoolQuery(prev => ({
+            ...prev,
+            page: prev.page + 1,
+            loading: true,
+          }));
+        }
       } else {
         setContactQuery(prev => ({...prev, page: prev.page + 1}));
       }
     },
-    [],
+    [schoolData, schoolQuery],
   );
 
   const sections = useMemo(() => {
@@ -191,14 +204,16 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
       title: '내 학교',
       type: 'school',
       data: schoolData.data,
+      total: schoolData.total,
     };
     const contact = {
       title: '내 연락처',
       type: 'contact',
+      total: contactData.total,
       data: contactData.data,
     };
     return [school, contact];
-  }, [schoolData.data, contactData.data]);
+  }, [schoolData.data, schoolData.total, contactData.data, contactData.total]);
 
   const renderKeyExtractor = useCallback(
     (item: UserRecommendation, i: number) => {
@@ -228,7 +243,6 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
           onAdd={() => {
             increaseTotalCount();
             if (type === 'school') {
-              setSchoolQuery(prev => ({...prev, loading: true}));
               setSchoolData(prev => ({
                 ...prev,
                 total: prev.total - 1,
@@ -270,6 +284,7 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
               <View style={styles.sectionHeader}>
                 <Text size={12} color={colors.darkGrey}>
                   {section.title}
+                  {` ${section.total}명`}
                 </Text>
               </View>
               {section.type === 'contact' && contactHook.loading && (

@@ -5,6 +5,7 @@ export const routes = {
   signup: '/signup',
   signupSchool: '/signup/school',
   signupGrade: '/signup/grade',
+  signupFriend: '/signup/friend',
   verification: '/verification',
 
   main: '/main',

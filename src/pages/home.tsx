@@ -3,12 +3,14 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   Animated,
   Dimensions,
+  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
-import {colors, constants, gifs, routes} from '../libs/common';
+import {colors, constants, gifs, pngs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
@@ -17,10 +19,12 @@ import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
 import {Polling} from '../components/poll';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 function Home(): JSX.Element {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const focused = useIsFocused();
 
@@ -229,7 +233,9 @@ function Home(): JSX.Element {
         <FriendSyncTemplate
           onSyncContacts={handleSyncContacts}
           icon={gifs.teddyBear}
-          title={'친구를 추가하고\n다양한 주제의 투표를 경험해 보세요!'}
+          title={
+            '친구를 4명 이상 추가하고\n다양한 주제의 투표를 경험해 보세요!'
+          }
         />
       )}
 
@@ -248,6 +254,18 @@ function Home(): JSX.Element {
           />
         )}
 
+      {/** 투표 대기화면에서 친구 추가 유도 */}
+      {((polling.state === 'lock' && polling.remainTime) ||
+        polling.state === 'reach') && (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(routes.friend, {add: true});
+          }}
+          style={[styles.floating, {bottom: insets.bottom + 24}]}>
+          <Image source={pngs.addFriend} style={styles.addFriend} />
+        </TouchableOpacity>
+      )}
+
       {polling.event && (
         <EventModalTemplate onClose={polling.clearEvent} {...polling.event} />
       )}
@@ -257,6 +275,15 @@ function Home(): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: colors.white},
+  floating: {
+    position: 'absolute',
+    right: 24,
+    zIndex: 3,
+  },
+  addFriend: {
+    width: 56,
+    height: 56,
+  },
 });
 
 export default Home;

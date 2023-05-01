@@ -1,10 +1,8 @@
 import {useEffect, useState} from 'react';
 import {getMySchool} from '../libs/api/school';
-import {MySchool, School} from '../libs/interfaces/school';
-import {useUserStore} from '../libs/stores';
+import {MySchool} from '../libs/interfaces/school';
 
-export function useMySchool() {
-  const userId = useUserStore(s => s.user?.id);
+export function useMySchool(userId: string) {
   const [school, setSchool] = useState<MySchool>();
   useEffect(() => {
     if (userId) {
