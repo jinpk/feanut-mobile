@@ -90,6 +90,8 @@ import feanutCardFigureSerenityIcon from '../../assets/pngs/feanut-card-figure-s
 
 import male from '../../assets/pngs/male.png';
 import female from '../../assets/pngs/female.png';
+import opened from '../../assets/pngs/opened.png';
+import closed from '../../assets/pngs/closed.png';
 
 import feanutCardJoyIcon from '../../assets/pngs/feanut-card-joy.png';
 import feanutCardAmusementIcon from '../../assets/pngs/feanut-card-amusement.png';
@@ -187,6 +189,8 @@ export const pngs = {
   female,
   coin5,
   school,
+  opened,
+  closed,
   coin30,
   feanutYellow: feanutYellowPNG,
   feanutBlue: feanutBluePNG,

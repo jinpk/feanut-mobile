@@ -26,7 +26,6 @@ function FriendListFeature(props: FriendListFeatureProps) {
 
   useEffect(() => {
     if (props.focused) {
-      console.log('hi');
       setQuery({page: 1, keyword: '', limit: 20});
       setLoading(true);
     }

@@ -28,16 +28,8 @@ type ProfileTemplateProps = {
 
   phoneNumber: string;
   profile: Profile;
-  onLogout: () => void;
   onPurchaseFeanut: () => void;
-  onEditProfile: () => void;
-  onWithdrawal: () => void;
 
-  onService: () => void;
-  onTerms: () => void;
-  onPrivacy: () => void;
-
-  onCard: () => void;
   onFriend: () => void;
 
   onProfileImage: () => void;
@@ -46,6 +38,8 @@ type ProfileTemplateProps = {
 
   onFeautCardTooltip: () => void;
   onFeautCard: () => void;
+
+  onEditProfile: () => void;
 
   me: boolean;
 
@@ -99,9 +93,6 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
                 }
                 size={100}
               />
-              {props.me && (
-                <Image source={pngs.modify} style={styles.modifyIcon} />
-              )}
             </View>
           </TouchableWithoutFeedback>
 
@@ -112,6 +103,15 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text my={30} mx={constants.screenWidth * 0.18} align="center">
             {props.profile.statusMessage}
           </Text>
+
+          {props.me && (
+            <TouchableOpacity style={styles.edit} onPress={props.onEditProfile}>
+              <Image source={pngs.modify} style={styles.modify} />
+              <Text ml={10} size={12} mr={27}>
+                프로필 편집
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <View style={styles.statsContainer}>
             <TouchableOpacity
@@ -176,7 +176,6 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
                 <Image source={pngs.q} style={styles.q} />
               </View>
             </TouchableOpacity>
-
             {props.me && (
               <TextButton
                 style={styles.feanutCard}
@@ -231,13 +230,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: 'center',
   },
-  modifyIcon: {
-    position: 'absolute',
-    width: 40,
-    height: 40,
-    right: -5,
-    bottom: -5,
-  },
   statsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -274,6 +266,20 @@ const styles = StyleSheet.create({
   feanutCard: {
     paddingVertical: 14,
     paddingHorizontal: 16,
+  },
+  edit: {
+    backgroundColor: colors.lightGrey,
+    borderRadius: 20,
+    marginBottom: 16,
+    minHeight: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modify: {
+    width: 24,
+    height: 24,
+    marginLeft: 24,
+    resizeMode: 'contain',
   },
 });
 

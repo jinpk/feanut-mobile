@@ -12,7 +12,7 @@ import {colors, constants, gifs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
-import {usePolling, useSyncContacts} from '../hooks';
+import {usePolling} from '../hooks';
 import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
@@ -144,11 +144,8 @@ function Home(): JSX.Element {
     navigation.navigate(routes.profileMe);
   }, []);
 
-  const contact = useSyncContacts();
   const handleSyncContacts = useCallback(() => {
-    contact.syncContacts(() => {
-      polling.fetchRound();
-    });
+    navigation.navigate(routes.friend, {add: true});
   }, []);
 
   const renderTopBar = useCallback(() => {

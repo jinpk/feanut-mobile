@@ -44,7 +44,7 @@ function FriendSyncTemplate(props: FriendSyncTemplateProps): JSX.Element {
         alignSelf="center"
         px={68}
         onPress={props.onSyncContacts}
-        title="연락처 동기화"
+        title="친구 추가하기"
         mx={16}
         mb={100 + insets.bottom}
       />

@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Alert, View} from 'react-native';
-import {useSyncContacts} from '../../hooks';
 import {getFriends, patchFriendHidden} from '../../libs/api/friendship';
 import {Friend as FriendI} from '../../libs/interfaces';
 import {useHiddenFriendStore, useUserStore} from '../../libs/stores';
@@ -12,7 +11,6 @@ import {BackTopBar} from '../../components/top-bar';
 
 function FriendHidden() {
   const navigation = useNavigation();
-
   const friends = useHiddenFriendStore(s => s.friends);
   const friendsTotalCount = useHiddenFriendStore(s => s.friendsTotalCount);
   const clear = useHiddenFriendStore(s => s.actions.clear);
@@ -25,7 +23,6 @@ function FriendHidden() {
   const add = useHiddenFriendStore(s => s.actions.add);
   const loading = useHiddenFriendStore(s => s.loading);
   const setLoading = useHiddenFriendStore(s => s.actions.setLoading);
-  const contact = useSyncContacts();
 
   // 화면 첫 진입 시 조회 요청
   useEffect(() => {
@@ -38,6 +35,7 @@ function FriendHidden() {
   // 친구 조회
   useEffect(() => {
     if (userId && loading) {
+      console.log(userId, loading, query.page);
       let tm = setTimeout(() => {
         getFriends(userId, {...query, hidden: '1'})
           .then(result => {
@@ -86,16 +84,6 @@ function FriendHidden() {
     },
     [userId],
   );
-
-  const handleSyncContact = useCallback(() => {
-    if (contact.loading) {
-      return;
-    }
-    contact.syncContacts(() => {
-      setQuery({page: 1, limit: 20});
-      setLoading(true);
-    });
-  }, [contact]);
 
   const handleLoadMore = useCallback(() => {
     if (loading) {

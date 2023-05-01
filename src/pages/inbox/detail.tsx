@@ -9,7 +9,7 @@ import InboxDetailTemplate from '../../templates/inbox/detail';
 import {getPollingReceiveDetail, openPull} from '../../libs/api/poll';
 import {Alert, StatusBar} from 'react-native';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
-import {constants, routes} from '../../libs/common';
+import {colors, constants, routes} from '../../libs/common';
 import {APIError} from '../../libs/interfaces';
 import {
   POLLING_ERROR_ALREADY_DONE,
@@ -21,6 +21,7 @@ import {useModalStore, useProfileStore} from '../../libs/stores';
 import {getMyProfile} from '../../libs/api/profile';
 import {getObjectURLByKey} from '../../libs/common/file';
 import OpenModalTemplate from '../../templates/inbox/open-modal';
+import {useMessageModalStore} from '../../libs/stores/message-modal';
 
 function InboxDetail() {
   const {
@@ -30,6 +31,8 @@ function InboxDetail() {
   const [pull, setPull] = useState<PollingReceiveDetail | undefined>(undefined);
   const fetchAmount = useCoin().fetchAmount;
   const [shareMode, setShareMode] = useState(false);
+
+  const openMessage = useMessageModalStore(s => s.actions.open);
 
   /** 공유하기 기능용 프로필 업데이트 */
   const profile = useProfileStore(s => s.profile);
@@ -99,9 +102,11 @@ function InboxDetail() {
     } catch (error) {
       const apiError = error as APIError;
       if (apiError.code === POLLING_ERROR_LACK_COIN_AMOUNT) {
-        Alert.alert('피넛코인이 부족해요.', undefined, [
+        openMessage('피넛코인이 부족해요.', [
+          {text: '취소'},
           {
             text: '구매하기',
+            color: colors.blue,
             onPress: () => {
               openCoinModal();
             },
@@ -118,19 +123,16 @@ function InboxDetail() {
 
   const handleOpen = async () => {
     if (!pull?.isOpened) {
-      Alert.alert(
-        '피넛코인 3개를 사용하여\n투표한 친구를 확인할 수 있어요.',
-        undefined,
-        [
-          {
-            text: '확인하기',
-            onPress: () => handleOnOpen(pull!._id),
-            isPreferred: true,
+      openMessage('피넛코인 3개를 사용하여\n투표한 친구를 확인할 수 있어요.', [
+        {text: '취소'},
+        {
+          text: '확인하기',
+          color: colors.blue,
+          onPress: () => {
+            handleOnOpen(pull!._id);
           },
-          {text: '취소', style: 'cancel'},
-        ],
-        {cancelable: true, userInterfaceStyle: 'light'},
-      );
+        },
+      ]);
     } else {
       navigation.navigate(routes.profile, {profileId: pull.voter.profileId});
     }

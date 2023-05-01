@@ -139,5 +139,6 @@ feanutAPI.interceptors.response.use(
 );
 
 export const setAPIAuthorization = (accessToken: string) => {
+  console.log(accessToken)
   feanutAPI.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 };

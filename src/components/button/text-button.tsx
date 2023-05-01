@@ -26,26 +26,29 @@ export const TextButton = (props: TextButtonProps): JSX.Element => {
   return (
     <TouchableOpacity
       onPress={props.onPress}
-      style={[
-        styles.root,
-        {
-          borderBottomColor: color,
-          borderBottomWidth: props.hiddenBorder ? 0 : 1,
-        },
-        props.style,
-      ]}>
-      <Text size={props.fontSize || 12} color={color}>
-        {props.title}
-      </Text>
-      {props.rightIcon && (
-        <View style={styles.rightIcon}>{props.rightIcon}</View>
-      )}
+      style={[styles.root, props.style]}>
+      <View
+        style={[
+          styles.content,
+          {
+            borderBottomColor: color,
+            borderBottomWidth: props.hiddenBorder ? 0 : 1,
+          },
+        ]}>
+        <Text size={props.fontSize || 12} color={color}>
+          {props.title}
+        </Text>
+        {props.rightIcon && (
+          <View style={styles.rightIcon}>{props.rightIcon}</View>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {
+  root: {},
+  content: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,

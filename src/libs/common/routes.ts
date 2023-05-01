@@ -10,6 +10,7 @@ export const routes = {
   main: '/main',
   home: '/home',
   inbox: '/inbox',
+  inboxEdit: '/inbox/edit',
 
   profile: '/profile',
   profileMe: '/profile/me',

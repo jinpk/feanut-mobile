@@ -5,6 +5,15 @@ import {
   PollingReceiveItem,
 } from '../../interfaces/polling';
 
+export const deletePollings = async (
+  pollingIds: string,
+): Promise<PagenatedResponse<PollingReceiveItem>> => {
+  const res = await feanutAPI.delete('/pollings/receive', {
+    params: {pollingIds},
+  });
+  return res.data;
+};
+
 export const getPollingReceive = async (
   params: PagenatedRequest,
 ): Promise<PagenatedResponse<PollingReceiveItem>> => {

@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {TouchableOpacity, View} from 'react-native';
 import {colors, routes} from '../../libs/common';
 import {StyleSheet} from 'react-native';
@@ -9,12 +9,22 @@ import Pager from '../../components/pager';
 import Tabs from '../../components/tabs';
 import FriendListFeature from '../../features/friend-list';
 import {useFriendStore} from '../../libs/stores';
+import FriendFindFeature from '../../features/friend-find';
+
+type FriendRoute = RouteProp<{Friend: {add: boolean}}, 'Friend'>;
 
 function Friend() {
   const navigation = useNavigation();
+  const route = useRoute<FriendRoute>();
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
 
   const [page, setPage] = useState<number>(1);
+
+  useEffect(() => {
+    if (route.params?.add) {
+      setPage(2);
+    }
+  }, [route.params?.add]);
 
   const handleHiddenFriend = useCallback(() => {
     navigation.navigate(routes.friendHidden);
@@ -36,7 +46,7 @@ function Friend() {
 
       <View style={styles.tabs}>
         <Tabs
-          titles={[`친구 ${friendsTotalCount}명`, `친구 찾기`]}
+          titles={[`친구 ${friendsTotalCount}명`, `친구 추천`]}
           index={page - 1}
           onIndexChange={index => {
             setPage(index + 1);
@@ -47,7 +57,9 @@ function Friend() {
         <View>
           <FriendListFeature focused={page === 1} />
         </View>
-        <View></View>
+        <View>
+          <FriendFindFeature focused={page === 2} />
+        </View>
       </Pager>
     </View>
   );

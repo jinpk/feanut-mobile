@@ -101,6 +101,12 @@ export interface PollingReceiveItem {
   name?: string;
   gender: Gender;
   imageFileKey?: string;
+  contentText?: string;
+  emojiId?: string;
+}
+
+export interface PollingReceiveItemWrap extends PollingReceiveItem {
+  selected?: boolean;
 }
 
 export interface PollingReceiveDetail {

@@ -8,6 +8,7 @@ export interface FriendStore {
   removedCount: number;
   loading: boolean;
   actions: {
+    increaseTotalCount: () => void;
     update: (friends: Friend[], friendsTotalCount: number) => void;
     updateHidden: (profileid: string, hidden: boolean) => void;
     add: (friends: Friend[]) => void;
@@ -46,6 +47,9 @@ const getFriendStore = () => {
       },
       update: (friends: Friend[], friendsTotalCount: number) => {
         set({friends, friendsTotalCount, removedCount: 0});
+      },
+      increaseTotalCount: () => {
+        set({friendsTotalCount: get().friendsTotalCount + 1});
       },
       updateHidden: (profileId: string, hidden: boolean) => {
         const friends = get().friends;

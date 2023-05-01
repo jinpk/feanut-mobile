@@ -43,6 +43,7 @@ import SignUpGrade from './pages/signup/grade';
 import ProfileEditSchool from './pages/profile/school';
 import ProfileEditGrade from './pages/profile/grade';
 import FriendHidden from './pages/friend/hidden';
+import InboxEdit from './pages/inbox/edit';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -74,8 +75,7 @@ function NavigationApp() {
   useInitEmoji();
   useNotificationUserConfig(true);
   // 친구 추가 방법 변경전 기존회원 친구 초기화 기능 제공
-  // rollback
-  // useLegacyFriendship();
+  useLegacyFriendship();
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
@@ -145,6 +145,7 @@ function NavigationApp() {
           }}>
           <Stack.Screen name={routes.home} component={Home} />
           <Stack.Screen name={routes.inbox} component={Inbox} />
+          <Stack.Screen name={routes.inboxEdit} component={InboxEdit} />
           <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
           <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
           <Stack.Screen name={routes.profile} component={Profile} />

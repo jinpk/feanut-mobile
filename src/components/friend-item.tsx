@@ -10,12 +10,14 @@ import {Avatar} from './avatar';
 import {BadgeButton} from './button';
 import {Text} from './text';
 import {getObjectURLByKey} from '../libs/common/file';
+import {colors} from '../libs/common';
 
 type FriendItemProps = {
   gender?: Gender;
   name: string;
   profileImageKey?: string;
   button?: string;
+  desc?: string;
   buttonColor?: string;
   buttonLoading?: boolean;
   icon?: JSX.Element;
@@ -47,6 +49,11 @@ export const FriendItem = memo((props: FriendItemProps) => {
 
         <View style={styles.body}>
           <Text>{props.name}</Text>
+          {Boolean(props.desc) && (
+            <Text mt={1} color={colors.darkGrey} size={12}>
+              {props.desc}
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
       {Boolean(props.button) &&

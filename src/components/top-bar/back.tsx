@@ -33,7 +33,8 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
           />
         </View>
       </TouchableWithoutFeedback>
-      <View>
+
+      <View style={styles.center}>
         {props.logo && (
           <WithLocalSvg width={67.5} height={35} asset={svgs.logoWithLetter} />
         )}
@@ -43,6 +44,7 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
           </Text>
         )}
       </View>
+
       <View style={styles.rightItem}>
         {props.rightComponent && props.rightComponent}
       </View>
@@ -75,4 +77,5 @@ const styles = StyleSheet.create({
     right: 0,
     position: 'absolute',
   },
+  center: {position: 'absolute'},
 });

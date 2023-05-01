@@ -65,10 +65,6 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
     [],
   );
 
-  const handleRefresh = useCallback(() => {
-    props.onRefresh();
-  }, []);
-
   const handleGetItemLayout = useCallback((_: any, index: number) => {
     return {length: 57, offset: 57 * index, index};
   }, []);
@@ -97,7 +93,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
         <RefreshControl
           tintColor={colors.primary}
           refreshing={false}
-          onRefresh={handleRefresh}
+          onRefresh={props.onRefresh}
         />
       }
       ListHeaderComponent={

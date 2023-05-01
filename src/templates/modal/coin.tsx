@@ -1,10 +1,17 @@
 import React from 'react';
-import {ActivityIndicator, Modal, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {CoinItem, Close} from '../../components';
 import {Text} from '../../components/text';
-import {colors} from '../../libs/common';
+import {colors, svgs} from '../../libs/common';
 import {CoinItem as CoinItemI} from '../../libs/interfaces';
+import {WithLocalSvg} from 'react-native-svg';
 
 type CoinModalTemplateProps = {
   data: CoinItemI[];
@@ -33,7 +40,14 @@ export const CoinModalTemplate = (
           <Text size={18} weight="bold" mb={23}>
             피넛코인 구매
           </Text>
-          <Close onClose={handleClose} style={styles.close} />
+          <TouchableOpacity onPress={props.onClose} style={styles.close}>
+            <WithLocalSvg
+              color={colors.black}
+              width={12}
+              height={12}
+              asset={svgs.close}
+            />
+          </TouchableOpacity>
           {props.data.map((x, i) => {
             return (
               <CoinItem
@@ -72,7 +86,10 @@ const styles = StyleSheet.create({
   },
   close: {
     position: 'absolute',
+    backgroundColor: colors.lightGrey,
     right: 15,
+    borderRadius: 100,
+    padding: 12,
     top: 15,
   },
   purchaseRoot: {

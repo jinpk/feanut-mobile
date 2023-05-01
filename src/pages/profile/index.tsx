@@ -5,12 +5,11 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Linking} from 'react-native';
+import {View} from 'react-native';
 import {useCoin} from '../../hooks';
 import {getFriendshipStatusByProfile} from '../../libs/api/friendship';
 import {getMyProfile, getProfile} from '../../libs/api/profile';
 import {colors, routes} from '../../libs/common';
-import {configs} from '../../libs/common/configs';
 import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
 import ProfileTemplate from '../../templates/profile';
 import {getObjectURLByKey} from '../../libs/common/file';
@@ -22,6 +21,7 @@ import {
 } from '../../libs/api/poll';
 import {FeanutCard, PollingStats} from '../../libs/interfaces/polling';
 import {useMessageModalStore} from '../../libs/stores/message-modal';
+import {StyleSheet} from 'react-native';
 
 type ProfileRoute = RouteProp<{Profile: {profileId: string}}, 'Profile'>;
 
@@ -44,8 +44,6 @@ function Profile(): JSX.Element {
   });
 
   const [feanutCard, setFeanutCard] = useState<FeanutCard>();
-
-  const openWebview = useModalStore(s => s.actions.openWebview);
 
   const coin = useCoin();
 
@@ -76,7 +74,7 @@ function Profile(): JSX.Element {
 
   // stats 조회
   useEffect(() => {
-    if (!profile?.id) return;
+    if (!profile?.id || !focused) return;
     // 친구수 조회
     getFriendshipStatusByProfile(profile.id)
       .then(stats => {
@@ -100,12 +98,7 @@ function Profile(): JSX.Element {
           console.error(apiError);
         }
       });
-  }, [profile?.id]);
 
-  // stats 조회
-  useEffect(() => {
-    if (!profile?.id) return;
-    // 피넛카드 조회
     getFeanutCardByProfile(profile.id)
       .then(setFeanutCard)
       .catch((error: any) => {
@@ -114,40 +107,14 @@ function Profile(): JSX.Element {
           console.error(apiError);
         }
       });
-  }, [profile?.id]);
-
-  const handleService = useCallback(() => {
-    Linking.openURL(configs.websiteUrl);
-  }, []);
-
-  const handlePrivacy = useCallback(() => {
-    openWebview(configs.privacyUrl);
-  }, []);
-
-  const handleTerms = useCallback(() => {
-    openWebview(configs.termsUrl);
-  }, []);
-
-  const handleWithdrawal = useCallback(() => {
-    navigation.navigate(routes.deleteMe);
-  }, []);
-
-  const handleCard = useCallback(() => {
-    if (profile?.id) {
-      navigation.navigate(routes.feanutCard, {profileId: profile.id});
-    }
-  }, [profile?.id]);
+  }, [profile?.id, focused]);
 
   const openImageModal = useModalStore(s => s.actions.openImage);
   const handleProfileImage = useCallback(() => {
-    if (isMyProfile) {
-      navigation.navigate(routes.profileEdit);
-    } else {
-      if (profile?.profileImageKey) {
-        openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
-      }
+    if (profile?.profileImageKey) {
+      openImageModal({uri: getObjectURLByKey(profile.profileImageKey)});
     }
-  }, [profile?.profileImageKey, isMyProfile]);
+  }, [profile?.profileImageKey]);
 
   const handleSetting = useCallback(() => {
     navigation.navigate(routes.setting);
@@ -178,7 +145,16 @@ function Profile(): JSX.Element {
     );
   }, [isMyProfile]);
 
-  if (!profile) return <BackTopBar title="프로필" onBack={navigation.goBack} />;
+  const handleEditProfile = useCallback(() => {
+    navigation.navigate(routes.profileEdit);
+  }, []);
+
+  if (!profile)
+    return (
+      <View style={styles.root}>
+        <BackTopBar title="프로필" onBack={navigation.goBack} />
+      </View>
+    );
 
   return (
     <ProfileTemplate
@@ -189,20 +165,19 @@ function Profile(): JSX.Element {
       phoneNumber={phoneNumber!}
       profile={profile}
       onPurchaseFeanut={coin.openPurchaseModal}
-      onPrivacy={handlePrivacy}
-      onTerms={handleTerms}
-      onService={handleService}
-      onWithdrawal={handleWithdrawal}
-      onCard={handleCard}
       onProfileImage={handleProfileImage}
       me={isMyProfile}
       onFeautCardTooltip={handleFeanutCardTooltip}
       friendsCount={friendsCount}
       feanutCard={feanutCard}
+      onEditProfile={handleEditProfile}
       onFeautCard={handleFeanutCard}
       {...pollingStats}
     />
   );
 }
 
+const styles = StyleSheet.create({
+  root: {backgroundColor: colors.white, flex: 1},
+});
 export default Profile;
