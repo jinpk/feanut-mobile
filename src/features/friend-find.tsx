@@ -179,7 +179,8 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
   const handleLoadMore = useCallback(
     (type: SectionType) => () => {
       if (type === 'school') {
-        if (schoolData.data.length !== schoolQuery.limit) {
+        if (schoolData.data.length !== schoolQuery.limit * schoolQuery.page) {
+          // 이미 친구추가한 경우 refetch
           setSchoolQuery(prev => ({
             ...prev,
             page: prev.page,

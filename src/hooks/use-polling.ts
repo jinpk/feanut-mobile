@@ -158,22 +158,8 @@ export function usePolling() {
           }
         }
       };
-
-      let stateStore: PollingState;
-
-      fetchUserRound().then(state => {
-        if (state) {
-          stateStore = state;
-        } else {
-          // 오류 알림 처리 후 처리 필요하면
-        }
-      });
-
-      // 로딩 딜레이 1초
-      let tm = setInterval(() => {
-        if (stateStore) {
-          setState(stateStore);
-        }
+      let tm = setTimeout(() => {
+        fetchUserRound().then(setState);
       }, 1500);
       return () => {
         clearInterval(tm);

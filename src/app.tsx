@@ -77,6 +77,7 @@ function NavigationApp() {
   useNotificationUserConfig(true);
   // 친구 추가 방법 변경전 기존회원 친구 초기화 기능 제공
   useLegacyFriendship();
+
   const logged = useUserStore(state => state.logged);
   const loginLoading = useUserStore(state => state.loading);
   const checkLogin = useUserStore(state => state.actions.check);
@@ -138,62 +139,65 @@ function NavigationApp() {
 
   return (
     <NavigationContainer>
-      {logged && (
-        <Stack.Navigator
-          initialRouteName={routes.home}
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name={routes.home} component={Home} />
-          <Stack.Screen name={routes.inbox} component={Inbox} />
-          <Stack.Screen name={routes.inboxEdit} component={InboxEdit} />
-          <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
-          <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
-          <Stack.Screen name={routes.profile} component={Profile} />
-          <Stack.Screen name={routes.profileMe} component={Profile} />
-          <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
-          <Stack.Screen
-            name={routes.profileEditSchool}
-            component={ProfileEditSchool}
-          />
-          <Stack.Screen
-            name={routes.profileEditGrade}
-            component={ProfileEditGrade}
-          />
+      <>
+        {logged && (
+          <Stack.Navigator
+            initialRouteName={routes.home}
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name={routes.home} component={Home} />
+            <Stack.Screen name={routes.inbox} component={Inbox} />
+            <Stack.Screen name={routes.inboxEdit} component={InboxEdit} />
+            <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
+            <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
+            <Stack.Screen name={routes.profile} component={Profile} />
+            <Stack.Screen name={routes.profileMe} component={Profile} />
+            <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+            <Stack.Screen
+              name={routes.profileEditSchool}
+              component={ProfileEditSchool}
+            />
+            <Stack.Screen
+              name={routes.profileEditGrade}
+              component={ProfileEditGrade}
+            />
 
-          <Stack.Screen name={routes.setting} component={Setting} />
-          <Stack.Screen name={routes.friend} component={Friend} />
-          <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
-          <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
-        </Stack.Navigator>
-      )}
-      {!logged && (
-        <Stack.Navigator
-          initialRouteName={routes.start}
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name={routes.start} component={Start} />
-          <Stack.Screen
-            name={routes.signup}
-            component={SignUp}
-            options={{
-              //  회원가입 정보 입력 도중 뒤로 나가지는 불편 예방
-              gestureEnabled: false,
-            }}
-          />
-          <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
-          <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
-          <Stack.Screen name={routes.signupFriend} component={SignUpFriend} />
-          <Stack.Screen
-            name={routes.verification}
-            component={Verification}
-            options={{
-              gestureEnabled: false,
-            }}
-          />
-        </Stack.Navigator>
-      )}
+            <Stack.Screen name={routes.setting} component={Setting} />
+            <Stack.Screen name={routes.friend} component={Friend} />
+            <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
+            <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
+          </Stack.Navigator>
+        )}
+        {!logged && (
+          <Stack.Navigator
+            initialRouteName={routes.start}
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name={routes.start} component={Start} />
+            <Stack.Screen
+              name={routes.signup}
+              component={SignUp}
+              options={{
+                //  회원가입 정보 입력 도중 뒤로 나가지는 불편 예방
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
+            <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
+            <Stack.Screen name={routes.signupFriend} component={SignUpFriend} />
+            <Stack.Screen
+              name={routes.verification}
+              component={Verification}
+              options={{
+                gestureEnabled: false,
+              }}
+            />
+          </Stack.Navigator>
+        )}
+        <LegacyFriendshipModal />
+      </>
     </NavigationContainer>
   );
 }
@@ -210,7 +214,6 @@ function FeanutApp(props: AppProps): JSX.Element {
       <CoinModal />
       <VersionCheckerModal />
       <MessageModal />
-      <LegacyFriendshipModal />
     </SafeAreaProvider>
   );
 }

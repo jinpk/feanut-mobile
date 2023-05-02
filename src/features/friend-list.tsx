@@ -45,29 +45,24 @@ function FriendListFeature(props: FriendListFeatureProps) {
   // 친구 조회
   useEffect(() => {
     if (userId && loading) {
-      let tm = setTimeout(() => {
-        getFriends(userId, {...query})
-          .then(result => {
-            if (query.page === 1) {
-              update(result.data, result.total);
-            } else {
-              add(result.data);
-            }
-            return;
-          })
-          .catch((error: any) => {
-            if (__DEV__) {
-              console.error(error);
-            }
-            return;
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }, 300);
-      return () => {
-        clearTimeout(tm);
-      };
+      getFriends(userId, {...query})
+        .then(result => {
+          if (query.page === 1) {
+            update(result.data, result.total);
+          } else {
+            add(result.data);
+          }
+          return;
+        })
+        .catch((error: any) => {
+          if (__DEV__) {
+            console.error(error);
+          }
+          return;
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [loading, query.page]);
 

@@ -130,7 +130,10 @@ export default function useContact() {
           .filter(x => x),
       );
     }
-    contacts.current = filtered;
+    // 가 > 나 > 다 정렬
+    contacts.current = filtered.sort((a, b) =>
+      a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+    );
     setLoading(false);
   };
 

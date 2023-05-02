@@ -50,6 +50,8 @@ type ProfileTemplateProps = {
   coinAmount: number;
 
   feanutCard?: FeanutCard;
+
+  contactName: string;
 };
 
 function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
@@ -95,10 +97,14 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               />
             </View>
           </TouchableWithoutFeedback>
-
           <Text mt={15} size={16} weight="medium">
-            {props.profile.name}
+            {props.profile.ownerId ? props.profile.name : props.contactName}
           </Text>
+          {/*!props.me && Boolean(props.contactName) && (
+            <Text mt={5} color={colors.darkGrey} size={10}>
+              내 연락처에 저장된 이름 : {props.contactName}
+            </Text>
+          )*/}
 
           <Text my={30} mx={constants.screenWidth * 0.18} align="center">
             {props.profile.statusMessage}

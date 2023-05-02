@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   Animated,
-  Dimensions,
   Image,
   ScrollView,
   StatusBar,
@@ -21,8 +20,6 @@ import PollLockTemplate from '../templates/polling/lock';
 import {Polling} from '../components/poll';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
 function Home(): JSX.Element {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -35,14 +32,13 @@ function Home(): JSX.Element {
   const scrollRef = useRef<ScrollView>(null);
   const [tabIndex, setTabIndex] = useState(0);
 
-  // 초기 알림 클릭 이벤트처리
+  /** 알림 클릭 이벤트처리 */
   const initialNotification = useUserStore(s => s.notification);
   const clearNotification = useUserStore(s => s.actions.clearNotification);
   useEffect(() => {
     if (initialNotification) {
       const {action, value} = initialNotification;
       if (action === 'pull') {
-        navigation.navigate(routes.inbox);
         navigation.navigate(routes.inboxDetail, {pollingId: value});
       } else if (action === 'poll') {
         navigation.navigate(routes.home);
@@ -51,19 +47,20 @@ function Home(): JSX.Element {
     }
   }, [initialNotification]);
 
-  /*const legacyFriendshipOpened = useModalStore(s => s.legacyFriendship);
+  /** 친구 초기화 후 다시 조회 */
+  const legacyFriendshipOpened = useModalStore(s => s.legacyFriendship);
   useEffect(() => {
     if (legacyFriendshipOpened) {
       return () => {
-        // 재로딩
         polling.fetchRound();
       };
     }
-  }, [legacyFriendshipOpened]);*/
+  }, [legacyFriendshipOpened]);
 
   const welcomModalOpened = useModalStore(s => s.welcome);
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
 
+  /** Status Bar Color handling */
   useEffect(() => {
     if (
       !firstInited ||
@@ -101,7 +98,7 @@ function Home(): JSX.Element {
     }
   }, [polling.state]);
 
-  // 처음에 한번 호죄
+  // 처음에 한번 조회
   useEffect(() => {
     polling.fetchRound();
   }, []);
@@ -133,10 +130,11 @@ function Home(): JSX.Element {
     }
   }, [polling.state, friendsTotalCount]);
 
+  /** index에 따라 화면 스크롤 */
   useEffect(() => {
     scrollRef.current?.scrollTo({
       animated: tabIndex !== 0,
-      x: tabIndex * SCREEN_WIDTH,
+      x: tabIndex * constants.screenWidth,
     });
   }, [tabIndex]);
 

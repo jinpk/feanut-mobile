@@ -7,7 +7,10 @@ import {
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {useCoin} from '../../hooks';
-import {getFriendshipStatusByProfile} from '../../libs/api/friendship';
+import {
+  getFriendByProfileId,
+  getFriendshipStatusByProfile,
+} from '../../libs/api/friendship';
 import {getMyProfile, getProfile} from '../../libs/api/profile';
 import {colors, routes} from '../../libs/common';
 import {useModalStore, useProfileStore, useUserStore} from '../../libs/stores';
@@ -28,6 +31,7 @@ type ProfileRoute = RouteProp<{Profile: {profileId: string}}, 'Profile'>;
 function Profile(): JSX.Element {
   const {params} = useRoute<ProfileRoute>();
   const myProfile = useProfileStore(s => s.profile);
+  const userId = useUserStore(s => s.user?.id);
   const [profile, setProfile] = useState<ProfileI>();
 
   const isMyProfile = profile?.id === myProfile.id;
@@ -46,6 +50,17 @@ function Profile(): JSX.Element {
   const [feanutCard, setFeanutCard] = useState<FeanutCard>();
 
   const coin = useCoin();
+
+  const [contactName, setContactName] = useState('');
+
+  // 다른사람 프로필 조회 시 내 연락처의 친구 이름
+  useEffect(() => {
+    if (userId && params?.profileId && myProfile.id !== params.profileId) {
+      getFriendByProfileId(userId, params.profileId).then(friendship => {
+        setContactName(friendship.name);
+      });
+    }
+  }, [userId, params?.profileId, myProfile.id]);
 
   // 프로필 조회
   useEffect(() => {
@@ -164,6 +179,7 @@ function Profile(): JSX.Element {
       onFriend={handleFriend}
       phoneNumber={phoneNumber!}
       profile={profile}
+      contactName={contactName}
       onPurchaseFeanut={coin.openPurchaseModal}
       onProfileImage={handleProfileImage}
       me={isMyProfile}
