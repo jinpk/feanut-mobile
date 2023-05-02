@@ -100,11 +100,12 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           <Text mt={15} size={16} weight="medium">
             {props.profile.ownerId ? props.profile.name : props.contactName}
           </Text>
-          {/*!props.me && Boolean(props.contactName) && (
+
+          {!props.me && (
             <Text mt={5} color={colors.darkGrey} size={10}>
-              내 연락처에 저장된 이름 : {props.contactName}
+              내가 설정한 이름 : {props.contactName || props.profile.name}
             </Text>
-          )*/}
+          )}
 
           <Text my={30} mx={constants.screenWidth * 0.18} align="center">
             {props.profile.statusMessage}

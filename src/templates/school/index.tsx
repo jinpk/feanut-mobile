@@ -9,6 +9,7 @@ import {SchoolItem} from '../../components/school-item';
 import {Gif} from '../../components/image';
 import {Text} from '../../components/text';
 import {Divider} from '../../components';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type SchoolTemplateProps = {
   onBack: () => void;
@@ -25,6 +26,7 @@ type SchoolTemplateProps = {
 };
 
 export const SchoolTemplate = (props: SchoolTemplateProps) => {
+  const insets = useSafeAreaInsets();
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -69,7 +71,7 @@ export const SchoolTemplate = (props: SchoolTemplateProps) => {
   }, []);
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <BackTopBar onBack={props.onBack} />
       <Text weight="bold" size={18} mt={15} mx={16}>
         학교를 선택해 주세요

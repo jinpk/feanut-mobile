@@ -239,6 +239,7 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
           onPress={() => {
             navigation.navigate(routes.profile, {
               profileId: item.profileId,
+              contactName: type === 'contact' && item.name,
             });
           }}
           onAdd={() => {

@@ -80,9 +80,11 @@ export const postFriend = async (
 export const postFriendByUser = async (
   userId: string,
   targetUserId: string,
+  name: string,
 ): Promise<boolean> => {
   const res = await feanutAPI.post(`/friendships/${userId}/friends/byuser`, {
     userId: targetUserId,
+    name,
   });
   return res.data;
 };

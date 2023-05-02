@@ -26,7 +26,10 @@ import {FeanutCard, PollingStats} from '../../libs/interfaces/polling';
 import {useMessageModalStore} from '../../libs/stores/message-modal';
 import {StyleSheet} from 'react-native';
 
-type ProfileRoute = RouteProp<{Profile: {profileId: string}}, 'Profile'>;
+type ProfileRoute = RouteProp<
+  {Profile: {profileId: string; contactName?: string}},
+  'Profile'
+>;
 
 function Profile(): JSX.Element {
   const {params} = useRoute<ProfileRoute>();
@@ -52,6 +55,12 @@ function Profile(): JSX.Element {
   const coin = useCoin();
 
   const [contactName, setContactName] = useState('');
+
+  useEffect(() => {
+    if (params?.contactName) {
+      setContactName(params.contactName);
+    }
+  }, [params?.contactName]);
 
   // 다른사람 프로필 조회 시 내 연락처의 친구 이름
   useEffect(() => {

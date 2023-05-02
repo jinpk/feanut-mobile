@@ -10,10 +10,12 @@ import Tabs from '../../components/tabs';
 import FriendListFeature from '../../features/friend-list';
 import {useFriendStore, useUserStore} from '../../libs/stores';
 import FriendFindFeature from '../../features/friend-find';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type FriendRoute = RouteProp<{Friend: {add: boolean}}, 'Friend'>;
 
 function Friend() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const route = useRoute<FriendRoute>();
   const friendsTotalCount = useFriendStore(s => s.friendsTotalCount);
@@ -32,7 +34,7 @@ function Friend() {
   }, []);
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <BackTopBar
         onBack={navigation.goBack}
         title="친구"

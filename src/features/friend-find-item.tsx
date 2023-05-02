@@ -17,7 +17,7 @@ function FriendFindItem(props: FriendFindItemProps) {
 
   const handleAdd = useCallback(() => {
     const promise = props.item.userId
-      ? postFriendByUser(props.userId, props.item.userId!)
+      ? postFriendByUser(props.userId, props.item.userId!, props.item.name)
       : postFriend(props.userId, {
           phoneNumber: props.item.phoneNumber!,
           name: props.item.name,

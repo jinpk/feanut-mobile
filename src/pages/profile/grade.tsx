@@ -8,8 +8,8 @@ import {Text} from '../../components/text';
 import {School} from '../../libs/interfaces/school';
 import {TouchableOpacity} from 'react-native';
 import {Button} from '../../components/button';
-import {useSignUp} from '../../hooks/use-signup';
 import {postUpdateMySchool} from '../../libs/api/school';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ProfileEditGradeProps = RouteProp<
   {ProfileEditGrade: {school: School}},
@@ -33,6 +33,7 @@ const grades = [
 
 export default function ProfileEditGrade() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const {params} = useRoute<ProfileEditGradeProps>();
   const [grade, setGrade] = useState<number | undefined>();
 
@@ -49,7 +50,7 @@ export default function ProfileEditGrade() {
   };
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <BackTopBar onBack={navigation.goBack} />
       <Text weight="bold" size={18} mt={15} mx={16}>
         {params.school.name} 몇 학년 이신가요?
