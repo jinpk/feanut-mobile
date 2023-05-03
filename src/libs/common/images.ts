@@ -59,6 +59,7 @@ import feanutBluePNG from '../../assets/pngs/feanut-blue.png';
 import feanutDarkGreyPNG from '../../assets/pngs/feanut-dark-grey.png';
 import school from '../../assets/pngs/school.png';
 import modify from '../../assets/pngs/modify.png';
+import addPNG from '../../assets/pngs/add.png';
 
 import sync from '../../assets/svgs/sync.svg';
 import share from '../../assets/svgs/share.svg';
@@ -91,6 +92,7 @@ import feanutCardFigureSerenityIcon from '../../assets/pngs/feanut-card-figure-s
 import male from '../../assets/pngs/male.png';
 import female from '../../assets/pngs/female.png';
 import opened from '../../assets/pngs/opened.png';
+import invite from '../../assets/pngs/invite.png';
 import closed from '../../assets/pngs/closed.png';
 
 import feanutCardJoyIcon from '../../assets/pngs/feanut-card-joy.png';
@@ -185,6 +187,7 @@ export const pngs = {
   male,
   female,
   coin5,
+  add: addPNG,invite,
   school,
   opened,
   closed,

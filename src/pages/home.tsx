@@ -19,6 +19,9 @@ import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
 import {Polling} from '../components/poll';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import HomeFloating from '../components/home-floating';
+import {getMyReferralLink} from '../libs/services/firebase-links';
+import Share from 'react-native-share';
 
 function Home(): JSX.Element {
   const insets = useSafeAreaInsets();
@@ -150,6 +153,27 @@ function Home(): JSX.Element {
     navigation.navigate(routes.friend, {add: true});
   }, []);
 
+  const userId = useUserStore(s => s.user.id);
+  const invitingRef = useRef(false);
+  const handleInvite = useCallback(() => {
+    if (invitingRef.current) return;
+    invitingRef.current = true;
+    getMyReferralLink(userId).then(url => {
+      Share.open({
+        url,
+      })
+        .then(() => {
+          return;
+        })
+        .catch(error => {
+          return;
+        })
+        .finally(() => {
+          invitingRef.current = false;
+        });
+    });
+  }, []);
+
   const renderTopBar = useCallback(() => {
     const last = polling.currentPollingIndex === polling.pollings.length - 1;
 
@@ -252,20 +276,18 @@ function Home(): JSX.Element {
           />
         )}
 
-      {/** 투표 대기화면에서 친구 추가 유도 */}
-      {((polling.state === 'lock' && polling.remainTime) ||
-        polling.state === 'reach') && (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(routes.friend, {add: true});
-          }}
-          style={[styles.floating, {bottom: insets.bottom + 24}]}>
-          <Image source={pngs.addFriend} style={styles.addFriend} />
-        </TouchableOpacity>
-      )}
-
       {polling.event && (
         <EventModalTemplate onClose={polling.clearEvent} {...polling.event} />
+      )}
+
+      {((polling.state === 'lock' && polling.remainTime) ||
+        polling.state === 'reach') && (
+        <HomeFloating
+          onAddFriend={() => {
+            navigation.navigate(routes.friend, {add: true});
+          }}
+          onInvite={handleInvite}
+        />
       )}
     </Animated.View>
   );
@@ -273,15 +295,6 @@ function Home(): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: colors.white},
-  floating: {
-    position: 'absolute',
-    right: 24,
-    zIndex: 3,
-  },
-  addFriend: {
-    width: 56,
-    height: 56,
-  },
 });
 
 export default Home;
