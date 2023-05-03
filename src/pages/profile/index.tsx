@@ -191,6 +191,7 @@ function Profile(): JSX.Element {
       contactName={contactName}
       onPurchaseFeanut={coin.openPurchaseModal}
       onProfileImage={handleProfileImage}
+      userId={userId}
       me={isMyProfile}
       onFeautCardTooltip={handleFeanutCardTooltip}
       friendsCount={friendsCount}

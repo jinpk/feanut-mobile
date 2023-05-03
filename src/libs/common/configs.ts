@@ -1,6 +1,6 @@
 const WEBSITE_URL = 'https://feanut.com';
 
-const isLocal = true;
+const isLocal = false;
 const localHost = 'http://192.168.35.100:3000';
 
 const PRODUCTION_MODE = false;
@@ -34,4 +34,7 @@ export const configs = {
   websiteUrl: WEBSITE_URL,
   privacyUrl: WEBSITE_URL + '/privacy',
   termsUrl: WEBSITE_URL + '/terms',
+
+  referralLinkUrl: WEBSITE_URL + '/referral',
+  referralLinkUserIdKey: 'referral_user_id',
 };

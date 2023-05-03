@@ -10,6 +10,7 @@ export interface SignUpRequest {
   name: string;
 
   school?: PostSchoolRequest;
+  referralUserId?: string;
 }
 
 export interface SignUpVerificationRequest {

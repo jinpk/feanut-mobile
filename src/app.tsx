@@ -45,6 +45,10 @@ import ProfileEditGrade from './pages/profile/grade';
 import FriendHidden from './pages/friend/hidden';
 import InboxEdit from './pages/inbox/edit';
 import SignUpFriend from './pages/signup/friend';
+import {useDynamicLinkStore} from './libs/stores/dynamic-link';
+import dynamicLinks, {
+  FirebaseDynamicLinksTypes,
+} from '@react-native-firebase/dynamic-links';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -131,6 +135,19 @@ function NavigationApp() {
         StatusBar.setBarStyle('dark-content');
       }
     }
+  }, []);
+
+  /** 파이어베이스 다이나믹 링크 */
+  const setDynamicLink = useDynamicLinkStore(s => s.actions.set);
+  useEffect(() => {
+    const handleLink = (link: FirebaseDynamicLinksTypes.DynamicLink | null) => {
+      if (link && link.url) {
+        setDynamicLink(link.url);
+      }
+    };
+    dynamicLinks().getInitialLink().then(handleLink);
+    const unsubscribe = dynamicLinks().onLink(handleLink);
+    return () => unsubscribe();
   }, []);
 
   if (loginLoading) {

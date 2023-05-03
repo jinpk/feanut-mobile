@@ -22,6 +22,9 @@ import {
 import {WithLocalSvg} from 'react-native-svg';
 import {FeanutCard} from '../../libs/interfaces/polling';
 import {FeanutCardItem} from '../../components/feanut-card';
+import {Button} from '../../components/button';
+import {getMyReferralLink} from '../../libs/services/firebase-links';
+import Share from 'react-native-share';
 
 type ProfileTemplateProps = {
   onBack: () => void;
@@ -42,6 +45,7 @@ type ProfileTemplateProps = {
   onEditProfile: () => void;
 
   me: boolean;
+  userId?: string;
 
   friendsCount: number;
   pollsCount: number;
@@ -74,6 +78,20 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.pageTopPadding} />
+
+        {props.me && Boolean(props.userId) && (
+          <Button
+            alignSelf="center"
+            title="친구 초대하기"
+            onPress={() => {
+              getMyReferralLink(props.userId!).then(url => {
+                Share.open({
+                  url,
+                });
+              });
+            }}
+          />
+        )}
         {props.me && (
           <FeanutCoin
             amount={props.coinAmount}
