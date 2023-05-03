@@ -1,13 +1,22 @@
-import React, {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
+  Alert,
+  Linking,
   RefreshControl,
   SectionList,
   StyleSheet,
   View,
 } from 'react-native';
 import {Text} from '../components/text';
-import {colors, routes} from '../libs/common';
+import {colors, constants, routes} from '../libs/common';
 import {useMySchool} from '../hooks';
 import {getUserRecommendation} from '../libs/api/users';
 import {PagenatedResponse, UserRecommendation} from '../libs/interfaces';
@@ -120,12 +129,35 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
   >('pending');
 
   /** 연락처 권한 확인 및 권한 허용 시 연락처 동기화 */
+  const contactPermissionAlertCount = useRef(0);
   useEffect(() => {
     if (props.focused) {
       contactHook.checkPermissions().then(granted => {
         setContactPermission(granted ? 'granted' : 'denied');
         if (granted) {
           contactHook.storeContacts();
+        } else {
+          if (constants.platform === 'ios') {
+            if (contactPermissionAlertCount.current >= 1) {
+              return;
+            }
+            contactPermissionAlertCount.current++;
+            // ios만 알림 유도
+            Alert.alert(
+              '설정에서 feanut 연락처 접근 허용 후 다시 시도해 주세요.',
+              '',
+              [
+                {text: '다음에', style: 'cancel'},
+                {
+                  text: '설정',
+                  isPreferred: true,
+                  onPress: () => {
+                    Linking.openSettings();
+                  },
+                },
+              ],
+            );
+          }
         }
       });
     }

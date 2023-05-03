@@ -16,7 +16,7 @@ export default function useContact() {
 
   const [loading, setLoading] = useState(false);
 
-  const checkPermissions = async () => {
+  const checkPermissions = useCallback(async () => {
     if (constants.platform === 'android') {
       const res = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
@@ -41,7 +41,7 @@ export default function useContact() {
         return false;
       }
     }
-  };
+  }, []);
 
   const storeContacts = async () => {
     if (!(await checkPermissions())) {
@@ -150,7 +150,7 @@ export default function useContact() {
       cachedOriginList.current.keyword = keyword;
       cachedOriginList.current.data = !keyword
         ? contacts.current
-        : contacts.current.filter(x => x.name.search(keyword.toLowerCase()));
+        : contacts.current.filter(x => x.name.includes(keyword));
     }
 
     let sliced = cachedOriginList.current.data.slice(start, start + limit);
@@ -162,6 +162,9 @@ export default function useContact() {
 
   const handleRemoveItem = useCallback((phoneNumber: string) => {
     contacts.current = contacts.current.filter(
+      x => x.phoneNumber !== phoneNumber,
+    );
+    cachedOriginList.current.data = cachedOriginList.current.data.filter(
       x => x.phoneNumber !== phoneNumber,
     );
   }, []);
