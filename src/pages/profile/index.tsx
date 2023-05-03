@@ -4,7 +4,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {useCoin} from '../../hooks';
 import {
@@ -25,6 +25,8 @@ import {
 import {FeanutCard, PollingStats} from '../../libs/interfaces/polling';
 import {useMessageModalStore} from '../../libs/stores/message-modal';
 import {StyleSheet} from 'react-native';
+import {getMyReferralLink} from '../../libs/services/firebase-links';
+import Share from 'react-native-share';
 
 type ProfileRoute = RouteProp<
   {Profile: {profileId: string; contactName?: string}},
@@ -173,6 +175,26 @@ function Profile(): JSX.Element {
     navigation.navigate(routes.profileEdit);
   }, []);
 
+  const invitingRef = useRef(false);
+  const handleInvite = useCallback(() => {
+    if (invitingRef.current) return;
+    invitingRef.current = true;
+    getMyReferralLink(userId!).then(url => {
+      Share.open({
+        url,
+      })
+        .then(() => {
+          return;
+        })
+        .catch(error => {
+          return;
+        })
+        .finally(() => {
+          invitingRef.current = false;
+        });
+    });
+  }, []);
+
   if (!profile)
     return (
       <View style={styles.root}>
@@ -191,7 +213,7 @@ function Profile(): JSX.Element {
       contactName={contactName}
       onPurchaseFeanut={coin.openPurchaseModal}
       onProfileImage={handleProfileImage}
-      userId={userId}
+      onInvite={handleInvite}
       me={isMyProfile}
       onFeautCardTooltip={handleFeanutCardTooltip}
       friendsCount={friendsCount}

@@ -22,9 +22,6 @@ import {
 import {WithLocalSvg} from 'react-native-svg';
 import {FeanutCard} from '../../libs/interfaces/polling';
 import {FeanutCardItem} from '../../components/feanut-card';
-import {Button} from '../../components/button';
-import {getMyReferralLink} from '../../libs/services/firebase-links';
-import Share from 'react-native-share';
 
 type ProfileTemplateProps = {
   onBack: () => void;
@@ -44,8 +41,9 @@ type ProfileTemplateProps = {
 
   onEditProfile: () => void;
 
+  onInvite: () => void;
+
   me: boolean;
-  userId?: string;
 
   friendsCount: number;
   pollsCount: number;
@@ -79,19 +77,6 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.pageTopPadding} />
 
-        {props.me && Boolean(props.userId) && (
-          <Button
-            alignSelf="center"
-            title="친구 초대하기"
-            onPress={() => {
-              getMyReferralLink(props.userId!).then(url => {
-                Share.open({
-                  url,
-                });
-              });
-            }}
-          />
-        )}
         {props.me && (
           <FeanutCoin
             amount={props.coinAmount}
@@ -130,12 +115,28 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
           </Text>
 
           {props.me && (
-            <TouchableOpacity style={styles.edit} onPress={props.onEditProfile}>
-              <Image source={pngs.modify} style={styles.modify} />
-              <Text ml={10} size={12} mr={27}>
-                프로필 편집
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.buttons}>
+              <TouchableOpacity
+                style={[styles.edit, {marginRight: 5}]}
+                onPress={props.onEditProfile}>
+                <Image source={pngs.modify} style={styles.modify} />
+                <Text ml={10} size={12}>
+                  프로필 편집
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.edit, {marginLeft: 5}]}
+                onPress={props.onInvite}>
+                <Image
+                  source={pngs.invite}
+                  style={[styles.modify, {tintColor: colors.dark}]}
+                />
+                <Text ml={10} size={12}>
+                  친구 초대
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
 
           <View style={styles.statsContainer}>
@@ -295,16 +296,23 @@ const styles = StyleSheet.create({
   edit: {
     backgroundColor: colors.lightGrey,
     borderRadius: 20,
-    marginBottom: 16,
     minHeight: 42,
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   modify: {
     width: 24,
     height: 24,
-    marginLeft: 24,
     resizeMode: 'contain',
+  },
+  buttons: {
+    marginBottom: 17,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingHorizontal: '12%',
   },
 });
 

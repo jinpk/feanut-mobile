@@ -136,7 +136,7 @@ function HomeFloating(props: HomeFloatingProps) {
             <Image style={styles.itemButtonIcon} source={pngs.addFriend} />
             {textShow && (
               <Text size={12} color={colors.primary}>
-                친구추가
+                친구 추가
               </Text>
             )}
           </Animated.View>
@@ -159,7 +159,7 @@ function HomeFloating(props: HomeFloatingProps) {
             <Image style={styles.itemButtonIcon} source={pngs.invite} />
             {textShow && (
               <Text size={12} color={colors.primary}>
-                친구초대
+                친구 초대
               </Text>
             )}
           </Animated.View>
