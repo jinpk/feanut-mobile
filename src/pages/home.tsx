@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {Animated, Image, ScrollView, StatusBar, StyleSheet} from 'react-native';
+import {Animated, ScrollView, StatusBar, StyleSheet} from 'react-native';
 import {MainTopBar} from '../components/top-bar/main';
 import {colors, constants, gifs, routes} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';

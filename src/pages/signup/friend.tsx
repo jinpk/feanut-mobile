@@ -25,7 +25,7 @@ export default function SignUpFriend() {
     });
     return () => {
       if (tm) {
-        // login(tm);
+        login(tm);
       }
     };
   }, []);
