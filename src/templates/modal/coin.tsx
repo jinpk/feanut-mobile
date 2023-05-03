@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {CoinItem, Close} from '../../components';
+import {CoinItem} from '../../components';
 import {Text} from '../../components/text';
 import {colors, svgs} from '../../libs/common';
 import {CoinItem as CoinItemI} from '../../libs/interfaces';

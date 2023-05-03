@@ -23,4 +23,5 @@ export interface UserRecommendation {
 export interface GetUserRecommendation extends PagenatedRequest {
   schoolCode?: string;
   phoneNumber?: string;
+  keyword?: string;
 }

@@ -134,15 +134,29 @@ export default function useContact() {
     contacts.current = filtered.sort((a, b) =>
       a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
     );
+    cachedOriginList.current.data = contacts.current;
+    cachedOriginList.current.keyword = '';
     setLoading(false);
   };
 
-  const fetch = async (page: number, limit: number) => {
+  const cachedOriginList = useRef<{
+    data: UserRecommendation[];
+    keyword: string;
+  }>({data: [], keyword: ''});
+
+  const fetch = async (page: number, limit: number, keyword: string) => {
     let start = (page - 1) * limit;
-    let sliced = contacts.current.slice(start, start + limit);
+    if (cachedOriginList.current.keyword !== keyword) {
+      cachedOriginList.current.keyword = keyword;
+      cachedOriginList.current.data = !keyword
+        ? contacts.current
+        : contacts.current.filter(x => x.name.search(keyword.toLowerCase()));
+    }
+
+    let sliced = cachedOriginList.current.data.slice(start, start + limit);
     return {
       data: sliced,
-      total: contacts.current.length,
+      total: cachedOriginList.current.data.length,
     };
   };
 

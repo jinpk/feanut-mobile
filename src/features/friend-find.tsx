@@ -16,6 +16,7 @@ import {TextButton} from '../components/button/text-button';
 import {useFriendStore} from '../libs/stores';
 import useContact from '../hooks/use-contact';
 import FriendFindItem from './friend-find-item';
+import {SearchInput} from '../components/input';
 
 type FriendFindFeatureProps = {
   focused: boolean;
@@ -25,6 +26,7 @@ type SectionType = 'contact' | 'school';
 
 const initialContactQuery = {
   page: 1,
+  keyword: '',
   limit: 20,
   loading: false,
 };
@@ -40,6 +42,7 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
     limit: 5,
     loading: false,
     schoolCode: '',
+    keyword: '',
   });
   const [schoolData, setSchoolData] = useState<
     PagenatedResponse<UserRecommendation>
@@ -49,19 +52,24 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
   });
 
   useEffect(() => {
-    if (
-      !mySchoolHook.school ||
-      !mySchoolHook.school?.code ||
-      schoolQuery.loading
-    ) {
+    if (!mySchoolHook.school || !mySchoolHook.school?.code) {
+      return;
+    }
+    setSchoolQuery(prev => ({
+      ...prev,
+      schoolCode: mySchoolHook.school!.code,
+    }));
+  }, [mySchoolHook.school]);
+
+  useEffect(() => {
+    if (!schoolQuery.schoolCode || schoolQuery.loading || !props.focused) {
       return;
     }
     setSchoolQuery(prev => ({
       ...prev,
       loading: true,
-      schoolCode: mySchoolHook.school!.code,
     }));
-  }, [mySchoolHook.school]);
+  }, [schoolQuery.schoolCode, props.focused]);
 
   useEffect(() => {
     if (!schoolQuery.loading || !schoolQuery.schoolCode) {
@@ -91,8 +99,11 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
       })
       .finally(() => {
         setSchoolQuery(prev => ({...prev, loading: false}));
+        if (schoolQuery.keyword) {
+          setSearching(false);
+        }
       });
-  }, [schoolQuery.page, schoolQuery.loading]);
+  }, [schoolQuery.page, schoolQuery.loading, schoolQuery.keyword]);
 
   /** 연락처 */
   const contactHook = useContact();
@@ -125,18 +136,19 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
     if (
       contactPermission !== 'granted' ||
       contactHook.loading ||
-      contactQuery.loading
+      contactQuery.loading ||
+      !props.focused
     ) {
       return;
     }
     setContactQuery(prev => ({...prev, loading: true}));
-  }, [contactQuery.page, contactHook.loading]);
+  }, [contactQuery.page, contactHook.loading, props.focused]);
 
   /** 조회 paging */
   useEffect(() => {
     if (contactQuery.loading) {
       contactHook
-        .fetch(contactQuery.page, contactQuery.limit)
+        .fetch(contactQuery.page, contactQuery.limit, contactQuery.keyword)
         .then(res => {
           if (contactQuery.page === 1) {
             setContactData(res);
@@ -159,12 +171,19 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
         .finally(() => {
           // 조회 완료시 loading false
           setContactQuery(prev => ({...prev, loading: false}));
+          if (contactQuery.keyword) {
+            setSearching(false);
+          }
         });
     }
-  }, [contactQuery.page, contactQuery.loading]);
+  }, [contactQuery.page, contactQuery.loading, contactQuery.keyword]);
 
+  /** List Handler */
   const handleRefresh = useCallback(() => {
+    setSearching(false);
+    setKeyword('');
     setSchoolQuery(prev => ({
+      keyword: '',
       page: 1,
       limit: 5,
       loading: true,
@@ -199,22 +218,6 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
     },
     [schoolData, schoolQuery],
   );
-
-  const sections = useMemo(() => {
-    const school = {
-      title: '내 학교',
-      type: 'school',
-      data: schoolData.data,
-      total: schoolData.total,
-    };
-    const contact = {
-      title: '내 연락처',
-      type: 'contact',
-      total: contactData.total,
-      data: contactData.data,
-    };
-    return [school, contact];
-  }, [schoolData.data, schoolData.total, contactData.data, contactData.total]);
 
   const renderKeyExtractor = useCallback(
     (item: UserRecommendation, i: number) => {
@@ -266,6 +269,66 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
     [userId],
   );
 
+  /** 검색 */
+  const [keyword, setKeyword] = useState('');
+  const [searching, setSearching] = useState(false);
+
+  const handleChangeKeyword = useCallback((keyword: string) => {
+    if (!keyword) {
+      handleRefresh();
+    }
+    setKeyword(keyword);
+  }, []);
+
+  const handleSearch = useCallback((keyword: string) => {
+    setSchoolQuery(prev => ({
+      ...prev,
+      page: 1,
+      keyword,
+      loading: true,
+    }));
+    setContactQuery(prev => ({
+      ...prev,
+      page: 1,
+      keyword,
+      loading: true,
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (keyword) {
+      setSearching(true);
+      setSchoolData({data: [], total: 0});
+      setContactData({data: [], total: 0});
+      let tm = setTimeout(() => {
+        handleSearch(keyword);
+      }, 1000);
+      return () => {
+        clearTimeout(tm);
+        if (!keyword) {
+          console.log('clear');
+          handleRefresh();
+        }
+      };
+    }
+  }, [keyword]);
+
+  const sections = useMemo(() => {
+    const school = {
+      title: '내 학교',
+      type: 'school',
+      data: schoolData.data,
+      total: schoolData.total,
+    };
+    const contact = {
+      title: '내 연락처',
+      type: 'contact',
+      total: contactData.total,
+      data: contactData.data,
+    };
+    return [school, contact];
+  }, [schoolData.data, schoolData.total, contactData.data, contactData.total]);
+
   return (
     <View style={styles.root}>
       <SectionList
@@ -273,6 +336,18 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
         sections={sections}
         keyExtractor={renderKeyExtractor}
         renderItem={handleRenderItem}
+        ListHeaderComponent={
+          <SearchInput
+            value={keyword}
+            onChange={handleChangeKeyword}
+            maxLength={10}
+            placeholder="검색"
+            returnKeyType="search"
+            mx={16}
+            mt={15}
+            mb={15}
+          />
+        }
         refreshControl={
           <RefreshControl
             tintColor={colors.primary}
@@ -289,8 +364,12 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
                   {` ${section.total}명`}
                 </Text>
               </View>
-              {section.type === 'contact' && contactHook.loading && (
-                <ActivityIndicator color={colors.primary} />
+              {(searching ||
+                (section.type === 'contact' && contactHook.loading)) && (
+                <ActivityIndicator
+                  style={{marginTop: 10}}
+                  color={colors.primary}
+                />
               )}
             </>
           );

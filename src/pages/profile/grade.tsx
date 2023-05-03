@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import {colors, constants, routes} from '../../libs/common';
 import {BackTopBar} from '../../components/top-bar';
@@ -8,7 +8,6 @@ import {Text} from '../../components/text';
 import {School} from '../../libs/interfaces/school';
 import {TouchableOpacity} from 'react-native';
 import {Button} from '../../components/button';
-import {postUpdateMySchool} from '../../libs/api/school';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type ProfileEditGradeProps = RouteProp<
@@ -40,13 +39,12 @@ export default function ProfileEditGrade() {
   const handleConfirm = () => {
     if (!grade) return;
 
-    postUpdateMySchool({grade: grade, code: params.school.code})
-      .then(() => {
-        navigation.navigate(routes.profileEdit);
-      })
-      .catch((err: any) => {
-        Alert.alert(err.message || err);
-      });
+    navigation.navigate(routes.profileEdit, {
+      updateSchool: {
+        grade: grade,
+        school: params.school,
+      },
+    });
   };
 
   return (

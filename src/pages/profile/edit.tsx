@@ -1,5 +1,5 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert} from 'react-native';
 import {useProfileImage} from '../../hooks';
@@ -19,9 +19,16 @@ import {useProfileStore} from '../../libs/stores';
 import ProfileEditTemplate from '../../templates/profile/edit';
 import {getObjectURLByKey} from '../../libs/common/file';
 import {HttpStatusCode} from 'axios';
-import {getMySchool} from '../../libs/api/school';
-import {MySchool} from '../../libs/interfaces/school';
+import {getMySchool, postUpdateMySchool} from '../../libs/api/school';
+import {MySchool, School} from '../../libs/interfaces/school';
 import {routes} from '../../libs/common';
+
+type UpdateSchool = {school: School; grade: number};
+
+type ProfileEditProps = RouteProp<
+  {ProfileEditGrade: {updateSchool?: UpdateSchool}},
+  'ProfileEditGrade'
+>;
 
 const initialFormValues: ProfileForm = {
   name: '',
@@ -31,17 +38,19 @@ const initialFormValues: ProfileForm = {
 
 function ProfileEdit(): JSX.Element {
   const navigation = useNavigation();
+  const {params} = useRoute<ProfileEditProps>();
   const profile = useProfileStore(s => s.profile);
   const update = useProfileStore(s => s.actions.update);
   const form = useForm<ProfileForm>({
     defaultValues: initialFormValues,
   });
 
-  const [mySchool, serMySchool] = useState<MySchool>({
+  const [mySchool, setMySchool] = useState<MySchool>({
     name: '',
     code: '',
     grade: 0,
   });
+  const [updateSchool, setUpdateScool] = useState<UpdateSchool>();
 
   const profileImage = useProfileImage();
 
@@ -53,18 +62,26 @@ function ProfileEdit(): JSX.Element {
     });
   }, [profileImage]);
 
-  const focused = useIsFocused();
+  /** 학교 조회 */
+  const fetchMySchool = () => {
+    getMySchool()
+      .then(setMySchool)
+      .catch(e => {
+        if (e.status === HttpStatusCode.NotFound) {
+          // 학교 등록하지 않음
+        }
+      });
+  };
   useEffect(() => {
-    if (focused) {
-      getMySchool()
-        .then(serMySchool)
-        .catch(e => {
-          if (e.status === HttpStatusCode.NotFound) {
-            // 학교 등록하지 않음
-          }
-        });
+    fetchMySchool();
+  }, []);
+
+  /** 학교 설정후 redirect */
+  useEffect(() => {
+    if (params?.updateSchool) {
+      setUpdateScool(params.updateSchool);
     }
-  }, [focused]);
+  }, [params?.updateSchool]);
 
   useEffect(() => {
     form.setValue('name', profile.name);
@@ -78,63 +95,85 @@ function ProfileEdit(): JSX.Element {
     }
   }, [profile]);
 
-  const onSubmit = useCallback(async (data: ProfileForm) => {
-    if (apiLoadingRef.current) {
-      return;
-    }
-
-    apiLoadingRef.current = true;
-
-    try {
-      const params: PatchProfileRequest = {
-        name: data.name.trim(),
-        statusMessage: (data.statusMessage || '').trim(),
-      };
-
-      if (data.profileImage?.fileName) {
-        const contentType = data.profileImage.type;
-        const buffer = await localImageURIToArrayBuffer(data.profileImage.uri);
-
-        let fileResponse: PostFileResponse;
-        try {
-          fileResponse = await postFile({
-            purpose: 'profileimage',
-            contentType: contentType,
-          });
-        } catch (error: any) {
-          const apiError = error as APIError;
-          if (apiError.status === HttpStatusCode.BadRequest) {
-            throw new Error('지원되지 않는 형식의 파일입니다.');
-          }
-          throw apiError;
-        }
-
-        params.imageFileId = fileResponse.fileId;
-        await putObject(fileResponse.signedUrl, {
-          buffer,
-          type: contentType,
-        });
-      } else if (!data.profileImage) {
-        params.imageFileId = null;
+  const onSubmit = useCallback(
+    async (data: ProfileForm) => {
+      if (apiLoadingRef.current) {
+        return;
       }
-      await patchProfile(profile.id, params);
-      getMyProfile().then(update);
-      navigation.goBack();
-    } catch (error: any) {
-      Alert.alert(error.message || error);
-    }
 
-    apiLoadingRef.current = false;
-  }, []);
+      apiLoadingRef.current = true;
+
+      try {
+        const params: PatchProfileRequest = {
+          name: data.name.trim(),
+          statusMessage: (data.statusMessage || '').trim(),
+        };
+
+        if (data.profileImage?.fileName) {
+          const contentType = data.profileImage.type;
+          const buffer = await localImageURIToArrayBuffer(
+            data.profileImage.uri,
+          );
+
+          let fileResponse: PostFileResponse;
+          try {
+            fileResponse = await postFile({
+              purpose: 'profileimage',
+              contentType: contentType,
+            });
+          } catch (error: any) {
+            const apiError = error as APIError;
+            if (apiError.status === HttpStatusCode.BadRequest) {
+              throw new Error('지원되지 않는 형식의 파일입니다.');
+            }
+            throw apiError;
+          }
+
+          params.imageFileId = fileResponse.fileId;
+          await putObject(fileResponse.signedUrl, {
+            buffer,
+            type: contentType,
+          });
+        } else if (!data.profileImage) {
+          params.imageFileId = null;
+        }
+        await patchProfile(profile.id, params);
+        if (updateSchool) {
+          postUpdateMySchool({
+            code: updateSchool.school.code,
+            grade: updateSchool.grade,
+          });
+        }
+        getMyProfile().then(update);
+        navigation.goBack();
+      } catch (error: any) {
+        Alert.alert(error.message || error);
+      }
+
+      apiLoadingRef.current = false;
+    },
+    [updateSchool],
+  );
 
   const handleSchool = useCallback(() => {
     navigation.navigate(routes.profileEditSchool);
   }, []);
 
+  const renderMySchool = useMemo(() => {
+    if (updateSchool) {
+      return {
+        name: updateSchool.school.name,
+        grade: updateSchool.grade,
+        code: updateSchool.school.code,
+      };
+    }
+    return mySchool;
+  }, [mySchool, updateSchool]);
+
   return (
     <ProfileEditTemplate
       form={form}
-      mySchool={mySchool}
+      mySchool={renderMySchool}
       onBack={navigation.goBack}
       profile={profile}
       onProfileImage={handleProfileImage}
