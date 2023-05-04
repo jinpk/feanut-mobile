@@ -366,6 +366,7 @@ function FriendFindFeature(props: FriendFindFeatureProps) {
       <SectionList
         showsVerticalScrollIndicator={false}
         sections={sections}
+        keyboardShouldPersistTaps='handled'
         keyExtractor={renderKeyExtractor}
         renderItem={handleRenderItem}
         ListHeaderComponent={

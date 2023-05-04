@@ -76,6 +76,7 @@ export const FreidnsListTemplate = (props: FreidnsListTemplateProps) => {
       keyExtractor={handleKeyExtractor}
       renderItem={handleRenderItem}
       contentContainerStyle={styles.list}
+      keyboardShouldPersistTaps='handled'
       onEndReached={props.onLoadMore}
       bounces={true}
       onEndReachedThreshold={0.1}
