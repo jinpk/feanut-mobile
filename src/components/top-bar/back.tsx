@@ -23,16 +23,18 @@ export const BackTopBar = (props: BackTopBar): JSX.Element => {
         {marginTop: insets.top},
         props.absolute && styles.rootAbsolute,
       ]}>
-      <TouchableWithoutFeedback onPress={props.onBack}>
-        <View style={[styles.leftItem]}>
-          <WithLocalSvg
-            width={14}
-            height={14}
-            asset={svgs.back}
-            color={props.absolute ? colors.white : colors.darkGrey}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+      {Boolean(props.onBack) && (
+        <TouchableWithoutFeedback onPress={props.onBack}>
+          <View style={[styles.leftItem]}>
+            <WithLocalSvg
+              width={14}
+              height={14}
+              asset={svgs.back}
+              color={props.absolute ? colors.white : colors.darkGrey}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      )}
 
       <View style={styles.center}>
         {props.logo && (

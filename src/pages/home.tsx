@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {Animated, ScrollView, StatusBar, StyleSheet} from 'react-native';
-import {MainTopBar} from '../components/top-bar/main';
-import {colors, constants, gifs, routes} from '../libs/common';
+import {Animated, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {colors, constants, gifs, routes, svgs} from '../libs/common';
 import {useFriendStore, useModalStore, useUserStore} from '../libs/stores';
 import LoadingTemplate from '../templates/loading';
 import FriendSyncTemplate from '../templates/friend-sync';
@@ -11,13 +10,12 @@ import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
 import {Polling} from '../components/poll';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import HomeFloating from '../components/home-floating';
 import {getMyReferralLink} from '../libs/services/firebase-links';
 import Share from 'react-native-share';
+import {MainTopBar} from '../components/top-bar/main';
 
 function Home(): JSX.Element {
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const focused = useIsFocused();
 
@@ -134,22 +132,14 @@ function Home(): JSX.Element {
     });
   }, [tabIndex]);
 
-  const handleInboxPress = useCallback(() => {
-    navigation.navigate(routes.inbox);
-  }, []);
-
-  const handleProfilePress = useCallback(() => {
-    navigation.navigate(routes.profileMe);
-  }, []);
-
   const handleSyncContacts = useCallback(() => {
-    navigation.navigate(routes.friend, {add: true});
+    navigation.navigate(routes.friendStack, {add: true});
   }, []);
 
-  const userId = useUserStore(s => s.user.id);
+  const userId = useUserStore(s => s.user?.id);
   const invitingRef = useRef(false);
   const handleInvite = useCallback(() => {
-    if (invitingRef.current) return;
+    if (invitingRef.current || !userId) return;
     invitingRef.current = true;
     getMyReferralLink(userId).then(url => {
       Share.open({
@@ -165,26 +155,11 @@ function Home(): JSX.Element {
           invitingRef.current = false;
         });
     });
-  }, []);
-
-  const renderTopBar = useCallback(() => {
-    const last = polling.currentPollingIndex === polling.pollings.length - 1;
-
-    return (
-      <MainTopBar
-        zIndex={last ? 1 : 50}
-        white={last ? false : polling.state === 'polling' && firstInited}
-        hideLogo={last ? false : polling.state === 'polling'}
-        onInboxPress={handleInboxPress}
-        onProfilePress={handleProfilePress}
-      />
-    );
-  }, [navigation, firstInited, polling]);
+  }, [userId]);
 
   return (
     <Animated.View style={[styles.root]}>
-      {renderTopBar()}
-
+      {polling.state !== 'polling' && <MainTopBar />}
       {polling.state === 'polling' && (
         <>
           <LineIndicator
@@ -200,11 +175,8 @@ function Home(): JSX.Element {
             }
             return (
               <Polling
-                onInboxPress={handleInboxPress}
-                onProfilePress={handleProfilePress}
                 index={index}
                 initialIndex={polling.initialIndex}
-                latest={index === polling.pollings.length - 1}
                 key={index.toString()}
                 style={{
                   position: 'absolute',
@@ -277,7 +249,7 @@ function Home(): JSX.Element {
         polling.state === 'reach') && (
         <HomeFloating
           onAddFriend={() => {
-            navigation.navigate(routes.friend, {add: true});
+            navigation.navigate(routes.friendStack, {add: true});
           }}
           onInvite={handleInvite}
         />

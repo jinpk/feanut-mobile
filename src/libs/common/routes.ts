@@ -1,4 +1,10 @@
 export const routes = {
+  mainTabs: '/main-tabs',
+  homeStack: '/home-stack',
+  inboxStack: '/inbox-stack',
+  friendStack: '/friend-stack',
+  profileStack: '/profile-stack',
+
   start: '/start',
 
   login: '/login',
@@ -14,7 +20,6 @@ export const routes = {
   inboxEdit: '/inbox/edit',
 
   profile: '/profile',
-  profileMe: '/profile/me',
   profileEdit: '/profile/edit',
   profileEditSchool: '/profile/edit/school',
   profileEditGrade: '/profile/edit/grade',

@@ -12,7 +12,7 @@ import {useFriendStore, useUserStore} from '../../libs/stores';
 import FriendFindFeature from '../../features/friend-find';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-type FriendRoute = RouteProp<{Friend: {add: boolean}}, 'Friend'>;
+type FriendRoute = RouteProp<{Friend: {add: boolean; list: boolean}}, 'Friend'>;
 
 function Friend() {
   const insets = useSafeAreaInsets();
@@ -26,8 +26,12 @@ function Friend() {
   useEffect(() => {
     if (route.params?.add) {
       setPage(2);
+      navigation.setParams({add: undefined});
+    } else if (route.params?.list) {
+      setPage(1);
+      navigation.setParams({list: undefined});
     }
-  }, [route.params?.add]);
+  }, [route.params?.add, route.params?.list]);
 
   const handleHiddenFriend = useCallback(() => {
     navigation.navigate(routes.friendHidden);
@@ -36,7 +40,6 @@ function Friend() {
   return (
     <View style={[styles.root, {paddingBottom: insets.bottom}]}>
       <BackTopBar
-        onBack={navigation.goBack}
         title="친구"
         rightComponent={
           <TouchableOpacity

@@ -147,7 +147,7 @@ function Profile(): JSX.Element {
   }, []);
 
   const handleFriend = useCallback(() => {
-    navigation.navigate(routes.friend);
+    navigation.navigate(routes.friend, {list: true});
   }, []);
 
   const handleFeanutCard = useCallback(() => {

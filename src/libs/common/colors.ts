@@ -19,5 +19,6 @@ export const colors = {
 
   transparent: '#ffffff00',
   yellow: '#FBE338',
+  tabIconOff: '#999796',
   red: '#FA4135',
 };

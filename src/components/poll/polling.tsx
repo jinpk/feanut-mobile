@@ -9,7 +9,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {
   colors,
@@ -24,7 +23,6 @@ import {PollFriendItem} from '../poll-friend-item';
 import {Text} from '../text';
 import {Feanut, Figure} from './layout';
 import {Animated} from 'react-native';
-import {MainTopBar} from '../top-bar/main';
 import {AppState} from 'react-native';
 
 type PollingProps = {
@@ -47,17 +45,11 @@ type PollingProps = {
 
   index: number;
   initialIndex: number;
-  latest?: boolean;
   firstInited: boolean;
   onFirstInited: () => void;
-
-  onInboxPress: () => void;
-  onProfilePress: () => void;
 };
 
 export const Polling = (props: PollingProps) => {
-  const insets = useSafeAreaInsets();
-
   /** 애니메이션 */
   const translateX = useRef(
     new Animated.Value(
@@ -260,17 +252,6 @@ export const Polling = (props: PollingProps) => {
         },
       ]}
       {...(inited && panResponder.panHandlers)}>
-      {props.latest && (
-        <>
-          {/** 애니메이션 부드러움을위해 마지막 투표는 탑바 UI 노출 */}
-          <MainTopBar
-            hideLogo
-            white
-            onInboxPress={props.onInboxPress}
-            onProfilePress={props.onProfilePress}
-          />
-        </>
-      )}
       {props.emotion?.length > 0 && (
         <>
           <Figure emotion={props.emotion} />
@@ -321,14 +302,7 @@ export const Polling = (props: PollingProps) => {
         </View>
       </View>
 
-      <TouchableOpacity
-        onPress={props.onShuffle}
-        style={[
-          styles.footerButton,
-          {
-            marginBottom: 30 + insets.bottom,
-          },
-        ]}>
+      <TouchableOpacity onPress={props.onShuffle} style={[styles.footerButton]}>
         <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
         <Text ml={7} color={colors.white} size={12}>
           친구 새로고침
@@ -356,6 +330,7 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     zIndex: 100,
+    marginBottom: 30,
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',

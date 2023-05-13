@@ -83,7 +83,7 @@ function HomeFloating(props: HomeFloatingProps) {
   const itemButtonWidth = useAnimatedValue(prevWidth);
 
   return (
-    <View style={[styles.root, {bottom: insets.bottom + 16}]}>
+    <View style={[styles.root]}>
       <TouchableWithoutFeedback
         onPressIn={() => {
           Animated.timing(scale, {
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   root: {
     position: 'absolute',
     right: 16,
-    bottom: 0,
+    bottom: 16,
   },
   action: {
     width: 56,

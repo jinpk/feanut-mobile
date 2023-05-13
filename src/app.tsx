@@ -1,7 +1,11 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {memo, useEffect} from 'react';
+import {
+  NavigationContainer,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {colors, constants, routes, setUser} from './libs/common';
+import {colors, constants, routes, setUser, svgs} from './libs/common';
 import Home from './pages/home';
 import {useUserStore} from './libs/stores';
 import {
@@ -49,6 +53,8 @@ import {useDynamicLinkStore} from './libs/stores/dynamic-link';
 import dynamicLinks, {
   FirebaseDynamicLinksTypes,
 } from '@react-native-firebase/dynamic-links';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import TabBar from './components/tabbar';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -74,6 +80,7 @@ PushNotification.configure({
 type AppProps = React.PropsWithChildren<{}>;
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function NavigationApp() {
   useIAP();
@@ -157,65 +164,172 @@ function NavigationApp() {
   return (
     <NavigationContainer>
       <>
-        {logged && (
-          <Stack.Navigator
-            initialRouteName={routes.home}
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name={routes.home} component={Home} />
-            <Stack.Screen name={routes.inbox} component={Inbox} />
-            <Stack.Screen name={routes.inboxEdit} component={InboxEdit} />
-            <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
-            <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
-            <Stack.Screen name={routes.profile} component={Profile} />
-            <Stack.Screen name={routes.profileMe} component={Profile} />
-            <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
-            <Stack.Screen
-              name={routes.profileEditSchool}
-              component={ProfileEditSchool}
-            />
-            <Stack.Screen
-              name={routes.profileEditGrade}
-              component={ProfileEditGrade}
-            />
-
-            <Stack.Screen name={routes.setting} component={Setting} />
-            <Stack.Screen name={routes.friend} component={Friend} />
-            <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
-            <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
-          </Stack.Navigator>
-        )}
-        {!logged && (
-          <Stack.Navigator
-            initialRouteName={routes.start}
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name={routes.start} component={Start} />
-            <Stack.Screen
-              name={routes.signup}
-              component={SignUp}
-              options={{
-                //  회원가입 정보 입력 도중 뒤로 나가지는 불편 예방
-                gestureEnabled: false,
-              }}
-            />
-            <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
-            <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
-            <Stack.Screen name={routes.signupFriend} component={SignUpFriend} />
-            <Stack.Screen
-              name={routes.verification}
-              component={Verification}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-          </Stack.Navigator>
-        )}
+        {logged && <MainStack />}
+        {!logged && <AuthStacks />}
         <LegacyFriendshipModal />
       </>
     </NavigationContainer>
+  );
+}
+
+const MainStack = memo(() => {
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.mainTabs}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.mainTabs} component={MainTabs} />
+      <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
+      <Stack.Screen name={routes.profile} component={Profile} />
+    </Stack.Navigator>
+  );
+});
+
+const MainTabs = memo(function () {
+  return (
+    <Tab.Navigator
+      initialRouteName={routes.homeStack}
+      screenOptions={{
+        headerShown: false,
+        lazy: true,
+      }}
+      tabBar={props => <TabBar {...props} />}>
+      <Tab.Screen
+        options={{
+          tabBarIcon: svgs.tabHome,
+          tabBarLabel: '투표',
+        }}
+        name={routes.homeStack}
+        component={HomeStacks}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: svgs.tabInbox,
+          tabBarLabel: '수신함',
+        }}
+        name={routes.inboxStack}
+        component={InboxStacks}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: svgs.tabFriend,
+          tabBarLabel: '친구',
+        }}
+        name={routes.friendStack}
+        component={FriendStacks}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: svgs.tabProfile,
+          tabBarLabel: '프로필',
+        }}
+        name={routes.profileStack}
+        component={ProfileStacks}
+      />
+    </Tab.Navigator>
+  );
+});
+
+const AuthStacks = memo(function () {
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.start}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.start} component={Start} />
+      <Stack.Screen
+        name={routes.signup}
+        component={SignUp}
+        options={{
+          //  회원가입 정보 입력 도중 뒤로 나가지는 불편 예방
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen name={routes.signupSchool} component={SignUpSchool} />
+      <Stack.Screen name={routes.signupGrade} component={SignUpGrade} />
+      <Stack.Screen name={routes.signupFriend} component={SignUpFriend} />
+      <Stack.Screen
+        name={routes.verification}
+        component={Verification}
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+});
+
+function HomeStacks() {
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.home}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.home} component={Home} />
+      <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
+    </Stack.Navigator>
+  );
+}
+
+function InboxStacks() {
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.inbox}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.inbox} component={Inbox} />
+      <Stack.Screen name={routes.inboxEdit} component={InboxEdit} />
+    </Stack.Navigator>
+  );
+}
+
+function FriendStacks() {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    navigation.navigate(routes.friend, route.params);
+  }, [route.params]);
+
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.friend}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.friend} component={Friend} />
+      <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStacks() {
+  return (
+    <Stack.Navigator
+      initialRouteName={routes.profile}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
+      <Stack.Screen name={routes.profile} component={Profile} />
+      <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+      <Stack.Screen
+        name={routes.profileEditSchool}
+        component={ProfileEditSchool}
+      />
+      <Stack.Screen
+        name={routes.profileEditGrade}
+        component={ProfileEditGrade}
+      />
+
+      <Stack.Screen name={routes.setting} component={Setting} />
+
+      <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
+    </Stack.Navigator>
   );
 }
 

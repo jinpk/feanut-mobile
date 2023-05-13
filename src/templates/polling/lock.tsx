@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import React, {Fragment, useEffect, useMemo, useRef, useState} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WithLocalSvg} from 'react-native-svg';
 import {Text} from '../../components/text';
 import {gifs, svgs} from '../../libs/common';
@@ -17,7 +16,6 @@ type PollLockTemplateProps = {
 };
 
 function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
-  const insets = useSafeAreaInsets();
   const [second, setSecond] = useState(0);
 
   // 컴포넌트 매번 초기화되서 ref에 now 저장
@@ -82,7 +80,7 @@ function PollLockTemplate(props: PollLockTemplateProps): JSX.Element {
   };
 
   return (
-    <View style={[styles.root, {marginTop: insets.top}]}>
+    <View style={[styles.root]}>
       {(props.todayCount === 1 || props.todayCount === 2) && (
         <Fragment>
           <Gif source={gifs.hourglassNotDone} />

@@ -78,6 +78,11 @@ import pullLove from '../../assets/svgs/pull-love.svg';
 import visitSNS from '../../assets/svgs/visit-sns.svg';
 import add from '../../assets/svgs/add.svg';
 
+import tabHome from '../../assets/svgs/tab-home.svg';
+import tabInbox from '../../assets/svgs/tab-inbox.svg';
+import tabFriend from '../../assets/svgs/tab-friend.svg';
+import tabProfile from '../../assets/svgs/tab-profile.svg';
+
 import feanutCardFigureJoyIcon from '../../assets/pngs/feanut-card-figure-joy.png';
 import feanutCardFigureAmusementIcon from '../../assets/pngs/feanut-card-figure-amusement.png';
 import feanutCardFigureGratitudeIcon from '../../assets/pngs/feanut-card-figure-gratitude.png';
@@ -119,6 +124,11 @@ import pullListSerenityIcon from '../../assets/pngs/pull-list-serenity.png';
 import addFriend from '../../assets/pngs/add-friend.png';
 
 export const svgs = {
+  tabHome,
+  tabInbox,
+  tabFriend,
+  tabProfile,
+
   add,
   pullHappiness,
   pullGratitude,
@@ -187,7 +197,8 @@ export const pngs = {
   male,
   female,
   coin5,
-  add: addPNG,invite,
+  add: addPNG,
+  invite,
   school,
   opened,
   closed,

@@ -24,7 +24,7 @@ export const emotionBackgorundColor: Colors = {
   pride: '#88D3EB',
   amusement: '#FFBCCE',
   inspiration: '#827DFF',
-  awe: '#C5EF68',
+  awe: '#ABF152',
   love: '#FB4738',
 };
 

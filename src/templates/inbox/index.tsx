@@ -135,7 +135,7 @@ function InboxTemplate(props: InboxTemplateProps) {
         />
       }
       ListEmptyComponent={
-        !props.loading ? (
+        !props.editMode && !props.loading ? (
           <View style={[styles.empty, {paddingTop: insets.top}]}>
             <Information
               icon={gifs.hatchingChick}

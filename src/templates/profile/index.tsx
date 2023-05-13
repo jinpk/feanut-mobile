@@ -60,8 +60,8 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
   return (
     <View style={styles.root}>
       <BackTopBar
+        onBack={props.me ? undefined : props.onBack}
         title="프로필"
-        onBack={props.onBack}
         rightComponent={
           props.me ? (
             <TextButton
@@ -147,24 +147,9 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
               <Text size={16} weight="medium">
                 {formatLengthLabel(props.friendsCount)}
               </Text>
-              {props.me && (
-                <View style={styles.myFriend}>
-                  <Text size={12} mr={4} color={colors.darkGrey}>
-                    친구
-                  </Text>
-                  <WithLocalSvg
-                    asset={svgs.right}
-                    width={5}
-                    height={10}
-                    color={colors.darkGrey}
-                  />
-                </View>
-              )}
-              {!props.me && (
-                <Text size={12} mt={4} color={colors.darkGrey}>
-                  친구
-                </Text>
-              )}
+              <Text size={12} mt={4} color={colors.darkGrey}>
+                친구
+              </Text>
             </TouchableOpacity>
             <View style={styles.divider} />
             <View style={styles.stats}>
@@ -270,7 +255,6 @@ const styles = StyleSheet.create({
     width: 1,
     height: 25,
   },
-  myFriend: {flexDirection: 'row', alignItems: 'center', marginTop: 4},
   feanutCards: {
     marginBottom: 130,
   },

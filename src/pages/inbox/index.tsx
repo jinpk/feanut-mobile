@@ -51,7 +51,6 @@ function Inbox(): JSX.Element {
   return (
     <View style={styles.root}>
       <BackTopBar
-        onBack={navigation.goBack}
         title="수신함"
         rightComponent={
           <TextButton
