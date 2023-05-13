@@ -15,6 +15,8 @@ import {
   POLLING_ERROR_EXCEED_SKIP,
   POLLING_ERROR_MIN_FRIENDS,
   POLLING_MODULE_NAME,
+  SCHOOL_ERROR_NOT_FOUND_MY_SCHOOL,
+  SCHOOL_MODULE_NAME,
 } from '../libs/common/errors';
 import {APIError} from '../libs/interfaces';
 import {
@@ -28,10 +30,13 @@ import {
 import {useEmojiStore} from '../libs/stores';
 import FastImage from 'react-native-fast-image';
 import {getObjectURLByKey} from '../libs/common/file';
+import {useMessageModalStore} from '../libs/stores/message-modal';
+import {useInviteFriend} from './use-invite-friend';
+import {routes} from '../libs/common';
+import {useNavigation} from '@react-navigation/native';
 
 type PollingState =
   | 'loading' // 투표 조회중
-  | 'reject' // 투표 불가능 (친구수 부족)
   | 'polling' // 투표중
   | 'lock' // 투표대기
   | 'reach'; // 하루최대도달
@@ -83,21 +88,12 @@ export function usePolling() {
     }, {});
   }, [emojis, emojiInitialized]);
 
-  /** state === 'polling' 상태일때 화면 focus 및 한번 조회해서 친구수 체크 */
-  const handleRequiredFriendsCount = async () => {
-    try {
-      await postPollingRound();
-    } catch (error) {
-      const apiError = error as APIError;
-      if (apiError && apiError.code === POLLING_ERROR_MIN_FRIENDS) {
-        setState('reject');
-      } else {
-        if (__DEV__) {
-          console.error(error);
-        }
-      }
-    }
-  };
+  const isSchoolFriendVoite = useRef(false);
+
+  const openMessageModal = useMessageModalStore(s => s.actions.open);
+
+  const navigation = useNavigation();
+  const inviteFriend = useInviteFriend();
 
   /** Fetch round */
   useEffect(() => {
@@ -105,7 +101,9 @@ export function usePolling() {
     if (state === 'loading' && emojiInitialized) {
       const fetchUserRound = async (): Promise<PollingState | undefined> => {
         try {
-          const pollingRound = await postPollingRound();
+          const pollingRound = await postPollingRound(
+            isSchoolFriendVoite.current ? 0 : 1,
+          );
           setMaxDailyCount(pollingRound.maxDailyCount);
           setTodayCount(pollingRound.todayCount);
           if (!pollingRound.data?.complete) {
@@ -150,7 +148,32 @@ export function usePolling() {
             apiError.code === POLLING_ERROR_MIN_FRIENDS &&
             apiError.module === POLLING_MODULE_NAME
           ) {
-            return 'reject';
+            // 친구 추가 유도 알림
+            if (isSchoolFriendVoite.current) {
+              // 학교 알림
+              openMessageModal('가입한 학생이 4명이\n되면 시작할 수 있어요!', [
+                {text: '확인'},
+                {text: '친구 초대', onPress: inviteFriend},
+              ]);
+            } else {
+              openMessageModal('추가한 친구가 4명이\n되면 시작할 수 있어요!', [
+                {text: '확인'},
+                {
+                  text: '친구 추가',
+                  onPress: () => {
+                    navigation.navigate(routes.friendStack, {add: true});
+                  },
+                },
+              ]);
+            }
+          } else if (
+            apiError.module === SCHOOL_MODULE_NAME &&
+            apiError.code === SCHOOL_ERROR_NOT_FOUND_MY_SCHOOL
+          ) {
+            openMessageModal(
+              '프로필 > 프로필 편집을 통해\n학교를 등록해 주세요.',
+              [{text: '확인'}],
+            );
           } else {
             if (__DEV__) {
               console.error(error);
@@ -158,12 +181,17 @@ export function usePolling() {
           }
         }
       };
-      let tm = setTimeout(() => {
-        fetchUserRound().then(setState);
-      }, 1500);
-      return () => {
-        clearInterval(tm);
-      };
+      fetchUserRound().then(state => {
+        if (state === 'polling') {
+          // 투표 불러올때는 로딩
+          let tm = setTimeout(() => {
+            clearTimeout(tm);
+            setState(state);
+          }, 1000);
+        } else {
+          setState(state);
+        }
+      });
     }
   }, [state, emojiInitialized]);
 
@@ -336,6 +364,26 @@ export function usePolling() {
     setRoundEvent(null);
   }, []);
 
+  const checkRoundLockOrReach = useCallback(async () => {
+    try {
+      const pollingRound = await postPollingRound(
+        isSchoolFriendVoite.current ? 0 : 1,
+      );
+      if (pollingRound.data?.complete) {
+        if (pollingRound.todayCount === pollingRound.maxDailyCount) {
+          setState('reach');
+        } else {
+          setRemainTime(pollingRound.remainTime);
+          setState('lock');
+        }
+      }
+    } catch (error: any) {
+      if (__DEV__) {
+        console.error(error);
+      }
+    }
+  }, []);
+
   return {
     state,
     maxDailyCount,
@@ -353,6 +401,16 @@ export function usePolling() {
     remainTime,
     event: roundEvent,
 
-    requiredFriendsCount: handleRequiredFriendsCount,
+    checkRoundLockOrReach,
+
+    getVoteTarget: (): 'school' | 'friend' => {
+      if (isSchoolFriendVoite.current) {
+        return 'school';
+      }
+      return 'friend';
+    },
+    setVoteTarget: (target: 'school' | 'friend') => {
+      isSchoolFriendVoite.current = target === 'school';
+    },
   };
 }

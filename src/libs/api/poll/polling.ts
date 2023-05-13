@@ -9,8 +9,12 @@ import {
   PostPollingVoteResponse,
 } from '../../interfaces/polling';
 
-export const postPollingRound = async (): Promise<PollingRound> => {
-  const res = await feanutAPI.post<PollingRound>('/pollings/rounds', {});
+export const postPollingRound = async (
+  target: 0 | 1,
+): Promise<PollingRound> => {
+  const res = await feanutAPI.post<PollingRound>('/pollings/rounds', {
+    target,
+  });
   return res.data;
 };
 

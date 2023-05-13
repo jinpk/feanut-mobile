@@ -30,3 +30,6 @@ export const POLLING_ERROR_ROUNDEVENT_LOOKUP = 16;
 
 export const PROFILES_ERROR_NOT_FOUND = 1;
 export const PROFILES_ERROR_OWNER_LESS = 2;
+
+export const SCHOOL_MODULE_NAME = 'schools';
+export const SCHOOL_ERROR_NOT_FOUND_MY_SCHOOL = 1;

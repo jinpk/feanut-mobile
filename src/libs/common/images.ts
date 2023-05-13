@@ -27,6 +27,8 @@ import shuffle from '../../assets/svgs/shuffle.svg';
 import refresh from '../../assets/svgs/refresh.svg';
 
 import hatchingChick from '../../assets/gifs/hatching-chick.gif';
+import girl from '../../assets/gifs/girl.gif';
+import boy from '../../assets/gifs/boy.gif';
 
 import figureHappiness from '../../assets/svgs/figure-happiness.svg';
 import figureGratitude from '../../assets/svgs/figure-gratitude.svg';
@@ -181,6 +183,8 @@ export const gifs = {
   partyingFace,
   teddyBear,
   hatchingChick,
+  girl,
+  boy,
   timerClock,
   backhand,
   highVoltage,

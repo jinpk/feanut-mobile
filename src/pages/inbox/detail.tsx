@@ -102,16 +102,19 @@ function InboxDetail() {
     } catch (error) {
       const apiError = error as APIError;
       if (apiError.code === POLLING_ERROR_LACK_COIN_AMOUNT) {
-        openMessage('피넛코인이 부족해요.', [
-          {text: '취소'},
-          {
-            text: '구매하기',
-            color: colors.blue,
-            onPress: () => {
-              openCoinModal();
+        openMessage(
+          '피넛코인이 부족해요\n피넛코인은 꾸준한 투표를 통해 얻을 수 있어요.',
+          [
+            {text: '확인'},
+            {
+              text: '구매하기',
+              color: colors.blue,
+              onPress: () => {
+                openCoinModal();
+              },
             },
-          },
-        ]);
+          ],
+        );
       } else if (apiError.code === POLLING_ERROR_ALREADY_DONE) {
         Alert.alert('이미 결제한 투표입니다');
         fetchData(pollingId);
