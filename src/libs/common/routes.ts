@@ -3,7 +3,7 @@ export const routes = {
   homeStack: '/home-stack',
   inboxStack: '/inbox-stack',
   friendStack: '/friend-stack',
-  profileStack: '/profile-stack',
+  profileTab: '/profile-tab',
 
   start: '/start',
 

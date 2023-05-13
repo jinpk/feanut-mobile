@@ -51,6 +51,7 @@ export default function TabBar(props: TabBarProps) {
 
         return (
           <TouchableOpacity
+            key={route.name}
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}

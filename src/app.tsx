@@ -184,6 +184,17 @@ const MainStack = memo(() => {
       <Stack.Screen name={routes.profile} component={Profile} />
       <Stack.Screen name={routes.setting} component={Setting} />
       <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
+
+      <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
+      <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
+      <Stack.Screen
+        name={routes.profileEditSchool}
+        component={ProfileEditSchool}
+      />
+      <Stack.Screen
+        name={routes.profileEditGrade}
+        component={ProfileEditGrade}
+      />
     </Stack.Navigator>
   );
 });
@@ -226,8 +237,8 @@ const MainTabs = memo(function () {
           tabBarIcon: svgs.tabProfile,
           tabBarLabel: '프로필',
         }}
-        name={routes.profileStack}
-        component={ProfileStacks}
+        name={routes.profileTab}
+        component={Profile}
       />
     </Tab.Navigator>
   );
@@ -305,28 +316,6 @@ function FriendStacks() {
       }}>
       <Stack.Screen name={routes.friend} component={Friend} />
       <Stack.Screen name={routes.friendHidden} component={FriendHidden} />
-    </Stack.Navigator>
-  );
-}
-
-function ProfileStacks() {
-  return (
-    <Stack.Navigator
-      initialRouteName={routes.profile}
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name={routes.profile} component={Profile} />
-      <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
-      <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
-      <Stack.Screen
-        name={routes.profileEditSchool}
-        component={ProfileEditSchool}
-      />
-      <Stack.Screen
-        name={routes.profileEditGrade}
-        component={ProfileEditGrade}
-      />
     </Stack.Navigator>
   );
 }
