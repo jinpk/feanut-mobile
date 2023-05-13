@@ -60,11 +60,13 @@ export default function TabBar(props: TabBarProps) {
             style={styles.tab}>
             <WithLocalSvg
               asset={options.tabBarIcon}
+              width={24}
+              height={24}
               color={isFocused ? colors.dark : colors.tabIconOff}
             />
             <Text
               size={11}
-              mt={2}
+              mt={3.25}
               color={isFocused ? colors.dark : colors.tabIconOff}>
               {label}
             </Text>
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    paddingVertical: 20,
+    paddingVertical: 9.75,
     alignItems: 'center',
     justifyContent: 'center',
   },

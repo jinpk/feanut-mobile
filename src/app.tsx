@@ -182,6 +182,8 @@ const MainStack = memo(() => {
       <Stack.Screen name={routes.mainTabs} component={MainTabs} />
       <Stack.Screen name={routes.inboxDetail} component={InboxDetail} />
       <Stack.Screen name={routes.profile} component={Profile} />
+      <Stack.Screen name={routes.setting} component={Setting} />
+      <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
     </Stack.Navigator>
   );
 });
@@ -314,8 +316,8 @@ function ProfileStacks() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
       <Stack.Screen name={routes.profile} component={Profile} />
+      <Stack.Screen name={routes.feanutCard} component={FeanutCard} />
       <Stack.Screen name={routes.profileEdit} component={ProfileEdit} />
       <Stack.Screen
         name={routes.profileEditSchool}
@@ -325,10 +327,6 @@ function ProfileStacks() {
         name={routes.profileEditGrade}
         component={ProfileEditGrade}
       />
-
-      <Stack.Screen name={routes.setting} component={Setting} />
-
-      <Stack.Screen name={routes.deleteMe} component={DeleteMe} />
     </Stack.Navigator>
   );
 }

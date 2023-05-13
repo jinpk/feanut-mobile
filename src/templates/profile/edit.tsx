@@ -121,10 +121,21 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
           <Text>{props.profile.gender === 'male' ? '남자' : '여자'}</Text>
         </View>
 
-        <View style={[styles.formContent, {marginLeft: 12}]}>
+        {/**
+        <View style={styles.formContent}>
+          <Text color={colors.darkGrey} size={12} mb={6}>
+            생년월일
+          </Text>
+          <Text>{dayjs(props.profile.birth).format('YYYY년 MM월 DD일')}</Text>
+        </View>
+         */}
+      </View>
+
+      <View style={[styles.form, styles.formRow]}>
+        <View style={[styles.formContent]}>
           <View style={styles.formTitleWrap}>
             <Text color={colors.darkGrey} size={12}>
-              학교 / 학년
+              학교 / 학년 / 반
             </Text>
             <TextButton
               onPress={props.onSchool}
@@ -135,19 +146,11 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
           </View>
           {Boolean(props.mySchool.code) && (
             <Text>
-              {props.mySchool?.name} / {props.mySchool.grade}학년
+              {props.mySchool?.name} / {props.mySchool.grade}학년 /{' '}
+              {props.mySchool.room}반
             </Text>
           )}
         </View>
-
-        {/**
-        <View style={styles.formContent}>
-          <Text color={colors.darkGrey} size={12} mb={6}>
-            생년월일
-          </Text>
-          <Text>{dayjs(props.profile.birth).format('YYYY년 MM월 DD일')}</Text>
-        </View>
-         */}
       </View>
     </View>
   );

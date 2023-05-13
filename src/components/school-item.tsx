@@ -25,7 +25,7 @@ export const SchoolItem = (props: SchoolItemProps) => {
           {props.join || '0'}
         </Text>
         <Text size={10} mt={1} color={colors.darkGrey}>
-          가입수
+          가입자 수
         </Text>
       </View>
     </TouchableOpacity>

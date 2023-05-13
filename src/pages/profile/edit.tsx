@@ -22,8 +22,9 @@ import {HttpStatusCode} from 'axios';
 import {getMySchool, postUpdateMySchool} from '../../libs/api/school';
 import {MySchool, School} from '../../libs/interfaces/school';
 import {routes} from '../../libs/common';
+import dayjs from 'dayjs';
 
-type UpdateSchool = {school: School; grade: number};
+type UpdateSchool = {school: School; grade: number; room: number};
 
 type ProfileEditProps = RouteProp<
   {ProfileEditGrade: {updateSchool?: UpdateSchool}},
@@ -47,6 +48,7 @@ function ProfileEdit(): JSX.Element {
 
   const [mySchool, setMySchool] = useState<MySchool>({
     name: '',
+    room: 0,
     code: '',
     grade: 0,
   });
@@ -142,6 +144,7 @@ function ProfileEdit(): JSX.Element {
           postUpdateMySchool({
             code: updateSchool.school.code,
             grade: updateSchool.grade,
+            room: updateSchool.room,
           });
         }
         getMyProfile().then(update);
@@ -156,8 +159,19 @@ function ProfileEdit(): JSX.Element {
   );
 
   const handleSchool = useCallback(() => {
-    navigation.navigate(routes.profileEditSchool);
-  }, []);
+    if (
+      mySchool &&
+      mySchool.createdAt &&
+      dayjs(new Date(mySchool.createdAt)).add(14, 'days').isAfter(dayjs())
+    ) {
+      const day = dayjs(new Date(mySchool.createdAt))
+        .add(14, 'days')
+        .diff(dayjs(), 'days');
+      Alert.alert(`학교 변경은 ${day}일 뒤에\n할 수 있어요.`, '');
+    } else {
+      navigation.navigate(routes.profileEditSchool);
+    }
+  }, [mySchool]);
 
   const renderMySchool = useMemo(() => {
     if (updateSchool) {
@@ -165,6 +179,7 @@ function ProfileEdit(): JSX.Element {
         name: updateSchool.school.name,
         grade: updateSchool.grade,
         code: updateSchool.school.code,
+        room: updateSchool.room,
       };
     }
     return mySchool;

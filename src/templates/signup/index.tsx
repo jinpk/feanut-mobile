@@ -46,7 +46,7 @@ function SignUpTemplate(props: SignUpTemplateProps) {
         친구에게 내가 누구인지 알려주세요
       </Text>
       <Text mt={30} mx={16}>
-        이름을 입력해주세요.
+        이름을 입력해 주세요.
       </Text>
 
       <Controller
@@ -74,7 +74,7 @@ function SignUpTemplate(props: SignUpTemplateProps) {
       <Errors errors={[errorsName]} mx={16} />
 
       <Text mt={57} mx={16}>
-        성별을 선택해주세요.
+        성별을 선택해 주세요.
       </Text>
 
       <Controller

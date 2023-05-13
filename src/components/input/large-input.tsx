@@ -14,7 +14,7 @@ type LargeInputProps = {
 
   value: string;
   onChange: (text: string) => void;
-  onBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 
   placeholder?: string;
 
@@ -29,6 +29,7 @@ type LargeInputProps = {
   mx?: number;
   ml?: number;
   mr?: number;
+  px?: number;
 
   keyboardType?: KeyboardTypeOptions;
   returnKeyType?: ReturnKeyTypeOptions;
@@ -55,13 +56,14 @@ export const LargeInput = (props: LargeInputProps): JSX.Element => {
       autoCapitalize={props.disabledAutoCapitalize ? 'none' : undefined}
       placeholderTextColor={colors.mediumGrey}
       textContentType={props.textContentType}
-      autoComplete={props.autoComplete}
+      autoComplete={props.autoComplete }
       style={[
         styles.input,
         {
           marginTop: props.mt,
           marginBottom: props.mb,
           marginHorizontal: props.mx,
+          paddingHorizontal: props.px,
           marginVertical: props.my,
           marginLeft: props.ml,
           marginRight: props.mr,
