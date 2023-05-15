@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import {
   getPoll,
   getPolling,
+  getPollingRoundLock,
   postPolling,
   postPollingRefresh,
   postPollingRound,
@@ -35,6 +36,7 @@ import {useInviteFriend} from './use-invite-friend';
 import {routes} from '../libs/common';
 import {useNavigation} from '@react-navigation/native';
 
+type VoteTarget = 'school' | 'friend';
 type PollingState =
   | 'loading' // 투표 조회중
   | 'polling' // 투표중
@@ -315,11 +317,19 @@ export function usePolling() {
     }
   };
 
+  const handleSkip = useCallback((pollingId: string) => {
+    return handlePollingVote(pollingId, {
+      selectedProfileId: undefined,
+      skipped: true,
+    });
+  }, []);
+
   const handleVote = async (): Promise<boolean> => {
     const poll = pollings[pollingIndexRef.current];
     if (poll.selectedProfileId) {
       return handlePollingVote(poll.pollingId!, {
         selectedProfileId: poll.selectedProfileId,
+        skipped: false,
       });
     }
     return false;
@@ -366,10 +376,12 @@ export function usePolling() {
 
   const checkRoundLockOrReach = useCallback(async () => {
     try {
-      const pollingRound = await postPollingRound(
-        isSchoolFriendVoite.current ? 0 : 1,
-      );
-      if (pollingRound.data?.complete) {
+      const pollingRound = await getPollingRoundLock();
+      if (!pollingRound.complete && pollingRound.userRoundId) {
+        // 진행중인 투표 있음
+        setState('loading');
+      } else if (pollingRound.complete && !pollingRound.userRoundId) {
+        // 하루 최대 투표 도달 혹은 투표 쿨타임
         if (pollingRound.todayCount === pollingRound.maxDailyCount) {
           setState('reach');
         } else {
@@ -384,14 +396,29 @@ export function usePolling() {
     }
   }, []);
 
+  const getVoteTarget = useCallback((): VoteTarget => {
+    if (isSchoolFriendVoite.current) {
+      return 'school';
+    }
+    return 'friend';
+  }, []);
+
+  const setVoteTarget = useCallback((target: VoteTarget) => {
+    isSchoolFriendVoite.current = target === 'school';
+  }, []);
+
   return {
     state,
     maxDailyCount,
     fetchRound: () => {
       setState('loading');
     },
+    init: () => {
+      setState(undefined);
+    },
     pollings,
     vote: handleVote,
+    skip: handleSkip,
     todayCount,
     selectFriend: handleSelectFriend,
     initialIndex,
@@ -400,17 +427,8 @@ export function usePolling() {
     clearEvent,
     remainTime,
     event: roundEvent,
-
     checkRoundLockOrReach,
-
-    getVoteTarget: (): 'school' | 'friend' => {
-      if (isSchoolFriendVoite.current) {
-        return 'school';
-      }
-      return 'friend';
-    },
-    setVoteTarget: (target: 'school' | 'friend') => {
-      isSchoolFriendVoite.current = target === 'school';
-    },
+    getVoteTarget: getVoteTarget,
+    setVoteTarget: setVoteTarget,
   };
 }

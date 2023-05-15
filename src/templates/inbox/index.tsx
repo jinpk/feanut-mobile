@@ -122,7 +122,7 @@ function InboxTemplate(props: InboxTemplateProps) {
       ListHeaderComponent={
         !props.editMode && (
           <Text align="center" color={colors.darkGrey} mx={36} mt={15}>
-            나를 투표한 친구를 확인하지 않은 투표는{'\n'}
+            나를 선택한 친구를 확인하지 않은 투표는{'\n'}
             3일이 지나면 확인할 수 없어요.
           </Text>
         )

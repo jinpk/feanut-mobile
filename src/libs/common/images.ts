@@ -23,6 +23,7 @@ import feanutLight from '../../assets/svgs/feanut-light.svg';
 import pencil from '../../assets/svgs/pencil.svg';
 import feanutBlue from '../../assets/svgs/feanut-blue.svg';
 import right from '../../assets/svgs/right.svg';
+import skip from '../../assets/pngs/skip.png';
 import shuffle from '../../assets/svgs/shuffle.svg';
 import refresh from '../../assets/svgs/refresh.svg';
 
@@ -204,6 +205,7 @@ export const pngs = {
   add: addPNG,
   invite,
   school,
+  skip,
   opened,
   closed,
   coin30,

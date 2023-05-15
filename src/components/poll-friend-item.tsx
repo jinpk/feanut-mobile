@@ -16,6 +16,8 @@ import {Gif} from './image';
 
 type PollFriendItemProps = {
   mb?: number;
+  ml?: number;
+  mr?: number;
   onPress?: (e: GestureResponderEvent) => void;
   selected?: boolean;
   color?: string;
@@ -26,8 +28,9 @@ type PollFriendItemProps = {
   isPull?: boolean;
 };
 
-const ITEM_WIDTH = constants.screenWidth * 0.4452;
-const ITEM_HEIGHT = ITEM_WIDTH * 0.4;
+const ITEM_WIDTH = (constants.screenWidth - 16 * 3) / 2;
+const ITEM_HEIGHT = ITEM_WIDTH * 0.49;
+const PADDING_VERTICAL = ITEM_HEIGHT * 0.17;
 
 export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
   const percentWidth = useAnimatedValue(0);
@@ -54,7 +57,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
     if (!props.selected) {
       percentWidth.setValue(0);
     } else {
-      const percent = props.isPull ? 100 : 85;
+      const percent = props.isPull ? 100 : 100;
       percentWidth.setValue(ITEM_HEIGHT);
       const toValue = Math.floor(
         ((ITEM_WIDTH - ITEM_HEIGHT) / 100) * percent + ITEM_HEIGHT,
@@ -78,7 +81,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
       <Animated.View
         style={[
           styles.root,
-          {marginBottom: props.mb},
+          {marginBottom: props.mb, marginLeft: props.ml, marginRight: props.mr},
           {transform: [{scale}, {translateY}]},
           props.selected && {borderColor: props.color, borderWidth: 1},
         ]}>
@@ -96,7 +99,7 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
           />
         )}
         <Avatar
-          size={ITEM_WIDTH * 0.3142}
+          size={ITEM_HEIGHT * 0.657}
           source={props.source}
           defaultLogo={
             props.gender === 'female'
@@ -109,7 +112,6 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
         <View style={styles.content}>
           <Text numberOfLines={1}>{props.label}</Text>
         </View>
-
         {props.isPull && !props.selected && (
           <View style={styles.unselectedWrapper} />
         )}
@@ -125,11 +127,12 @@ export function PollFriendItem(props: PollFriendItemProps): JSX.Element {
 
 const styles = StyleSheet.create({
   root: {
-    borderRadius: ITEM_WIDTH * 0.2,
+    borderRadius: 15,
     backgroundColor: colors.white,
-    padding: ITEM_WIDTH * 0.0457,
+    paddingVertical: PADDING_VERTICAL,
     width: ITEM_WIDTH,
     height: ITEM_HEIGHT,
+    paddingLeft: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -141,15 +144,14 @@ const styles = StyleSheet.create({
   precent: {
     position: 'absolute',
     left: 0,
-    borderRadius: ITEM_WIDTH * 0.1828,
+    borderRadius: 13,
     bottom: 0,
     top: 0,
   },
   unselectedWrapper: {
     position: 'absolute',
     left: 0,
-    borderRadius: ITEM_WIDTH * 0.1828,
-
+    borderRadius: 13,
     right: 0,
     top: 0,
     bottom: 0,

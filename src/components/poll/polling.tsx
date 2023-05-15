@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
+  Image,
   NativeEventSubscription,
   PanResponder,
   StyleSheet,
@@ -16,6 +17,7 @@ import {
   emotionBackgorundColor,
   emotionPointColor,
   emotions,
+  pngs,
   svgs,
 } from '../../libs/common';
 import {PollingFriendItem} from '../../libs/interfaces/polling';
@@ -34,6 +36,7 @@ type PollingProps = {
   friends: PollingFriendItem[];
   selectedFriend?: string;
   onShuffle: () => void;
+  onSkip: () => void;
   onSelected: (value: string) => void;
 
   // 다음 순서
@@ -275,39 +278,55 @@ export const Polling = (props: PollingProps) => {
             {props.title}
           </Text>
         </View>
-        <View
-          key={props.friends?.map(x => x.value).join('-')}
-          style={styles.friends}>
-          {props.friends?.length >= 1 &&
-            props.focused &&
-            props.friends.map((x, i) => {
-              return (
-                <PollFriendItem
-                  label={x.label}
-                  gender={x.gender}
-                  key={i.toString()}
-                  source={x.source}
-                  selected={props.selectedFriend === x.value}
-                  color={pointColor}
-                  onPress={() => {
-                    props.onSelected(x.value);
-                  }}
-                  mb={15}
-                />
-              );
-            })}
-          {!props.friends?.length && props.focused && (
-            <ActivityIndicator color={colors.white} />
-          )}
+
+        <View style={styles.friendsWrap}>
+          <View
+            key={props.friends?.map(x => x.value).join('-')}
+            style={styles.friends}>
+            {props.friends?.length >= 1 &&
+              props.focused &&
+              props.friends.map((x, i) => {
+                return (
+                  <PollFriendItem
+                    label={x.label}
+                    gender={x.gender}
+                    key={i.toString()}
+                    source={x.source}
+                    selected={props.selectedFriend === x.value}
+                    color={pointColor}
+                    onPress={() => {
+                      props.onSelected(x.value);
+                    }}
+                    ml={i === 1 || i == 3 ? 8 : 0}
+                    mr={i === 0 || i == 2 ? 8 : 0}
+                    mb={i < 2 ? 16 : 0}
+                  />
+                );
+              })}
+            {!props.friends?.length && props.focused && (
+              <ActivityIndicator color={colors.white} />
+            )}
+          </View>
         </View>
       </View>
 
-      <TouchableOpacity onPress={props.onShuffle} style={[styles.footerButton]}>
-        <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
-        <Text ml={7} color={colors.white} size={12}>
-          친구 새로고침
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.footerButtons}>
+        <TouchableOpacity
+          onPress={props.onShuffle}
+          style={[styles.footerButton]}>
+          <WithLocalSvg width={20} height={16} asset={svgs.shuffle} />
+          <Text ml={10} color={colors.white} size={12}>
+            친구 새로고침
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.buttonLine} />
+        <TouchableOpacity onPress={props.onSkip} style={[styles.footerButton]}>
+          <Image style={styles.footerIcon} source={pngs.skip} />
+          <Text ml={10} color={colors.white} size={12}>
+            투표 건너뛰기
+          </Text>
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };
@@ -317,10 +336,16 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
   },
-  friends: {
+  friendsWrap: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  friends: {
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   titleArea: {alignItems: 'center', marginTop: 60},
   body: {
@@ -330,10 +355,28 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     zIndex: 100,
-    marginBottom: 30,
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
+    paddingHorizontal: 30,
+    justifyContent: 'center',
     paddingVertical: 4,
+  },
+  footerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+    zIndex: 50,
+    alignSelf: 'center',
+  },
+  buttonLine: {
+    backgroundColor: colors.white,
+    width: 1,
+    height: 18,
+  },
+  footerIcon: {
+    width: 10,
+    height: 12,
+    resizeMode: 'contain',
   },
 });

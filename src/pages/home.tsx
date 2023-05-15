@@ -9,11 +9,11 @@ import {LineIndicator} from '../components';
 import EventModalTemplate from '../templates/polling/event-modal';
 import PollLockTemplate from '../templates/polling/lock';
 import {Polling} from '../components/poll';
-import HomeFloating from '../components/home-floating';
 import {MainTopBar} from '../components/top-bar/main';
 import {InternalPolling} from '../libs/interfaces/polling';
 import PollReadyTemplate from '../templates/poll-ready';
-import {useInviteFriend} from '../hooks/use-invite-friend';
+//import HomeFloating from '../components/home-floating';
+//import {useInviteFriend} from '../hooks/use-invite-friend';
 
 function Home(): JSX.Element {
   const navigation = useNavigation();
@@ -69,13 +69,12 @@ function Home(): JSX.Element {
     polling.checkRoundLockOrReach();
   }, []);
 
-  const inviteFriend = useInviteFriend();
+  // const inviteFriend = useInviteFriend();
 
   /** render 투표 화면 */
   const renderPolling = useCallback(
     (item: InternalPolling, index: number) => {
       const zIndex = polling.pollings.length - index;
-
       // 이미 지니간 투표는 UI 그리지 않음.
       if (index < polling.currentPollingIndex) {
         return null;
@@ -106,6 +105,9 @@ function Home(): JSX.Element {
           onNext={polling.vote}
           onSelected={(selectedProfileId: string) => {
             polling.selectFriend(item.pollingId!, selectedProfileId);
+          }}
+          onSkip={() => {
+            polling.skip(item.pollingId!);
           }}
           onShuffle={() => {
             polling.shuffle(item.pollingId!);
@@ -160,9 +162,7 @@ function Home(): JSX.Element {
             todayCount={polling.todayCount}
             remainTime={polling.remainTime || undefined}
             isReached={polling.state === 'reach'}
-            onTimeout={() => {
-              polling.fetchRound();
-            }}
+            onTimeout={polling.init}
           />
         )}
 
@@ -171,6 +171,8 @@ function Home(): JSX.Element {
         <EventModalTemplate onClose={polling.clearEvent} {...polling.event} />
       )}
 
+      {/** TODO: 바텀 바 변경 되면서 굳이 필요한 버튼인가? */}
+      {/**
       {((polling.state === 'lock' && polling.remainTime) ||
         polling.state === 'reach') && (
         <HomeFloating
@@ -180,6 +182,7 @@ function Home(): JSX.Element {
           onInvite={inviteFriend}
         />
       )}
+       */}
     </Animated.View>
   );
 }

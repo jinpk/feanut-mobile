@@ -1,6 +1,7 @@
 import {feanutAPI} from '..';
 import {
   FeanutCard,
+  GetPollingRoundLockResponse,
   Polling,
   PollingRound,
   PollingStats,
@@ -15,6 +16,11 @@ export const postPollingRound = async (
   const res = await feanutAPI.post<PollingRound>('/pollings/rounds', {
     target,
   });
+  return res.data;
+};
+
+export const getPollingRoundLock = async (): Promise<GetPollingRoundLockResponse> => {
+  const res = await feanutAPI.get<GetPollingRoundLockResponse>('/pollings/rounds/lock', {});
   return res.data;
 };
 

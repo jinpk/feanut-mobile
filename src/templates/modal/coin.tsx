@@ -38,7 +38,7 @@ export const CoinModalTemplate = (
       <View style={styles.root}>
         <View style={[styles.content, {paddingBottom: insests.bottom + 30}]}>
           <Text size={18} weight="bold" mb={23}>
-            피넛코인 구매
+            버터 구매
           </Text>
           <TouchableOpacity onPress={props.onClose} style={styles.close}>
             <WithLocalSvg
@@ -56,7 +56,7 @@ export const CoinModalTemplate = (
                   props.onPurchase(x.productId);
                 }}
                 icon={x.icon}
-                label={`${x.amount}개`}
+                label={`${x.amount}`}
                 price={x.price}
               />
             );

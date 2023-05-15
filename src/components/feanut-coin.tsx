@@ -15,7 +15,7 @@ export const FeanutCoin = (props: FeanutCoinProps) => {
     <TouchableOpacity onPress={props.onPress} style={styles.root}>
       <View style={styles.content}>
         <Text color={colors.primary} size={10} mt={3} weight="medium">
-          피넛코인
+          버터
         </Text>
         <Text color={colors.primary} size={16} weight="medium">
           {props.amount}

@@ -44,6 +44,14 @@ export interface Polling {
   isVoted: boolean;
 }
 
+export interface GetPollingRoundLockResponse {
+  maxDailyCount: number;
+  todayCount: number;
+  remainTime: number;
+  complete: boolean;
+  userRoundId: string | null;
+}
+
 export interface PollingRound {
   maxDailyCount: number;
   todayCount: number;
@@ -72,6 +80,7 @@ export interface PostPollingReqequest {
 }
 export interface PostPollingVoteRequest {
   selectedProfileId?: string;
+  skipped: boolean;
 }
 
 export interface RoundEvent {

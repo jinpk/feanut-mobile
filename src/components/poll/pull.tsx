@@ -1,13 +1,7 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {WithLocalSvg} from 'react-native-svg';
-import {
-  colors,
-  constants,
-  emotionPointColor,
-  gifs,
-  svgs,
-} from '../../libs/common';
+import {colors, constants, gifs, svgs} from '../../libs/common';
 import {PollingReceiveDetail} from '../../libs/interfaces/polling';
 import {Avatar} from '../avatar';
 import {Text} from '../text';

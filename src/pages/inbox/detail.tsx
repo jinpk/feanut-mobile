@@ -103,7 +103,7 @@ function InboxDetail() {
       const apiError = error as APIError;
       if (apiError.code === POLLING_ERROR_LACK_COIN_AMOUNT) {
         openMessage(
-          '피넛코인이 부족해요\n피넛코인은 꾸준한 투표를 통해 얻을 수 있어요.',
+          '버터가 부족해요\버터는 꾸준한 투표를 통해 얻을 수 있어요.',
           [
             {text: '확인'},
             {
@@ -126,7 +126,7 @@ function InboxDetail() {
 
   const handleOpen = async () => {
     if (!pull?.isOpened) {
-      openMessage('피넛코인 3개를 사용하여\n투표한 친구를 확인할 수 있어요.', [
+      openMessage('3버터를 사용하여\n투표한 친구를 확인할 수 있어요.', [
         {text: '취소'},
         {
           text: '확인하기',
