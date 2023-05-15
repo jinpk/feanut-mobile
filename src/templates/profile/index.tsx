@@ -175,7 +175,7 @@ function ProfileTemplate(props: ProfileTemplateProps): JSX.Element {
             style={[
               styles.feanutCardToolBar,
               // 전체 보기 버튼에서 padding 설정
-              {marginBottom: props.me ? 0 : 14, marginTop: props.me ? 21 : 35},
+              {marginBottom: props.me ? 0 : 14, marginTop: props.me ? 20 : 50},
             ]}>
             <TouchableOpacity
               onPress={props.onFeautCardTooltip}

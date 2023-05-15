@@ -72,6 +72,7 @@ export default function SignUpGrade() {
                 keyboardType="number-pad"
                 placeholder="0"
                 maxLength={1}
+                autoFocus
                 value={grade}
                 onChange={grade => {
                   setGrade(grade);

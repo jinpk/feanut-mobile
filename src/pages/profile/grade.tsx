@@ -64,6 +64,7 @@ export default function ProfileEditGrade() {
             <View style={styles.row}>
               <LargeInput
                 inputRef={gradeRef}
+                autoFocus
                 keyboardType="number-pad"
                 placeholder="0"
                 maxLength={1}

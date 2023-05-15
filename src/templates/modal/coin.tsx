@@ -56,7 +56,7 @@ export const CoinModalTemplate = (
                   props.onPurchase(x.productId);
                 }}
                 icon={x.icon}
-                label={`${x.amount}`}
+                label={`${x.amount} 버터`}
                 price={x.price}
               />
             );

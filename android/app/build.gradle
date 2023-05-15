@@ -101,7 +101,7 @@ android {
         applicationId "com.feanut.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
+        versionCode 30
         versionName "1.02.0"
     }
 
