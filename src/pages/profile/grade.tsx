@@ -1,7 +1,12 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, TextInput, TouchableWithoutFeedback} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {View} from 'react-native';
-import {colors, routes} from '../../libs/common';
+import {colors, constants, routes} from '../../libs/common';
 import {BackTopBar} from '../../components/top-bar';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Text} from '../../components/text';
@@ -38,74 +43,78 @@ export default function ProfileEditGrade() {
   };
 
   return (
-    <View style={[styles.root, {paddingBottom: insets.bottom}]}>
-      <BackTopBar onBack={navigation.goBack} />
-      <Text weight="bold" size={18} mt={15} mx={16}>
-        {params.school.name}
-      </Text>
+    <KeyboardAvoidingView
+      style={[styles.root, {paddingBottom: insets.bottom}]}
+      {...(constants.platform === 'ios' ? {behavior: 'padding'} : {})}>
+      <View style={[styles.root]}>
+        <BackTopBar onBack={navigation.goBack} />
+        <Text weight="bold" size={18} mt={15} mx={16}>
+          {params.school.name}
+        </Text>
 
-      <Text mt={30} mx={16}>
-        학년과 반을 입력해 주세요.
-      </Text>
+        <Text mt={30} mx={16}>
+          학년과 반을 입력해 주세요.
+        </Text>
 
-      <View style={styles.inputWrap}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            gradeRef.current?.focus();
-          }}>
-          <View style={styles.row}>
-            <LargeInput
-              inputRef={gradeRef}
-              keyboardType="number-pad"
-              placeholder="0"
-              maxLength={1}
-              value={grade}
-              onChange={grade => {
-                setGrade(grade);
-                if (grade) {
-                  roomRef.current?.focus();
-                }
-              }}
-            />
-            <Text ml={8} weight="bold" color={colors.darkGrey} size={27}>
-              학년
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            roomRef.current?.focus();
-          }}>
-          <View style={styles.row}>
-            <LargeInput
-              keyboardType="number-pad"
-              inputRef={roomRef}
-              placeholder="0"
-              maxLength={2}
-              value={room}
-              onChange={room => {
-                setRoom(room);
-                if (!room) {
-                  gradeRef.current?.focus();
-                }
-              }}
-            />
-            <Text ml={8} weight="bold" color={colors.darkGrey} size={27}>
-              반
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <View style={styles.inputWrap}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              gradeRef.current?.focus();
+            }}>
+            <View style={styles.row}>
+              <LargeInput
+                inputRef={gradeRef}
+                keyboardType="number-pad"
+                placeholder="0"
+                maxLength={1}
+                value={grade}
+                onChange={grade => {
+                  setGrade(grade);
+                  if (grade) {
+                    roomRef.current?.focus();
+                  }
+                }}
+              />
+              <Text ml={8} weight="bold" color={colors.darkGrey} size={27}>
+                학년
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              roomRef.current?.focus();
+            }}>
+            <View style={styles.row}>
+              <LargeInput
+                keyboardType="number-pad"
+                inputRef={roomRef}
+                placeholder="0"
+                maxLength={2}
+                value={room}
+                onChange={room => {
+                  setRoom(room);
+                  if (!room) {
+                    gradeRef.current?.focus();
+                  }
+                }}
+              />
+              <Text ml={8} weight="bold" color={colors.darkGrey} size={27}>
+                반
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+
+        <View style={{flex: 1}} />
+        <Button
+          disabled={!grade || !room}
+          onPress={handleConfirm}
+          title={'확인'}
+          mx={16}
+          mb={15}
+        />
       </View>
-
-      <View style={{flex: 1}} />
-      <Button
-        disabled={!grade || !room}
-        onPress={handleConfirm}
-        title={'확인'}
-        mx={16}
-        mb={15}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

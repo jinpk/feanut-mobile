@@ -26,6 +26,7 @@ function Home(): JSX.Element {
   /** 알림 클릭 이벤트처리 */
   const initialNotification = useUserStore(s => s.notification);
   const clearNotification = useUserStore(s => s.actions.clearNotification);
+
   useEffect(() => {
     if (initialNotification) {
       const {action, value} = initialNotification;

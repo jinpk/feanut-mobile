@@ -91,6 +91,7 @@ export const SchoolTemplate = (props: SchoolTemplateProps) => {
       <FlatList
         data={props.data}
         extraData={props.data}
+        keyboardShouldPersistTaps="handled"
         keyExtractor={handleKeyExtractor}
         renderItem={handleRenderItem}
         contentContainerStyle={styles.list}
