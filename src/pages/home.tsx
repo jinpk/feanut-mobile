@@ -80,6 +80,9 @@ function Home(): JSX.Element {
       if (index < polling.currentPollingIndex) {
         return null;
       }
+      const skippedCount = polling.getSkippedCount();
+      const shuffledCount = polling.getShuffledCount();
+
       return (
         <Polling
           index={index}
@@ -107,6 +110,7 @@ function Home(): JSX.Element {
           onSelected={(selectedProfileId: string) => {
             polling.selectFriend(item.pollingId!, selectedProfileId);
           }}
+          skipDisabled={shuffledCount > 4 ? false : skippedCount >= 3}
           onSkip={() => {
             polling.skip(item.pollingId!);
           }}
@@ -124,7 +128,6 @@ function Home(): JSX.Element {
   return (
     <Animated.View style={[styles.root]}>
       {polling.state !== 'polling' && <MainTopBar />}
-
       {/** 투표 대기 화면 */}
       {!polling.state && (
         <PollReadyTemplate
@@ -138,7 +141,6 @@ function Home(): JSX.Element {
           }}
         />
       )}
-
       {/** 투표 화면 */}
       {polling.state === 'polling' && (
         <>
@@ -149,10 +151,8 @@ function Home(): JSX.Element {
           {polling.pollings.map(renderPolling)}
         </>
       )}
-
       {/** 투표 로딩 화면 */}
       {polling.state === 'loading' && <LoadingTemplate />}
-
       {/** 투표 쿨타임 화면 */}
       {((polling.state === 'lock' && polling.remainTime) ||
         polling.state === 'reach') &&

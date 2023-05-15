@@ -97,6 +97,9 @@ export function usePolling() {
   const navigation = useNavigation();
   const inviteFriend = useInviteFriend();
 
+  const skippedCount = useRef(0);
+  const shuffledCount = useRef(0);
+
   /** Fetch round */
   useEffect(() => {
     // 이모지 초기화 선행 필요.
@@ -106,6 +109,7 @@ export function usePolling() {
           const pollingRound = await postPollingRound(
             isSchoolFriendVoite.current ? 0 : 1,
           );
+
           setMaxDailyCount(pollingRound.maxDailyCount);
           setTodayCount(pollingRound.todayCount);
           if (!pollingRound.data?.complete) {
@@ -113,6 +117,11 @@ export function usePolling() {
             if (!pollingRound.data) {
               throw new Error('조회 실패 하였습니다.');
             }
+            // 스킵 횟수
+            skippedCount.current = pollingRound.data?.pollingIds.filter(
+              x => x.skipped,
+            ).length;
+
             setUserRoundId(pollingRound.data.id);
             const initalPolls = pollingRound.data.pollIds.map((x, i) => {
               const polling = pollingRound.data!.pollingIds.find(
@@ -227,6 +236,11 @@ export function usePolling() {
           }
         }
 
+        // 현재 투표 조회시 친구 새로고침 수 초기화
+        if (preLoad) {
+          shuffledCount.current = 0;
+        }
+
         const emojiURI =
           configs.assetBaseUrl +
           '/' +
@@ -278,6 +292,11 @@ export function usePolling() {
     voting.current = true;
     try {
       const res = await postPollingVote(pollingId, body);
+      // 스킵이면 카운팅
+      if (body.skipped) {
+        skippedCount.current = skippedCount.current + 1;
+      }
+
       if (res.userroundCompleted) {
         // 끝났으면 라운드 다시 조회
         setState('loading');
@@ -344,6 +363,7 @@ export function usePolling() {
   };
 
   const shuffling = useRef(false);
+
   const handleShuffle = async (pollingId: string) => {
     if (shuffling.current) {
       return;
@@ -351,6 +371,7 @@ export function usePolling() {
     shuffling.current = true;
     try {
       const res = await postPollingRefresh(pollingId);
+      shuffledCount.current = shuffledCount.current + 1;
       setPollings(prev => {
         prev[pollingIndexRef.current].selectedProfileId = undefined;
         prev[pollingIndexRef.current].friends = makeFriendItems(res.friendIds);
@@ -377,16 +398,23 @@ export function usePolling() {
   const checkRoundLockOrReach = useCallback(async () => {
     try {
       const pollingRound = await getPollingRoundLock();
-      if (!pollingRound.complete && pollingRound.userRoundId) {
+      if (!pollingRound.complete) {
         // 진행중인 투표 있음
         setState('loading');
-      } else if (pollingRound.complete && !pollingRound.userRoundId) {
-        // 하루 최대 투표 도달 혹은 투표 쿨타임
-        if (pollingRound.todayCount === pollingRound.maxDailyCount) {
+      } else {
+        // 진행중인 투표 없음
+        if (pollingRound.maxDailyCount === pollingRound.todayCount) {
+          // 하루 투표 최대 참여
           setState('reach');
         } else {
-          setRemainTime(pollingRound.remainTime);
-          setState('lock');
+          if (pollingRound.remainTime > 0) {
+            // 투표 쿨타임
+            setState('lock');
+            setRemainTime(pollingRound.remainTime);
+          } else {
+            // 투표 생성 가능
+            setState(undefined);
+          }
         }
       }
     } catch (error: any) {
@@ -407,6 +435,14 @@ export function usePolling() {
     isSchoolFriendVoite.current = target === 'school';
   }, []);
 
+  const handleGetSkippedCount = useCallback(() => {
+    return skippedCount.current || 0;
+  }, []);
+
+  const handleGetShuffledCount = useCallback(() => {
+    return shuffledCount.current || 0;
+  }, []);
+
   return {
     state,
     maxDailyCount,
@@ -420,6 +456,8 @@ export function usePolling() {
     vote: handleVote,
     skip: handleSkip,
     todayCount,
+    getShuffledCount: handleGetShuffledCount,
+    getSkippedCount: handleGetSkippedCount,
     selectFriend: handleSelectFriend,
     initialIndex,
     shuffle: handleShuffle,

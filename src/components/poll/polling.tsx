@@ -50,6 +50,8 @@ type PollingProps = {
   initialIndex: number;
   firstInited: boolean;
   onFirstInited: () => void;
+
+  skipDisabled: boolean;
 };
 
 export const Polling = (props: PollingProps) => {
@@ -320,7 +322,15 @@ export const Polling = (props: PollingProps) => {
           </Text>
         </TouchableOpacity>
         <View style={styles.buttonLine} />
-        <TouchableOpacity onPress={props.onSkip} style={[styles.footerButton]}>
+        <TouchableOpacity
+           disabled={props.skipDisabled}
+          onPress={props.onSkip}
+          style={[
+            styles.footerButton,
+            props.skipDisabled && {
+              opacity: 0.5,
+            },
+          ]}>
           <Image style={styles.footerIcon} source={pngs.skip} />
           <Text ml={10} color={colors.white} size={12}>
             투표 건너뛰기

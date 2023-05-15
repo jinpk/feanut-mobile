@@ -64,6 +64,7 @@ interface PollingId {
   _id: string;
   isVoted: boolean;
   pollId: string;
+  skipped: boolean | null;
 }
 
 export interface UserRound {
