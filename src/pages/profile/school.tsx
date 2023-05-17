@@ -10,9 +10,17 @@ function ProfileEditSchool() {
   const navigation = useNavigation();
 
   const handleItemPress = useCallback((school: School) => {
-    navigation.navigate(routes.profileEditGrade, {
-      school,
-    });
+    if (school.level === '대학교') {
+      navigation.navigate(routes.profileEdit, {
+        updateSchool: {
+          school,
+        },
+      });
+    } else {
+      navigation.navigate(routes.profileEditGrade, {
+        school,
+      });
+    }
   }, []);
 
   return (

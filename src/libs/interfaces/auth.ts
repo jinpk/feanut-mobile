@@ -1,4 +1,4 @@
-import {PostSchoolRequest, School} from './school';
+import {PostMySchoolRequest, School} from './school';
 
 export interface TokenRequest {
   refreshToken: string;
@@ -9,7 +9,7 @@ export interface SignUpRequest {
   gender: 'female' | 'male';
   name: string;
 
-  school?: PostSchoolRequest;
+  school?: PostMySchoolRequest;
   referralUserId?: string;
 }
 

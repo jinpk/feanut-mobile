@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -33,6 +33,31 @@ export default function SignUpGrade() {
   const [grade, setGrade] = useState<string>('');
   const [room, setRoom] = useState<string>('');
 
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    let tm = setTimeout(() => {
+      gradeRef.current?.focus();
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
+  }, []);
+
+  /** 대학교 바로 회원가입 처리 */
+  useEffect(() => {
+    if (params.school.level === '대학교') {
+      signUp({
+        ...params.payload,
+        school: {
+          code: params.school.code,
+        },
+      });
+    } else {
+      setInit(true);
+    }
+  }, []);
+
   const handleConfirm = () => {
     if (!grade) return;
     if (!room) return;
@@ -46,6 +71,17 @@ export default function SignUpGrade() {
       },
     });
   };
+
+  if (!init) {
+    return (
+      <View style={[styles.root]}>
+        <BackTopBar onBack={navigation.goBack} />
+        <Text weight="bold" size={18} mt={15} mx={16}>
+          {params.school.name}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView

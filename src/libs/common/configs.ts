@@ -1,7 +1,7 @@
 const WEBSITE_URL = 'https://feanut.com';
 
-const isLocal = false;
-const localHost = 'http://192.168.35.172:3000';
+const isLocal = true;
+const localHost = 'http://192.168.35.41:3000';
 
 const PRODUCTION_MODE = true;
 

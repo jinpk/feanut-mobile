@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -28,6 +28,15 @@ export default function ProfileEditGrade() {
   const {params} = useRoute<ProfileEditGradeProps>();
   const [grade, setGrade] = useState<string>('');
   const [room, setRoom] = useState<string>('');
+
+  useEffect(() => {
+    let tm = setTimeout(() => {
+      gradeRef.current?.focus();
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
+  }, []);
 
   const handleConfirm = () => {
     if (!grade) return;

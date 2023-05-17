@@ -135,7 +135,7 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
         <View style={[styles.formContent]}>
           <View style={styles.formTitleWrap}>
             <Text color={colors.darkGrey} size={12}>
-              학교 / 학년 / 반
+              학교
             </Text>
             <TextButton
               onPress={props.onSchool}
@@ -146,8 +146,9 @@ function ProfileEditTemplate(props: ProfileEditTemplateProps): JSX.Element {
           </View>
           {Boolean(props.mySchool.code) && (
             <Text>
-              {props.mySchool?.name} / {props.mySchool.grade}학년 /{' '}
-              {props.mySchool.room}반
+              {props.mySchool?.name}
+              {props.mySchool.grade && ` / ${props.mySchool.grade}학년`}
+              {props.mySchool.room && ` / ${props.mySchool.room}반`}
             </Text>
           )}
         </View>

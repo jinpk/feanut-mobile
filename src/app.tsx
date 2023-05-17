@@ -226,7 +226,7 @@ const MainTabs = memo(function () {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: svgs.tabFriend,
+          tabBarIcon: svgs.tabProfile,
           tabBarLabel: '친구',
         }}
         name={routes.friendStack}
@@ -234,7 +234,7 @@ const MainTabs = memo(function () {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: svgs.tabProfile,
+          tabBarIcon: svgs.tabFriend,
           tabBarLabel: '프로필',
         }}
         name={routes.profileTab}

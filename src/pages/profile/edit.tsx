@@ -24,7 +24,7 @@ import {MySchool, School} from '../../libs/interfaces/school';
 import {routes} from '../../libs/common';
 import dayjs from 'dayjs';
 
-type UpdateSchool = {school: School; grade: number; room: number};
+type UpdateSchool = {school: School; grade?: number; room?: number};
 
 type ProfileEditProps = RouteProp<
   {ProfileEditGrade: {updateSchool?: UpdateSchool}},
@@ -143,8 +143,8 @@ function ProfileEdit(): JSX.Element {
         if (updateSchool) {
           postUpdateMySchool({
             code: updateSchool.school.code,
-            grade: updateSchool.grade,
-            room: updateSchool.room,
+            grade: updateSchool?.grade,
+            room: updateSchool?.room,
           });
         }
         getMyProfile().then(update);
