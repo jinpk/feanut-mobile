@@ -100,6 +100,41 @@ export function usePolling() {
   const skippedCount = useRef(0);
   const shuffledCount = useRef(0);
 
+  // true 반환시 이후 에러 추가 핸들링 필요
+  // false면 친구 에러 핸들링 함수에서 처리
+  const assertMinFriend = (error: APIError) => {
+    if (
+      error &&
+      error.code === POLLING_ERROR_MIN_FRIENDS &&
+      error.module === POLLING_MODULE_NAME
+    ) {
+      // 화면 초기화
+      setState(undefined);
+      // 친구 추가 유도 알림
+      if (isSchoolFriendVoite.current) {
+        // 학교 알림
+        openMessageModal('가입한 학생이 4명이\n되면 시작할 수 있어요!', [
+          {text: '확인'},
+          {text: '친구 초대', onPress: inviteFriend},
+        ]);
+      } else {
+        openMessageModal('추가한 친구가 4명이\n되면 시작할 수 있어요!', [
+          {text: '확인'},
+          {
+            text: '친구 추가',
+            onPress: () => {
+              navigation.navigate(routes.friendStack, {add: true});
+            },
+          },
+        ]);
+      }
+
+      return false;
+    }
+
+    return true;
+  };
+
   /** Fetch round */
   useEffect(() => {
     // 이모지 초기화 선행 필요.
@@ -155,29 +190,6 @@ export function usePolling() {
         } catch (error: any) {
           const apiError = error as APIError;
           if (
-            apiError &&
-            apiError.code === POLLING_ERROR_MIN_FRIENDS &&
-            apiError.module === POLLING_MODULE_NAME
-          ) {
-            // 친구 추가 유도 알림
-            if (isSchoolFriendVoite.current) {
-              // 학교 알림
-              openMessageModal('가입한 학생이 4명이\n되면 시작할 수 있어요!', [
-                {text: '확인'},
-                {text: '친구 초대', onPress: inviteFriend},
-              ]);
-            } else {
-              openMessageModal('추가한 친구가 4명이\n되면 시작할 수 있어요!', [
-                {text: '확인'},
-                {
-                  text: '친구 추가',
-                  onPress: () => {
-                    navigation.navigate(routes.friendStack, {add: true});
-                  },
-                },
-              ]);
-            }
-          } else if (
             apiError.module === SCHOOL_MODULE_NAME &&
             apiError.code === SCHOOL_ERROR_NOT_FOUND_MY_SCHOOL
           ) {
@@ -186,8 +198,10 @@ export function usePolling() {
               [{text: '확인'}],
             );
           } else {
-            if (__DEV__) {
-              console.error(error);
+            if (assertMinFriend(apiError)) {
+              if (__DEV__) {
+                console.error(error);
+              }
             }
           }
         }
@@ -269,10 +283,12 @@ export function usePolling() {
           handlePolling(curPollingIndex + 1, false);
         }
       } catch (error: any) {
-        if (__DEV__) {
-          console.error(error, 'handlePolling');
+        const apiError = error as APIError;
+        if (assertMinFriend(apiError)) {
+          if (__DEV__) {
+            console.error(error, 'handlePolling');
+          }
         }
-        // Alert.alert(error.message || error);
       }
     };
 
@@ -385,7 +401,9 @@ export function usePolling() {
           '투표당 최대 3번까지 친구를 다시 찾을 수 있어요.',
         );
       } else {
-        Alert.alert(error.message || error);
+        if (assertMinFriend(apiError)) {
+          Alert.alert(error.message || error);
+        }
       }
     }
     shuffling.current = false;
@@ -418,6 +436,7 @@ export function usePolling() {
         }
       }
     } catch (error: any) {
+      console.log(error);
       if (__DEV__) {
         console.error(error);
       }

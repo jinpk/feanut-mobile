@@ -110,25 +110,18 @@ export default function useContact() {
         limit: 1, // ignored
         phoneNumber: sliced.map(x => x.phoneNumber).join(','),
       });
-      filtered.push(
-        ...sliced
-          .map((x, _i) => {
-            const exist = res.data.find(z => z.phoneNumber === x.phoneNumber);
-            if (!exist) {
-              return {...x};
-            } else {
-              if (exist.isFriend) {
-                return null;
-              } else {
-                return {
-                  ...exist,
-                  ...x,
-                };
-              }
-            }
-          })
-          .filter(x => x),
-      );
+      sliced.forEach(x => {
+        const exist = res.data.find(z => z.phoneNumber === x.phoneNumber);
+        if (!exist) {
+          // 피넛 가입 회원 아니면 연락처 정보만 노출
+          filtered.push(x);
+        } else {
+          if (!exist.isFriend) {
+            // 친구 아닌 연락처만
+            filtered.push(exist);
+          }
+        }
+      });
     }
     // 가 > 나 > 다 정렬
     contacts.current = filtered.sort((a, b) =>
