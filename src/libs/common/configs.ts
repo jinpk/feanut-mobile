@@ -37,4 +37,6 @@ export const configs = {
 
   referralLinkUrl: WEBSITE_URL + '/referral',
   referralLinkUserIdKey: 'referral_user_id',
+
+  appStoreId: '6446508324',
 };

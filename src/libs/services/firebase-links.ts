@@ -12,6 +12,7 @@ async function buildReferralDynamicLink(referralUserId: string) {
       ios: {
         bundleId: 'com.feanut.ios',
         iPadBundleId: 'com.feanut.ios',
+        appStoreId: configs.appStoreId,
       },
       analytics: {
         campaign: 'referral',
