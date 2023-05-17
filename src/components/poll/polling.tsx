@@ -292,7 +292,7 @@ export const Polling = (props: PollingProps) => {
                   <PollFriendItem
                     label={x.label}
                     gender={x.gender}
-                    key={i.toString()}
+                    key={x.value}
                     source={x.source}
                     selected={props.selectedFriend === x.value}
                     color={pointColor}
@@ -323,7 +323,7 @@ export const Polling = (props: PollingProps) => {
         </TouchableOpacity>
         <View style={styles.buttonLine} />
         <TouchableOpacity
-           disabled={props.skipDisabled}
+          disabled={props.skipDisabled}
           onPress={props.onSkip}
           style={[
             styles.footerButton,

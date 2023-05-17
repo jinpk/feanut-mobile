@@ -1,5 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
 import {SearchInput} from '../../components/input';
 import {BackTopBar} from '../../components/top-bar';
 import {colors, gifs, pngs} from '../../libs/common';
@@ -28,6 +34,16 @@ type SchoolTemplateProps = {
 export const SchoolTemplate = (props: SchoolTemplateProps) => {
   const insets = useSafeAreaInsets();
   const [keyword, setKeyword] = useState('');
+
+  const schoolRef = useRef<TextInput>(null);
+  useEffect(() => {
+    let tm = setTimeout(() => {
+      schoolRef.current?.focus();
+    }, 1000);
+    return () => {
+      clearTimeout(tm);
+    };
+  }, []);
 
   useEffect(() => {
     setKeyword(props.keyword || '');
@@ -77,6 +93,7 @@ export const SchoolTemplate = (props: SchoolTemplateProps) => {
         학교를 선택해 주세요
       </Text>
       <SearchInput
+        inputRef={schoolRef}
         value={keyword}
         onChange={setKeyword}
         maxLength={10}
